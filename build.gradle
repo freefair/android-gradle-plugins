@@ -1,8 +1,19 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+    dependencies {
+        classpath 'io.freefair.gradle-plugins:git-version:2.0.0-beta5'
+    }
+}
+
 repositories {
     jcenter()
 }
 
 group = 'io.freefair'
+apply plugin: 'io.freefair.git-version'
 
 apply plugin: 'groovy'
 apply plugin: 'maven'
