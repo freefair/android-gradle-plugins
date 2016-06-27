@@ -14,7 +14,7 @@ class AndroidJavadocJarPlugin extends AndroidProjectPlugin {
     void apply(Project project) {
         super.apply(project)
 
-        AndroidJavadocPlugin ajp = project.getPluginManager().apply(AndroidJavadocPlugin);
+        project.getPluginManager().apply(AndroidJavadocPlugin);
 
         Task allJavadocJarTask = project.task("javadocJar") { Task ajdjTask ->
             ajdjTask.description = "Generate the javadoc jar for all variants"
@@ -23,7 +23,8 @@ class AndroidJavadocJarPlugin extends AndroidProjectPlugin {
 
         androidVariants.all { variant ->
 
-            Javadoc javadocTask = ajp.javadocTasks.get(variant.name);
+            AndroidJavadocPlugin androidJavadocPlugin = project.plugins.findPlugin(AndroidJavadocPlugin)
+            Javadoc javadocTask = androidJavadocPlugin.getJavadocTask(project, variant);
 
             Jar javadocJarTask = project.task("javadoc${variant.name.capitalize()}Jar", type: Jar, dependsOn: javadocTask) { Jar jar ->
                 jar.description = "Generate the javadoc jar for the ${variant.name} variant"
