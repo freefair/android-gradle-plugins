@@ -49,7 +49,7 @@ abstract class AndroidProjectPlugin implements Plugin<Project> {
         if (isLibrary) {
             return libraryExtension.publishNonDefault || libraryExtension.defaultPublishConfig.equals(variant.name)
         } else {
-            return variant.baseName.contains("release")
+            return appExtension.publishNonDefault || appExtension.defaultPublishConfig.equals(variant.name)
         }
     }
 }
