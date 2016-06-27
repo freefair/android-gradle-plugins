@@ -49,16 +49,15 @@ class AndroidJavadocPlugin extends AndroidProjectPlugin {
                 //javadoc.exclude '**/BuildConfig.java'
                 javadoc.exclude '**/R.java'
 
+                javadoc.options.encoding "UTF-8"
                 javadoc.options.bootClasspath = androidExtension.getBootClasspath()
+                javadoc.options.source = variant.javaCompiler.sourceCompatibility
 
                 if (javadoc.getOptions() instanceof StandardJavadocDocletOptions) {
                     StandardJavadocDocletOptions realOptions = javadoc.options as StandardJavadocDocletOptions
 
-                    realOptions.encoding "UTF-8"
                     realOptions.docEncoding "UTF-8"
                     realOptions.charSet "UTF-8"
-
-                    realOptions.source = variant.javaCompiler.sourceCompatibility
 
                     realOptions.links "http://docs.oracle.com/javase/${Jvm.current().javaVersion.majorVersion ?: '7'}/docs/api/"
                     realOptions.linksOffline "http://developer.android.com/reference/", "${androidExtension.sdkDirectory}/docs/reference"
