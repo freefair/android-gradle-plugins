@@ -50,7 +50,7 @@ class AndroidJavadocPlugin extends AndroidProjectPlugin {
                 javadoc.exclude '**/R.java'
 
                 javadoc.options.encoding "UTF-8"
-                javadoc.options.bootClasspath = androidExtension.getBootClasspath()
+                javadoc.options.bootClasspath = androidExtension.getBootClasspath() + Jvm.current().runtimeJar;
                 javadoc.options.source = variant.javaCompiler.sourceCompatibility
 
                 if (javadoc.getOptions() instanceof StandardJavadocDocletOptions) {
