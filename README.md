@@ -18,3 +18,8 @@ buildscript {
 ```gradle
 apply plugin: 'io.freefair.<plugin-name>'
 ```
+## Available Plugins:
+- `io.freefair.android-maven-jars`
+  - `io.freefair.android-javadoc-jar`
+    - `io.freefair.android-javadoc`
+  - `io.freefair.android-sources-jar`
