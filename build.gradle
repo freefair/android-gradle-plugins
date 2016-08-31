@@ -15,6 +15,7 @@ repositories {
 group = 'io.freefair'
 apply plugin: 'io.freefair.git-version'
 
+apply plugin: 'java-gradle-plugin'
 apply plugin: 'groovy'
 apply plugin: 'maven'
 
@@ -23,7 +24,28 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'com.android.tools.build:gradle:2.1.+'
+    compile 'com.android.tools.build:gradle:2.1.3'
+}
+
+gradlePlugin {
+    plugins {
+        androidJavadoc {
+            id = "io.freefair.android-javadoc"
+            implementationClass = "io.freefair.gradle.plugin.android.AndroidJavadocPlugin"
+        }
+        androidJavadocJar {
+            id = "io.freefair.android-javadoc-jar"
+            implementationClass = "io.freefair.gradle.plugin.android.maven.AndroidJavadocJarPlugin"
+        }
+        androidSourcesJar {
+            id = "io.freefair.android-sources-jar"
+            implementationClass = "io.freefair.gradle.plugin.android.maven.AndroidSourcesJarPlugin"
+        }
+        androidMavenJars {
+            id = "io.freefair.android-maven-jars"
+            implementationClass = "io.freefair.gradle.plugin.android.maven.AndroidMavenJarsPlugin"
+        }
+    }
 }
 
 groovydoc {

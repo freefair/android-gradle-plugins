@@ -26,7 +26,6 @@ class AndroidJavadocPlugin extends AndroidProjectPlugin {
         }
 
         androidVariants.all { variant ->
-
             Javadoc javadocTask = getJavadocTask(project, variant)
 
             allJavadocTask.dependsOn javadocTask
@@ -44,7 +43,7 @@ class AndroidJavadocPlugin extends AndroidProjectPlugin {
                 javadoc.dependsOn variant.javaCompiler
 
                 javadoc.source = variant.javaCompiler.source
-                javadoc.classpath = variant.javaCompiler.classpath;
+                javadoc.classpath = project.files(variant.javaCompiler.destinationDir) + variant.javaCompiler.classpath
 
                 //javadoc.exclude '**/BuildConfig.java'
                 javadoc.exclude '**/R.java'
@@ -66,9 +65,10 @@ class AndroidJavadocPlugin extends AndroidProjectPlugin {
                 javadoc.setFailOnError false
 
                 if (project.hasProperty("docsDir")) {
-                    javadoc.destinationDir = new File(project.docsDir, "javadoc/${variant.dirName}")
+                    javadoc.destinationDir = project.file("$project.docsDir/javadoc/${variant.dirName}")
+                } else {
+                    javadoc.destinationDir = project.file("$project.buildDir/docs/javadoc/${variant.dirName}")
                 }
-
             } as Javadoc
 
             javadocTasks.put(variant.name, task);
