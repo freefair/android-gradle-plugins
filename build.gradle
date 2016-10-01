@@ -45,6 +45,18 @@ gradlePlugin {
             id = "io.freefair.android-maven-jars"
             implementationClass = "io.freefair.gradle.plugin.android.maven.AndroidMavenJarsPlugin"
         }
+        androidCi {
+            id = "io.freefair.android-ci"
+            implementationClass = "io.freefair.gradle.plugin.android.ci.CiPlugin"
+        }
+        androidCiDex {
+            id = "io.freefair.android-ci-dex"
+            implementationClass = "io.freefair.gradle.plugin.android.ci.CiDexPlugin"
+        }
+        androidCiLint {
+            id = "io.freefair.android-ci-lint"
+            implementationClass = "io.freefair.gradle.plugin.android.ci.CiLintPlugin"
+        }
     }
 }
 

@@ -58,7 +58,7 @@ class AndroidJavadocPlugin extends AndroidProjectPlugin {
                     realOptions.docEncoding "UTF-8"
                     realOptions.charSet "UTF-8"
 
-                    realOptions.links "http://docs.oracle.com/javase/${Jvm.current().javaVersion.majorVersion ?: '7'}/docs/api/"
+                    realOptions.links "http://docs.oracle.com/javase/${Jvm.current().javaVersion.majorVersion ?: '8'}/docs/api/"
                     realOptions.linksOffline "http://developer.android.com/reference/", "${androidExtension.sdkDirectory}/docs/reference"
                 }
 
