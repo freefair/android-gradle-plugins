@@ -1,9 +1,12 @@
 package io.freefair.gradle.plugin.android
 
 import com.android.build.gradle.api.BaseVariant
+import com.android.build.gradle.internal.pipeline.TransformTask
+import com.android.build.gradle.internal.transforms.JackTransform
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.JavaBasePlugin
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.external.javadoc.StandardJavadocDocletOptions
 import org.gradle.internal.jvm.Jvm
@@ -42,15 +45,31 @@ class AndroidJavadocPlugin extends AndroidProjectPlugin {
 
                 javadoc.dependsOn variant.javaCompiler
 
-                javadoc.source = variant.javaCompiler.source
-                javadoc.classpath = project.files(variant.javaCompiler.destinationDir) + variant.javaCompiler.classpath
+                if(variant.javaCompiler instanceof JavaCompile) {
+                    JavaCompile javacTask = variant.javaCompiler as JavaCompile;
+
+                    javadoc.source = javacTask.source;
+
+                    javadoc.classpath = project.files(javacTask.destinationDir) + javacTask.classpath
+                    javadoc.options.source = javacTask.sourceCompatibility
+                }
+
+                if(variant.javaCompiler instanceof TransformTask){
+                    TransformTask jackTask = variant.javaCompiler as TransformTask;
+                    JackTransform jackTransform = jackTask.transform as JackTransform;
+
+                    javadoc.source = jackTransform.getSourceFiles();
+
+                    javadoc.classpath = project.files(jackTransform.options.classpaths.toArray())
+                    javadoc.options.source = jackTransform.options.sourceCompatibility;
+                }
+
 
                 //javadoc.exclude '**/BuildConfig.java'
                 javadoc.exclude '**/R.java'
 
                 javadoc.options.encoding "UTF-8"
-                javadoc.options.bootClasspath = androidExtension.getBootClasspath() + Jvm.current().runtimeJar;
-                javadoc.options.source = variant.javaCompiler.sourceCompatibility
+                javadoc.options.bootClasspath = androidExtension.getBootClasspath()
 
                 if (javadoc.getOptions() instanceof StandardJavadocDocletOptions) {
                     StandardJavadocDocletOptions realOptions = javadoc.options as StandardJavadocDocletOptions
