@@ -24,10 +24,11 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'com.android.tools.build:gradle:2.2.0'
+    compile 'com.android.tools.build:gradle:2.2.2'
 }
 
 gradlePlugin {
+    //noinspection GroovyAssignabilityCheck
     plugins {
         androidJavadoc {
             id = "io.freefair.android-javadoc"
