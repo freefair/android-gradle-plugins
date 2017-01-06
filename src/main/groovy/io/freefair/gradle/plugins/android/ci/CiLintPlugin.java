@@ -1,6 +1,6 @@
-package io.freefair.gradle.plugin.android.ci;
+package io.freefair.gradle.plugins.android.ci;
 
-import io.freefair.gradle.plugin.android.AndroidProjectPlugin;
+import io.freefair.gradle.plugins.android.AndroidProjectPlugin;
 import org.gradle.api.Project;
 
 public class CiLintPlugin extends AndroidProjectPlugin {

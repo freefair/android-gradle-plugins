@@ -1,23 +1,15 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-    }
-    dependencies {
-        classpath 'io.freefair.gradle-plugins:git-version:2.0.0-beta5'
-    }
+plugins {
+    id "maven-publish"
+    id "groovy"
+    id "java-gradle-plugin"
+    id "com.gradle.plugin-publish" version "0.9.7"
 }
 
 repositories {
     jcenter()
 }
 
-group = 'io.freefair'
-apply plugin: 'io.freefair.git-version'
-
-apply plugin: 'java-gradle-plugin'
-apply plugin: 'groovy'
-apply plugin: 'maven'
+group = 'io.freefair.gradle'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
@@ -32,31 +24,31 @@ gradlePlugin {
     plugins {
         androidJavadoc {
             id = "io.freefair.android-javadoc"
-            implementationClass = "io.freefair.gradle.plugin.android.AndroidJavadocPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.AndroidJavadocPlugin"
         }
         androidJavadocJar {
             id = "io.freefair.android-javadoc-jar"
-            implementationClass = "io.freefair.gradle.plugin.android.maven.AndroidJavadocJarPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidJavadocJarPlugin"
         }
         androidSourcesJar {
             id = "io.freefair.android-sources-jar"
-            implementationClass = "io.freefair.gradle.plugin.android.maven.AndroidSourcesJarPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidSourcesJarPlugin"
         }
         androidMavenJars {
             id = "io.freefair.android-maven-jars"
-            implementationClass = "io.freefair.gradle.plugin.android.maven.AndroidMavenJarsPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidMavenJarsPlugin"
         }
         androidCi {
             id = "io.freefair.android-ci"
-            implementationClass = "io.freefair.gradle.plugin.android.ci.CiPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.ci.CiPlugin"
         }
         androidCiDex {
             id = "io.freefair.android-ci-dex"
-            implementationClass = "io.freefair.gradle.plugin.android.ci.CiDexPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.ci.CiDexPlugin"
         }
         androidCiLint {
             id = "io.freefair.android-ci-lint"
-            implementationClass = "io.freefair.gradle.plugin.android.ci.CiLintPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.ci.CiLintPlugin"
         }
     }
 }
@@ -85,5 +77,60 @@ artifacts {
     archives sourcesJar
     archives javadocJar
     archives groovydocJar
+}
+
+pluginBundle {
+    website = "https://github.com/freefair/android-gradle-plugins"
+    vcsUrl = 'https://github.com/freefair/android-gradle-plugins'
+    tags = ['android']
+
+    plugins {
+        androidJavadoc {
+            id = "io.freefair.android-javadoc"
+            displayName = "Android Javadoc Plugin"
+            description = "Generate javadocs for all variants of your android project"
+            tags = ['android', 'javadoc']
+        }
+        androidJavadocJar {
+            id = "io.freefair.android-javadoc-jar"
+            displayName = "Android Javadoc Jar Plugin"
+            description = "Generate javadoc jars for all variants of your android project"
+            tags = ['android', 'maven', 'javadoc', 'jar']
+        }
+        androidSourcesJar {
+            id = "io.freefair.android-sources-jar"
+            displayName = "Android Sources Jar Plugin"
+            description = "Generate sources jars for all variants of your android project"
+            tags = ['android', 'maven', 'sources', 'jar']
+        }
+        androidMavenJars {
+            id = "io.freefair.android-maven-jars"
+            displayName = "Android Maven Jars Plugin"
+            description = "Generate sources and javadoc jars for all variants of your android project"
+            tags = ['android', 'maven', 'jar']
+        }
+        androidCi {
+            id = "io.freefair.android-ci"
+            displayName = "Android CI Plugin"
+            description = "Properly configure your android project on CI servers (like travis)"
+            tags = ['android', 'ci', 'travis']
+        }
+        androidCiDex {
+            id = "io.freefair.android-ci-dex"
+            displayName = "Android CI Plugin"
+            description = "Properly configure your android project on CI servers (like travis)"
+            tags = ['android', 'ci', 'travis', 'dex']
+        }
+        androidCiLint {
+            id = "io.freefair.android-ci-lint"
+            displayName = "Android CI Plugin"
+            description = "Properly configure your android project on CI servers (like travis)"
+            tags = ['android', 'ci', 'travis', 'lint']
+        }
+    }
+
+    mavenCoordinates {
+        groupId = project.group
+    }
 }
 

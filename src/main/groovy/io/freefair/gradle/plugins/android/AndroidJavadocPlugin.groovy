@@ -1,4 +1,4 @@
-package io.freefair.gradle.plugin.android
+package io.freefair.gradle.plugins.android
 
 import com.android.build.gradle.api.BaseVariant
 import com.android.build.gradle.internal.pipeline.TransformTask

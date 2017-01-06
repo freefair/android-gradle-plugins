@@ -1,2 +1,8 @@
 language: groovy
 jdk: oraclejdk8
+
+deploy:
+  provider: script
+  script: ./gradlew clean publishPlugins -Pversion=$TRAVIS_TAG -Pgradle.publish.key=$GRADLE_PUBLISH_KEY -Pgradle.publish.secret=$GRADLE_PUBLISH_SECRET
+  on:
+    tags: true
