@@ -14,8 +14,7 @@ group = 'io.freefair.gradle'
 sourceCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
+    compileOnly "org.projectlombok:lombok:1.16.12"
     compile 'com.android.tools.build:gradle:2.2.2'
 }
 
