@@ -20,8 +20,11 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
 
     private boolean isLibrary;
 
+    private Project project;
+
     @Override
     public void apply(Project project) {
+        this.project = project;
 
         Object androidExtension = project.getExtensions().getByName("android");
 
