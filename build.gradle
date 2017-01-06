@@ -89,24 +89,25 @@ pluginBundle {
             id = "io.freefair.android-javadoc"
             displayName = "Android Javadoc Plugin"
             description = "Generate javadocs for all variants of your android project"
-            tags = ['javadoc', 'android']
+            tags = ['android', 'javadoc']
         }
         androidJavadocJar {
             id = "io.freefair.android-javadoc-jar"
             displayName = "Android Javadoc Jar Plugin"
             description = "Generate javadoc jars for all variants of your android project"
-            tags = ['maven', 'javadoc', 'jar']
+            tags = ['android', 'maven', 'javadoc', 'jar']
         }
         androidSourcesJar {
             id = "io.freefair.android-sources-jar"
             displayName = "Android Sources Jar Plugin"
             description = "Generate sources jars for all variants of your android project"
-            tags = ['maven', 'sources', 'jar']
+            tags = ['android', 'maven', 'sources', 'jar']
         }
         androidMavenJars {
             id = "io.freefair.android-maven-jars"
             displayName = "Android Maven Jars Plugin"
             description = "Generate sources and javadoc jars for all variants of your android project"
+            tags = ['android', 'maven', 'jar']
         }
         androidCi {
             id = "io.freefair.android-ci"
