@@ -1,4 +1,4 @@
-package io.freefair.gradle.plugin.android.maven;
+package io.freefair.gradle.plugins.android.maven;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;

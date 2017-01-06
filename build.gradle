@@ -24,31 +24,31 @@ gradlePlugin {
     plugins {
         androidJavadoc {
             id = "io.freefair.android-javadoc"
-            implementationClass = "io.freefair.gradle.plugin.android.AndroidJavadocPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.AndroidJavadocPlugin"
         }
         androidJavadocJar {
             id = "io.freefair.android-javadoc-jar"
-            implementationClass = "io.freefair.gradle.plugin.android.maven.AndroidJavadocJarPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidJavadocJarPlugin"
         }
         androidSourcesJar {
             id = "io.freefair.android-sources-jar"
-            implementationClass = "io.freefair.gradle.plugin.android.maven.AndroidSourcesJarPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidSourcesJarPlugin"
         }
         androidMavenJars {
             id = "io.freefair.android-maven-jars"
-            implementationClass = "io.freefair.gradle.plugin.android.maven.AndroidMavenJarsPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidMavenJarsPlugin"
         }
         androidCi {
             id = "io.freefair.android-ci"
-            implementationClass = "io.freefair.gradle.plugin.android.ci.CiPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.ci.CiPlugin"
         }
         androidCiDex {
             id = "io.freefair.android-ci-dex"
-            implementationClass = "io.freefair.gradle.plugin.android.ci.CiDexPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.ci.CiDexPlugin"
         }
         androidCiLint {
             id = "io.freefair.android-ci-lint"
-            implementationClass = "io.freefair.gradle.plugin.android.ci.CiLintPlugin"
+            implementationClass = "io.freefair.gradle.plugins.android.ci.CiLintPlugin"
         }
     }
 }

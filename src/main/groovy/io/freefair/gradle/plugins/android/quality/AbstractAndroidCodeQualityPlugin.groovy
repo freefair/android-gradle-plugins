@@ -1,7 +1,7 @@
-package io.freefair.gradle.plugin.android.quality
+package io.freefair.gradle.plugins.android.quality
 
 import com.android.build.gradle.api.AndroidSourceSet
-import io.freefair.gradle.plugin.android.AndroidProjectPlugin
+import io.freefair.gradle.plugins.android.AndroidProjectPlugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.JavaBasePlugin

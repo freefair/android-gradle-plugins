@@ -1,7 +1,7 @@
-package io.freefair.gradle.plugin.android.maven
+package io.freefair.gradle.plugins.android.maven
 
-import io.freefair.gradle.plugin.android.AndroidJavadocPlugin
-import io.freefair.gradle.plugin.android.AndroidProjectPlugin
+import io.freefair.gradle.plugins.android.AndroidJavadocPlugin
+import io.freefair.gradle.plugins.android.AndroidProjectPlugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.artifacts.Dependency
