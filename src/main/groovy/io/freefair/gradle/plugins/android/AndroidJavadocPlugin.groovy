@@ -19,7 +19,7 @@ class AndroidJavadocPlugin extends AndroidProjectPlugin {
 
     @Override
     void apply(Project project) {
-        Object.apply(project)
+        super.apply(project)
 
         javadocTasks = new HashMap<>();
 
