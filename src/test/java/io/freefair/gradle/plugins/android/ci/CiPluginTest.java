@@ -19,12 +19,12 @@ public class CiPluginTest extends AbstractGradlePluginTest {
 
         BuildResult result = GradleRunner.create()
                 .withProjectDir(testProjectDir.getRoot())
-                .withArguments("build", "--stacktrace")
+                .withArguments("assemble", "--stacktrace")
                 .withPluginClasspath()
                 .withDebug(true)
                 .build();
 
-        assertEquals(result.task(":build").getOutcome(), SUCCESS);
+        assertEquals(result.task(":assemble").getOutcome(), SUCCESS);
     }
 
     @Test
@@ -34,11 +34,11 @@ public class CiPluginTest extends AbstractGradlePluginTest {
 
         BuildResult result = GradleRunner.create()
                 .withProjectDir(testProjectDir.getRoot())
-                .withArguments("build", "--stacktrace")
+                .withArguments("assemble", "--stacktrace")
                 .withPluginClasspath()
                 .withDebug(true)
                 .build();
 
-        assertEquals(result.task(":build").getOutcome(), SUCCESS);
+        assertEquals(result.task(":assemble").getOutcome(), SUCCESS);
     }
 }
