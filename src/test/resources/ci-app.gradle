@@ -1,0 +1,9 @@
+plugins {
+    id "com.android.application" version "2.2.2"
+    id "io.freefair.android-ci"
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+}
