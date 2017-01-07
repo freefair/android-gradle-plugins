@@ -7,7 +7,6 @@ android:
     - tools
     - platform-tools
     - android-25
-    - extra
     - build-tools-25.0.0
 
 install: ./gradlew assemble --stacktrace
