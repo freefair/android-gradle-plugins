@@ -10,7 +10,9 @@ android:
     - extra
     - build-tools-25.0.0
 
-script: ./gradlew build check
+install: ./gradlew assemble --stacktrace
+
+script: ./gradlew check --info
 
 deploy:
   provider: script
