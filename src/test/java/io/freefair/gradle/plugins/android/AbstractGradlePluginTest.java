@@ -4,9 +4,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
@@ -15,10 +13,21 @@ public class AbstractGradlePluginTest {
     @Rule
     public final TemporaryFolder testProjectDir = new TemporaryFolder();
     protected File buildFile;
+    private File srcMain;
 
     @Before
     public void setup() throws IOException {
         buildFile = testProjectDir.newFile("build.gradle");
+        srcMain = testProjectDir.newFolder("src", "main");
+
+    }
+
+    protected void setPackageName(String packageName) throws FileNotFoundException, UnsupportedEncodingException {
+        File androidManifestXml = new File(srcMain, "AndroidManifest.xml");
+
+        try (PrintWriter writer = new PrintWriter(androidManifestXml, "UTF-8")) {
+            writer.printf("<manifest package=\"%s\"></manifest>\n", packageName);
+        }
     }
 
     protected void loadBuildFileFromClasspath(String name) throws IOException {

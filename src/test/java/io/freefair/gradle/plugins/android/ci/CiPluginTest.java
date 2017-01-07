@@ -10,14 +10,12 @@ import java.io.IOException;
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS;
 import static org.junit.Assert.*;
 
-/**
- * Created by larsgrefer on 07.01.17.
- */
 public class CiPluginTest extends AbstractGradlePluginTest {
 
     @Test
     public void testApp() throws IOException {
         loadBuildFileFromClasspath("/ci-app.gradle");
+        setPackageName("io.freefair.android.test.ciApp");
 
         BuildResult result = GradleRunner.create()
                 .withProjectDir(testProjectDir.getRoot())
@@ -32,6 +30,7 @@ public class CiPluginTest extends AbstractGradlePluginTest {
     @Test
     public void testLibrary() throws IOException {
         loadBuildFileFromClasspath("/ci-library.gradle");
+        setPackageName("io.freefair.android.test.ciLib");
 
         BuildResult result = GradleRunner.create()
                 .withProjectDir(testProjectDir.getRoot())
