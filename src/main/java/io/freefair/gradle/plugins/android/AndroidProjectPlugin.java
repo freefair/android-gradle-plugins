@@ -1,62 +1,129 @@
 package io.freefair.gradle.plugins.android;
 
-import com.android.build.gradle.AppExtension;
-import com.android.build.gradle.LibraryExtension;
-import com.android.build.gradle.TestedExtension;
+import com.android.build.gradle.*;
 import com.android.build.gradle.api.BaseVariant;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.gradle.api.DomainObjectSet;
 import org.gradle.api.Nullable;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
+import static lombok.AccessLevel.PRIVATE;
+
 @Getter
 public abstract class AndroidProjectPlugin implements Plugin<Project> {
 
     @Nullable
     private LibraryExtension libraryExtension;
+
     @Nullable
     private AppExtension appExtension;
 
-    private boolean isLibrary;
+    @Nullable
+    private TestExtension testExtension;
+
+    @Nullable
+    private ProjectType projectType;
 
     private Project project;
+
+    @Getter(PRIVATE)
+    private boolean withAndroidCalled = false;
 
     @Override
     public void apply(Project project) {
         this.project = project;
 
-        Object androidExtension = project.getExtensions().getByName("android");
+        project.getPlugins().withType(AppPlugin.class, appPlugin -> {
+            appExtension = project.getExtensions().getByType(AppExtension.class);
+            projectType = ProjectType.APP;
 
-        if (androidExtension instanceof LibraryExtension) {
-            isLibrary = true;
-            libraryExtension = (LibraryExtension) androidExtension;
-        } else if (androidExtension instanceof AppExtension) {
-            isLibrary = false;
-            appExtension = (AppExtension) androidExtension;
+            withAndroid(appExtension);
+            if(!isWithAndroidCalled()) {
+                throw new RuntimeException("call super() in withAndroid()");
+            }
+        });
+
+        project.getPlugins().withType(LibraryPlugin.class, libraryPlugin -> {
+            libraryExtension = project.getExtensions().getByType(LibraryExtension.class);
+            projectType = ProjectType.LIBRARY;
+
+            withAndroid(libraryExtension);
+            if(!isWithAndroidCalled()) {
+                throw new RuntimeException("call super() in withAndroid()");
+            }
+        });
+
+        project.getPlugins().withType(TestPlugin.class, testPlugin -> {
+            testExtension = project.getExtensions().getByType(TestExtension.class);
+            projectType = ProjectType.TEST;
+
+            withAndroid(testExtension);
+            if(!isWithAndroidCalled()) {
+                throw new RuntimeException("call super() in withAndroid()");
+            }
+        });
+
+        project.afterEvaluate(project1 -> {
+            if (projectType == null)
+                project1.getLogger().warn("No android plugin found on project {}", project);
+        });
+    }
+
+    protected void withAndroid(BaseExtension extension) {
+        withAndroidCalled = true;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public BaseExtension getAndroidExtension() {
+        if(projectType == null) {
+            throw new IllegalStateException("No android plugin found");
         }
 
+        switch (projectType){
+            case APP:
+                return appExtension;
+            case LIBRARY:
+                return libraryExtension;
+            case TEST:
+                return testExtension;
+            default:
+                throw new IllegalStateException("Unexpected project type: " + projectType);
+        }
     }
 
-    protected TestedExtension getAndroidExtension() {
-        if (isLibrary)
-            return libraryExtension;
-        else
-            return appExtension;
-    }
+    @SuppressWarnings("WeakerAccess")
+    public DomainObjectSet<? extends BaseVariant> getAndroidVariants() {
+        if(projectType == null) {
+            throw new IllegalStateException("No android plugin found");
+        }
 
-    protected DomainObjectSet<? extends BaseVariant> getAndroidVariants() {
-        if (isLibrary)
-            return libraryExtension.getLibraryVariants();
-        else
-            return appExtension.getApplicationVariants();
+        switch (projectType) {
+            case APP:
+                return appExtension.getApplicationVariants();
+            case LIBRARY:
+                return libraryExtension.getLibraryVariants();
+            case TEST:
+                return testExtension.getApplicationVariants();
+            default:
+                throw new IllegalStateException("Unexpected project type: " + projectType);
+        }
     }
 
     protected boolean publishVariant(BaseVariant variant) {
-        if (isLibrary) {
-            return libraryExtension.getPublishNonDefault() || libraryExtension.getDefaultPublishConfig().equals(variant.getName());
-        } else {
-            return appExtension.getPublishNonDefault() || appExtension.getDefaultPublishConfig().equals(variant.getName());
-        }
+        return getAndroidExtension().getPublishNonDefault() || getAndroidExtension().getDefaultPublishConfig().equals(variant.getName());
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum ProjectType {
+        APP(AppPlugin.class, AppExtension.class),
+        LIBRARY(LibraryPlugin.class, LibraryExtension.class),
+        TEST(TestPlugin.class, TestExtension.class);
+
+        private Class<? extends BasePlugin> pluginClass;
+        private Class<? extends BaseExtension> extensionClass;
+
     }
 }

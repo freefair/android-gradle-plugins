@@ -1,5 +1,6 @@
 package io.freefair.gradle.plugins.android.maven;
 
+import com.android.build.gradle.BaseExtension;
 import io.freefair.gradle.plugins.android.AndroidProjectPlugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -10,18 +11,24 @@ import static org.codehaus.groovy.runtime.StringGroovyMethods.capitalize;
 
 public class AndroidSourcesJarPlugin extends AndroidProjectPlugin {
 
+    private Task allSourcesJarTask;
+
     @Override
     public void apply(Project project) {
         super.apply(project);
 
-        Task allSourcesJarTask = project.getTasks().create("sourcesJar", asjTask -> {
+        allSourcesJarTask = project.getTasks().create("sourcesJar", asjTask -> {
             asjTask.setDescription("Generate the sources jar for all variants");
             asjTask.setGroup("jar");
         });
+    }
 
+    @Override
+    protected void withAndroid(BaseExtension extension) {
+        super.withAndroid(extension);
 
         getAndroidVariants().all(variant -> {
-            Jar sourcesJarTask = project.getTasks().create("sources" + capitalize((CharSequence) variant.getName()) + "Jar", Jar.class, jar -> {
+            Jar sourcesJarTask = getProject().getTasks().create("sources" + capitalize((CharSequence) variant.getName()) + "Jar", Jar.class, jar -> {
                 jar.setDescription("Generate the sources jar for the " + variant.getName() + " variant");
                 jar.setGroup("jar");
 
@@ -33,7 +40,7 @@ public class AndroidSourcesJarPlugin extends AndroidProjectPlugin {
             allSourcesJarTask.dependsOn(sourcesJarTask);
 
             if (publishVariant(variant)) {
-                project.getArtifacts().add(Dependency.ARCHIVES_CONFIGURATION, sourcesJarTask);
+                getProject().getArtifacts().add(Dependency.ARCHIVES_CONFIGURATION, sourcesJarTask);
             }
         });
     }

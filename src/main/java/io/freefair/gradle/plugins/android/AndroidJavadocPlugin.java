@@ -1,5 +1,6 @@
 package io.freefair.gradle.plugins.android;
 
+import com.android.build.gradle.BaseExtension;
 import com.android.build.gradle.api.BaseVariant;
 import com.android.build.gradle.internal.pipeline.TransformTask;
 import com.android.build.gradle.internal.transforms.JackTransform;
@@ -26,7 +27,7 @@ import static org.codehaus.groovy.runtime.StringGroovyMethods.capitalize;
 
 public class AndroidJavadocPlugin extends AndroidProjectPlugin {
 
-    private Map<String, Javadoc> javadocTasks;
+    private Map<String, Javadoc> javadocTasks = new HashMap<>();
 
     private Task allJavadocTask;
 
@@ -34,15 +35,18 @@ public class AndroidJavadocPlugin extends AndroidProjectPlugin {
     public void apply(Project project) {
         super.apply(project);
 
-        javadocTasks = new HashMap<>();
-
         allJavadocTask = project.getTasks().create("javadoc", ajdTasks -> {
             ajdTasks.setDescription("Generate Javadoc for all variants");
             ajdTasks.setGroup(JavaBasePlugin.DOCUMENTATION_GROUP);
         });
 
+    }
+
+    @Override
+    protected void withAndroid(BaseExtension extension) {
+        super.withAndroid(extension);
         getAndroidVariants().all(variant -> {
-            Javadoc javadocTask = getJavadocTask(project, variant);
+            Javadoc javadocTask = getJavadocTask(getProject(), variant);
 
             allJavadocTask.dependsOn(javadocTask);
         });
