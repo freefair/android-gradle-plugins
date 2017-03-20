@@ -9,7 +9,7 @@ import org.gradle.api.internal.file.UnionFileTree;
 import org.gradle.api.internal.jvm.ClassDirectoryBinaryNamingScheme;
 import org.gradle.api.tasks.SourceSet;
 
-abstract class AndroidCodeQualityHelper extends AndroidProjectPlugin {
+public abstract class AndroidCodeQualityHelper extends AndroidProjectPlugin {
 
     /**
      * Returns the name of a task for this source set.

@@ -23,7 +23,7 @@ import java.io.File;
  * @see AbstractAndroidCodeQualityPlugin
  */
 @Incubating
-class AndroidFindBugsPlugin extends AbstractAndroidCodeQualityPlugin<FindBugs> {
+public class AndroidFindBugsPlugin extends AbstractAndroidCodeQualityPlugin<FindBugs> {
 
     public static final String DEFAULT_FINDBUGS_VERSION = FindBugsPlugin.DEFAULT_FINDBUGS_VERSION;
     private FindBugsExtension extension;

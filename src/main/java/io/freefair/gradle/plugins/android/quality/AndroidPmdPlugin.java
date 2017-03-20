@@ -24,7 +24,7 @@ import java.util.Arrays;
  * @see AbstractAndroidCodeQualityPlugin
  */
 @Incubating
-class AndroidPmdPlugin extends AbstractAndroidCodeQualityPlugin<Pmd> {
+public class AndroidPmdPlugin extends AbstractAndroidCodeQualityPlugin<Pmd> {
 
     public static final String DEFAULT_PMD_VERSION = PmdPlugin.DEFAULT_PMD_VERSION;
     private PmdExtension extension;
