@@ -53,6 +53,18 @@ gradlePlugin {
             id = "io.freefair.android-ci-lint"
             implementationClass = "io.freefair.gradle.plugins.android.ci.CiLintPlugin"
         }
+        androidCheckstyle {
+            id = "io.freefair.android-checkstyle"
+            implementationClass = "io.freefair.gradle.plugins.android.quality.AndroidCheckstylePlugin"
+        }
+        androidPmd {
+            id = "io.freefair.android-pmd"
+            implementationClass = "io.freefair.gradle.plugins.android.quality.AndroidPmdPlugin"
+        }
+        androidCheckstyle {
+            id = "io.freefair.android-findbugs"
+            implementationClass = "io.freefair.gradle.plugins.android.quality.AndroidFindBugsPlugin"
+        }
     }
 }
 
@@ -103,6 +115,24 @@ pluginBundle {
             displayName = "Android CI Plugin"
             description = "Properly configure your android project on CI servers (like travis)"
             tags = ['android', 'ci', 'travis', 'lint']
+        }
+        androidCheckstyle {
+            id = "io.freefair.android-checkstyle"
+            displayName = "Android Checkstyle Plugin"
+            description = "Run Checkstyle on your android source-sets"
+            tags = ['android', 'checkstyle']
+        }
+        androidPmd {
+            id = "io.freefair.android-pmd"
+            displayName = "Android PMD Plugin"
+            description = "Run PMD on your android source-sets"
+            tags = ['android', 'pmd']
+        }
+        androidCheckstyle {
+            id = "io.freefair.android-findbugs"
+            displayName = "Android FindBugs Plugin"
+            description = "Run FindBugs on your android source-sets"
+            tags = ['android', 'findbugs']
         }
     }
 

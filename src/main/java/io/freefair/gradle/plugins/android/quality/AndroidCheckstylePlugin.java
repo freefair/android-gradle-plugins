@@ -6,6 +6,7 @@ import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.plugins.quality.Checkstyle;
 import org.gradle.api.plugins.quality.CheckstyleExtension;
+import org.gradle.api.plugins.quality.CheckstylePlugin;
 import org.gradle.api.plugins.quality.CodeQualityExtension;
 
 import java.io.File;
@@ -22,7 +23,7 @@ import java.io.File;
  */
 public class AndroidCheckstylePlugin extends AbstractAndroidCodeQualityPlugin<Checkstyle> {
 
-    public static final String DEFAULT_CHECKSTYLE_VERSION = "5.9";
+    public static final String DEFAULT_CHECKSTYLE_VERSION = CheckstylePlugin.DEFAULT_CHECKSTYLE_VERSION;
     private CheckstyleExtension extension;
 
     @Override

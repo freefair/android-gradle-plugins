@@ -8,6 +8,7 @@ import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.plugins.quality.CodeQualityExtension;
 import org.gradle.api.plugins.quality.FindBugs;
 import org.gradle.api.plugins.quality.FindBugsExtension;
+import org.gradle.api.plugins.quality.FindBugsPlugin;
 
 import java.io.File;
 
@@ -24,7 +25,7 @@ import java.io.File;
 @Incubating
 class AndroidFindBugsPlugin extends AbstractAndroidCodeQualityPlugin<FindBugs> {
 
-    public static final String DEFAULT_FINDBUGS_VERSION = "3.0.1";
+    public static final String DEFAULT_FINDBUGS_VERSION = FindBugsPlugin.DEFAULT_FINDBUGS_VERSION;
     private FindBugsExtension extension;
 
     @Override
