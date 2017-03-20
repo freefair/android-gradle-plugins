@@ -62,7 +62,7 @@ gradlePlugin {
             id = "io.freefair.android-pmd"
             implementationClass = "io.freefair.gradle.plugins.android.quality.AndroidPmdPlugin"
         }
-        androidCheckstyle {
+        androidFindbugs {
             id = "io.freefair.android-findbugs"
             implementationClass = "io.freefair.gradle.plugins.android.quality.AndroidFindBugsPlugin"
         }
@@ -129,7 +129,7 @@ pluginBundle {
             description = "Run PMD on your android source-sets"
             tags = ['android', 'pmd']
         }
-        androidCheckstyle {
+        androidFindbugs {
             id = "io.freefair.android-findbugs"
             displayName = "Android FindBugs Plugin"
             description = "Run FindBugs on your android source-sets"
