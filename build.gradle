@@ -2,10 +2,19 @@ plugins {
     id "maven-publish"
     id "java-gradle-plugin"
     id "com.gradle.plugin-publish" version "0.9.7"
+    id "findbugs"
+    id "pmd"
 }
 
 repositories {
     jcenter()
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
 }
 
 group = 'io.freefair.gradle'
