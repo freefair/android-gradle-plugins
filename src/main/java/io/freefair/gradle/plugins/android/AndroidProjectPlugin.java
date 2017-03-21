@@ -36,9 +36,13 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
     @Getter(PRIVATE)
     private boolean withAndroidCalled = false;
 
+    @Getter(PRIVATE)
+    private boolean applyCalled = false;
+
     @Override
     public void apply(Project project) {
         this.project = project;
+        applyCalled = true;
 
         project.getPlugins().withType(AppPlugin.class, appPlugin -> {
             appExtension = project.getExtensions().getByType(AppExtension.class);
@@ -83,7 +87,11 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
     @SuppressWarnings("WeakerAccess")
     public BaseExtension getAndroidExtension() {
         if (projectType == null) {
-            throw new IllegalStateException("No android plugin found");
+            if (isApplyCalled()) {
+                throw new IllegalStateException("No android plugin found");
+            } else {
+                throw new IllegalArgumentException("super.apply() not called");
+            }
         }
 
         switch (projectType) {

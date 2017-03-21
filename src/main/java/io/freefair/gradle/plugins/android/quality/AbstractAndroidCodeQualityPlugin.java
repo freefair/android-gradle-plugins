@@ -36,6 +36,7 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task> extends A
 
     @Override
     public final void apply(Project project) {
+        super.apply(project);
         this.project = (ProjectInternal) project;
 
         beforeApply();
