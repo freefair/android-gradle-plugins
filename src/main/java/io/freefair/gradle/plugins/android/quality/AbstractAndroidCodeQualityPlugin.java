@@ -25,7 +25,7 @@ import java.util.concurrent.Callable;
  *
  * @see org.gradle.api.plugins.quality.internal.AbstractCodeQualityPlugin
  */
-abstract class AbstractAndroidCodeQualityPlugin<T extends Task> extends AndroidCodeQualityHelper {
+public abstract class AbstractAndroidCodeQualityPlugin<T extends Task> extends AndroidCodeQualityHelper {
 
     protected static ConventionMapping conventionMappingOf(Object object) {
         return ((IConventionAware) object).getConventionMapping();
@@ -53,7 +53,7 @@ abstract class AbstractAndroidCodeQualityPlugin<T extends Task> extends AndroidC
     protected abstract Class<T> getTaskType();
 
     private Class<? extends Task> getCastedTaskType() {
-        return (Class<? extends Task>) getTaskType();
+        return getTaskType();
     }
 
     protected String getTaskBaseName() {

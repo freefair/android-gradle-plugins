@@ -26,12 +26,13 @@ public class AbstractGradlePluginTest {
         File androidManifestXml = new File(srcMain, "AndroidManifest.xml");
 
         try (PrintWriter writer = new PrintWriter(androidManifestXml, "UTF-8")) {
-            writer.printf("<manifest package=\"%s\"></manifest>\n", packageName);
+            writer.printf("<manifest package=\"%s\"></manifest>", packageName);
+            writer.println();
         }
     }
 
     protected void loadBuildFileFromClasspath(String name) throws IOException {
-        InputStream resourceAsStream = getClass().getResourceAsStream(name);
+        InputStream resourceAsStream = AbstractGradlePluginTest.class.getResourceAsStream(name);
         Files.copy(resourceAsStream, buildFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 }

@@ -11,6 +11,11 @@ import org.gradle.api.Project;
 
 import static lombok.AccessLevel.PRIVATE;
 
+/**
+ * Abstract base class for all android related {@link Plugin plugins}.
+ * Provides type-safe access to the {@link BaseExtension android}-extension
+ * and the {@link BaseVariant variant} collection.
+ */
 @Getter
 public abstract class AndroidProjectPlugin implements Plugin<Project> {
 
@@ -40,7 +45,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
             projectType = ProjectType.APP;
 
             withAndroid(appExtension);
-            if(!isWithAndroidCalled()) {
+            if (!isWithAndroidCalled()) {
                 throw new RuntimeException("call super() in withAndroid()");
             }
         });
@@ -50,7 +55,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
             projectType = ProjectType.LIBRARY;
 
             withAndroid(libraryExtension);
-            if(!isWithAndroidCalled()) {
+            if (!isWithAndroidCalled()) {
                 throw new RuntimeException("call super() in withAndroid()");
             }
         });
@@ -60,7 +65,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
             projectType = ProjectType.TEST;
 
             withAndroid(testExtension);
-            if(!isWithAndroidCalled()) {
+            if (!isWithAndroidCalled()) {
                 throw new RuntimeException("call super() in withAndroid()");
             }
         });
@@ -77,11 +82,11 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
 
     @SuppressWarnings("WeakerAccess")
     public BaseExtension getAndroidExtension() {
-        if(projectType == null) {
+        if (projectType == null) {
             throw new IllegalStateException("No android plugin found");
         }
 
-        switch (projectType){
+        switch (projectType) {
             case APP:
                 return appExtension;
             case LIBRARY:
@@ -95,7 +100,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
 
     @SuppressWarnings("WeakerAccess")
     public DomainObjectSet<? extends BaseVariant> getAndroidVariants() {
-        if(projectType == null) {
+        if (projectType == null) {
             throw new IllegalStateException("No android plugin found");
         }
 

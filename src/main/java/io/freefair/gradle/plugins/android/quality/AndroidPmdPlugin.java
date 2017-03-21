@@ -6,10 +6,7 @@ import org.gradle.api.Incubating;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.internal.ConventionMapping;
-import org.gradle.api.plugins.quality.CodeQualityExtension;
-import org.gradle.api.plugins.quality.Pmd;
-import org.gradle.api.plugins.quality.PmdExtension;
-import org.gradle.api.plugins.quality.TargetJdk;
+import org.gradle.api.plugins.quality.*;
 import org.gradle.util.VersionNumber;
 
 import java.io.File;
@@ -27,9 +24,9 @@ import java.util.Arrays;
  * @see AbstractAndroidCodeQualityPlugin
  */
 @Incubating
-class AndroidPmdPlugin extends AbstractAndroidCodeQualityPlugin<Pmd> {
+public class AndroidPmdPlugin extends AbstractAndroidCodeQualityPlugin<Pmd> {
 
-    public static final String DEFAULT_PMD_VERSION = "5.5.1";
+    public static final String DEFAULT_PMD_VERSION = PmdPlugin.DEFAULT_PMD_VERSION;
     private PmdExtension extension;
 
     @Override
