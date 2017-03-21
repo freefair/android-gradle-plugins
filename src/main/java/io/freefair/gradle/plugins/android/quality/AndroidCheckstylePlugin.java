@@ -5,9 +5,7 @@ import com.google.common.util.concurrent.Callables;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.plugins.quality.Checkstyle;
-import org.gradle.api.plugins.quality.CheckstyleExtension;
 import org.gradle.api.plugins.quality.CheckstylePlugin;
-import org.gradle.api.plugins.quality.CodeQualityExtension;
 
 import java.io.File;
 
@@ -24,7 +22,7 @@ import java.io.File;
 public class AndroidCheckstylePlugin extends AbstractAndroidCodeQualityPlugin<Checkstyle> {
 
     public static final String DEFAULT_CHECKSTYLE_VERSION = CheckstylePlugin.DEFAULT_CHECKSTYLE_VERSION;
-    private CheckstyleExtension extension;
+    private AndroidCheckstyleExtension extension;
 
     @Override
     protected String getToolName() {
@@ -37,8 +35,8 @@ public class AndroidCheckstylePlugin extends AbstractAndroidCodeQualityPlugin<Ch
     }
 
     @Override
-    protected CodeQualityExtension createExtension() {
-        extension = project.getExtensions().create("checkstyle", CheckstyleExtension.class, project);
+    protected AndroidCodeQualityExtension createExtension() {
+        extension = project.getExtensions().create("checkstyle", AndroidCheckstyleExtension.class, project);
         extension.setToolVersion(DEFAULT_CHECKSTYLE_VERSION);
         extension.setConfig(project.getResources().getText().fromFile("config/checkstyle/checkstyle.xml"));
         return extension;

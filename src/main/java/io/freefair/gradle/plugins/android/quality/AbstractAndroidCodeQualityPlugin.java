@@ -12,7 +12,6 @@ import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.ReportingBasePlugin;
-import org.gradle.api.plugins.quality.CodeQualityExtension;
 import org.gradle.api.reporting.ReportingExtension;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task> extends A
     }
 
     protected ProjectInternal project;
-    protected CodeQualityExtension extension;
+    protected AndroidCodeQualityExtension extension;
 
     @Override
     public final void apply(Project project) {
@@ -99,7 +98,7 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task> extends A
                 .build();
     }
 
-    protected abstract CodeQualityExtension createExtension();
+    protected abstract AndroidCodeQualityExtension createExtension();
 
     private void configureExtensionRule() {
         final ConventionMapping extensionMapping = conventionMappingOf(extension);
@@ -140,7 +139,7 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task> extends A
 
     private void configureCheckTaskDependents() {
         final String taskBaseName = getTaskBaseName();
-        project.getTasks().getByName("check").dependsOn((Callable) () -> Iterables.transform(extension.getSourceSets(), sourceSet -> sourceSet.getTaskName(taskBaseName, null)));
+        project.getTasks().getByName("check").dependsOn((Callable) () -> Iterables.transform(extension.getSourceSets(), sourceSet -> getTaskName(sourceSet, taskBaseName, null)));
     }
 
     protected void withBasePlugin(Action<Plugin> action) {

@@ -5,9 +5,7 @@ import com.google.common.util.concurrent.Callables;
 import org.gradle.api.Incubating;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.internal.ConventionMapping;
-import org.gradle.api.plugins.quality.CodeQualityExtension;
 import org.gradle.api.plugins.quality.FindBugs;
-import org.gradle.api.plugins.quality.FindBugsExtension;
 import org.gradle.api.plugins.quality.FindBugsPlugin;
 
 import java.io.File;
@@ -26,7 +24,7 @@ import java.io.File;
 public class AndroidFindBugsPlugin extends AbstractAndroidCodeQualityPlugin<FindBugs> {
 
     public static final String DEFAULT_FINDBUGS_VERSION = FindBugsPlugin.DEFAULT_FINDBUGS_VERSION;
-    private FindBugsExtension extension;
+    private AndroidFindBugsExtension extension;
 
     @Override
     protected String getToolName() {
@@ -51,8 +49,8 @@ public class AndroidFindBugsPlugin extends AbstractAndroidCodeQualityPlugin<Find
     }
 
     @Override
-    protected CodeQualityExtension createExtension() {
-        extension = project.getExtensions().create("findbugs", FindBugsExtension.class, project);
+    protected AndroidCodeQualityExtension createExtension() {
+        extension = project.getExtensions().create("findbugs", AndroidFindBugsExtension.class, project);
         extension.setToolVersion(DEFAULT_FINDBUGS_VERSION);
         return extension;
     }
