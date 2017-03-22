@@ -19,7 +19,7 @@ import java.io.File;
  * @see org.gradle.api.plugins.quality.CheckstylePlugin
  * @see AbstractAndroidCodeQualityPlugin
  */
-public class AndroidCheckstylePlugin extends AbstractAndroidCodeQualityPlugin<Checkstyle> {
+public class AndroidCheckstylePlugin extends SourceSetBasedCodeQualityPlugin<Checkstyle> {
 
     public static final String DEFAULT_CHECKSTYLE_VERSION = CheckstylePlugin.DEFAULT_CHECKSTYLE_VERSION;
     private AndroidCheckstyleExtension extension;
@@ -35,7 +35,7 @@ public class AndroidCheckstylePlugin extends AbstractAndroidCodeQualityPlugin<Ch
     }
 
     @Override
-    protected AndroidCodeQualityExtension createExtension() {
+    protected SourceSetBasedCodeQualityExtension createExtension() {
         extension = project.getExtensions().create("checkstyle", AndroidCheckstyleExtension.class, project);
         extension.setToolVersion(DEFAULT_CHECKSTYLE_VERSION);
         extension.setConfig(project.getResources().getText().fromFile("config/checkstyle/checkstyle.xml"));

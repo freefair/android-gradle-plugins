@@ -1,8 +1,8 @@
 plugins {
     id "com.android.application" version "2.2.2"
+    id "io.freefair.android-checkstyle"
     id "io.freefair.android-findbugs"
     id "io.freefair.android-pmd"
-    id "io.freefair.android-checkstyle"
 }
 
 android {

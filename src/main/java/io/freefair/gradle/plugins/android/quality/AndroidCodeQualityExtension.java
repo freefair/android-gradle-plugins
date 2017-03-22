@@ -1,13 +1,11 @@
 package io.freefair.gradle.plugins.android.quality;
 
-import com.android.build.gradle.api.AndroidSourceSet;
 import lombok.NoArgsConstructor;
 
 import java.io.File;
-import java.util.Collection;
 
 /**
- * Copy of {@link org.gradle.api.plugins.quality.CodeQualityExtension} which uses {@link AndroidSourceSet AndroidSourceSets}
+ * Copy of {@link org.gradle.api.plugins.quality.CodeQualityExtension} without source sets.
  *
  * @author Lars Grefer
  * @see org.gradle.api.plugins.quality.CodeQualityExtension
@@ -16,7 +14,7 @@ import java.util.Collection;
 public class AndroidCodeQualityExtension {
 
     private String toolVersion;
-    private Collection<AndroidSourceSet> sourceSets;
+
     private boolean ignoreFailures;
     private File reportsDir;
 
@@ -26,14 +24,6 @@ public class AndroidCodeQualityExtension {
 
     public void setToolVersion(String toolVersion) {
         this.toolVersion = toolVersion;
-    }
-
-    public Collection<AndroidSourceSet> getSourceSets() {
-        return this.sourceSets;
-    }
-
-    public void setSourceSets(Collection<AndroidSourceSet> sourceSets) {
-        this.sourceSets = sourceSets;
     }
 
     public boolean isIgnoreFailures() {

@@ -14,7 +14,7 @@ import java.util.List;
  * @author Lars Grefer
  * @see org.gradle.api.plugins.quality.PmdExtension
  */
-public class AndroidPmdExtension extends AndroidCodeQualityExtension {
+public class AndroidPmdExtension extends SourceSetBasedCodeQualityExtension {
 
     private final Project project;
     private List<String> ruleSets;

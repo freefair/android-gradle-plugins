@@ -2,19 +2,21 @@ package io.freefair.gradle.plugins.android.quality;
 
 import com.android.build.gradle.api.AndroidSourceSet;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
 import com.google.common.util.concurrent.Callables;
-import org.gradle.api.*;
+import org.gradle.api.Action;
+import org.gradle.api.Plugin;
+import org.gradle.api.Project;
+import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.internal.IConventionAware;
-import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.ReportingBasePlugin;
 import org.gradle.api.reporting.ReportingExtension;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -24,35 +26,34 @@ import java.util.concurrent.Callable;
  *
  * @see org.gradle.api.plugins.quality.internal.AbstractCodeQualityPlugin
  */
-public abstract class AbstractAndroidCodeQualityPlugin<T extends Task> extends AndroidCodeQualityHelper {
+public abstract class AbstractAndroidCodeQualityPlugin<T extends Task, E extends AndroidCodeQualityExtension> extends AndroidCodeQualityHelper {
 
     protected static ConventionMapping conventionMappingOf(Object object) {
         return ((IConventionAware) object).getConventionMapping();
     }
 
-    protected ProjectInternal project;
-    protected AndroidCodeQualityExtension extension;
+    protected Project project;
+    protected E extension;
 
     @Override
     public final void apply(Project project) {
-        super.apply(project);
-        this.project = (ProjectInternal) project;
-
+        this.project = project;
         beforeApply();
+
+        super.apply(project);
+
         project.getPluginManager().apply(ReportingBasePlugin.class);
         createConfigurations();
         extension = createExtension();
         configureExtensionRule();
         configureTaskRule();
-        configureSourceSetRule();
-        configureCheckTask();
     }
 
     protected abstract String getToolName();
 
     protected abstract Class<T> getTaskType();
 
-    private Class<? extends Task> getCastedTaskType() {
+    Class<? extends Task> getCastedTaskType() {
         return getTaskType();
     }
 
@@ -98,14 +99,21 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task> extends A
                 .build();
     }
 
-    protected abstract AndroidCodeQualityExtension createExtension();
+    protected abstract E createExtension();
 
     private void configureExtensionRule() {
         final ConventionMapping extensionMapping = conventionMappingOf(extension);
-        extensionMapping.map("sourceSets", Callables.returning(new ArrayList()));
+
+        String sourceSets = getExtensionElementsName();
+        Callable<Collection<?>> ssCallable = getExtensionElementsCallable();
+
+        extensionMapping.map(sourceSets, Callables.returning(new ArrayList()));
         extensionMapping.map("reportsDir", () -> project.getExtensions().getByType(ReportingExtension.class).file(getReportName()));
-        withBasePlugin(plugin -> extensionMapping.map("sourceSets", () -> getAndroidExtension().getSourceSets()));
+        withBasePlugin(plugin -> extensionMapping.map(sourceSets, ssCallable));
     }
+
+    protected abstract String getExtensionElementsName();
+    protected abstract Callable<Collection<?>> getExtensionElementsCallable();
 
     private void configureTaskRule() {
         project.getTasks().withType(getCastedTaskType(), (Action<Task>) task -> {
@@ -119,28 +127,6 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task> extends A
     }
 
     protected abstract void configureTaskDefaults(T task, String baseName);
-
-    private void configureSourceSetRule() {
-        withBasePlugin(plugin -> configureForSourceSets(getAndroidExtension().getSourceSets()));
-    }
-
-    private void configureForSourceSets(NamedDomainObjectContainer<AndroidSourceSet> sourceSets) {
-        sourceSets.all(sourceSet -> {
-            Task task = project.getTasks().create(getTaskName(sourceSet, getTaskBaseName(), null), getCastedTaskType());
-            configureForSourceSet(sourceSet, (T)task);
-        });
-    }
-
-    protected abstract void configureForSourceSet(AndroidSourceSet sourceSet, T task);
-
-    private void configureCheckTask() {
-        withBasePlugin(plugin -> configureCheckTaskDependents());
-    }
-
-    private void configureCheckTaskDependents() {
-        final String taskBaseName = getTaskBaseName();
-        project.getTasks().getByName("check").dependsOn((Callable) () -> Iterables.transform(extension.getSourceSets(), sourceSet -> getTaskName(sourceSet, taskBaseName, null)));
-    }
 
     protected void withBasePlugin(Action<Plugin> action) {
         project.getPlugins().withType(getBasePlugin(), action);

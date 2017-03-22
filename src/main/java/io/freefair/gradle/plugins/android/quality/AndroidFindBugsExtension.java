@@ -13,7 +13,7 @@ import java.util.Collection;
  * @see org.gradle.api.plugins.quality.FindBugsExtension
  */
 @RequiredArgsConstructor
-public class AndroidFindBugsExtension extends AndroidCodeQualityExtension {
+public class AndroidFindBugsExtension extends VariantBasedCodeQualityExtension {
 
     private final Project project;
     private String effort;

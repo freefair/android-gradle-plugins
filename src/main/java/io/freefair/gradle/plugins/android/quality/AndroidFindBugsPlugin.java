@@ -1,6 +1,7 @@
 package io.freefair.gradle.plugins.android.quality;
 
 import com.android.build.gradle.api.AndroidSourceSet;
+import com.android.build.gradle.api.BaseVariant;
 import com.google.common.util.concurrent.Callables;
 import org.gradle.api.Incubating;
 import org.gradle.api.artifacts.Configuration;
@@ -21,7 +22,7 @@ import java.io.File;
  * @see AbstractAndroidCodeQualityPlugin
  */
 @Incubating
-public class AndroidFindBugsPlugin extends AbstractAndroidCodeQualityPlugin<FindBugs> {
+public class AndroidFindBugsPlugin extends VariantBasedCodeQualityPlugin<FindBugs> {
 
     public static final String DEFAULT_FINDBUGS_VERSION = FindBugsPlugin.DEFAULT_FINDBUGS_VERSION;
     private AndroidFindBugsExtension extension;
@@ -49,7 +50,7 @@ public class AndroidFindBugsPlugin extends AbstractAndroidCodeQualityPlugin<Find
     }
 
     @Override
-    protected AndroidCodeQualityExtension createExtension() {
+    protected VariantBasedCodeQualityExtension createExtension() {
         extension = project.getExtensions().create("findbugs", AndroidFindBugsExtension.class, project);
         extension.setToolVersion(DEFAULT_FINDBUGS_VERSION);
         return extension;
@@ -93,14 +94,16 @@ public class AndroidFindBugsPlugin extends AbstractAndroidCodeQualityPlugin<Find
     }
 
     @Override
-    protected void configureForSourceSet(final AndroidSourceSet sourceSet, FindBugs task) {
+    protected void configureForVariant(final BaseVariant sourceSet, FindBugs task) {
         task.setDescription("Run FindBugs analysis for " + sourceSet.getName() + " classes");
         task.setSource(getAllJava(sourceSet));
         ConventionMapping taskMapping = task.getConventionMapping();
         taskMapping.map("classes", () -> {
             // the simple "classes = sourceSet.output" may lead to non-existing resources directory
             // being passed to FindBugs Ant task, resulting in an error
-            return getOutput(sourceSet);
+            return getOutput(sourceSet)
+                    .filter(f -> !f.getName().matches("R(\\$.*)?\\.class"))
+                    .filter(f -> !f.getName().equals("BuildConfig.class"));
         });
         taskMapping.map("classpath", () -> getCompileClasspath(sourceSet));
     }

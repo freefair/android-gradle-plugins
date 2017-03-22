@@ -14,7 +14,7 @@ import java.util.Map;
  * @see org.gradle.api.plugins.quality.CheckstyleExtension
  */
 @RequiredArgsConstructor
-public class AndroidCheckstyleExtension extends AndroidCodeQualityExtension {
+public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtension {
 
     private final Project project;
     private TextResource config;
