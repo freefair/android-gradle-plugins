@@ -8,6 +8,7 @@ import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.internal.jvm.ClassDirectoryBinaryNamingScheme;
+import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.tasks.SourceSet;
 
 import java.util.ArrayList;
@@ -48,9 +49,10 @@ public abstract class VariantBasedCodeQualityPlugin<T extends Task> extends Abst
         configureForVariants(getUnitTestVariants());
     }
 
-    private void configureForVariants(DomainObjectSet<? extends BaseVariant> sourceSets) {
-        sourceSets.all(sourceSet -> {
+    private void configureForVariants(DomainObjectSet<? extends BaseVariant> variants) {
+        variants.all(sourceSet -> {
             Task task = project.getTasks().create(getTaskName(sourceSet, getTaskBaseName(), null), getCastedTaskType());
+            task.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
             configureForVariant(sourceSet, (T)task);
         });
     }

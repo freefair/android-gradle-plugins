@@ -11,6 +11,7 @@ import org.gradle.api.file.FileTree;
 import org.gradle.api.internal.file.FileTreeInternal;
 import org.gradle.api.internal.file.UnionFileTree;
 import org.gradle.api.internal.jvm.ClassDirectoryBinaryNamingScheme;
+import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.tasks.SourceSet;
 
 import java.util.Collection;
@@ -46,6 +47,7 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
     private void configureForSourceSets(NamedDomainObjectContainer<AndroidSourceSet> sourceSets) {
         sourceSets.all(sourceSet -> {
             Task task = project.getTasks().create(getTaskName(sourceSet, getTaskBaseName(), null), getCastedTaskType());
+            task.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
             configureForSourceSet(sourceSet, (T)task);
         });
     }
