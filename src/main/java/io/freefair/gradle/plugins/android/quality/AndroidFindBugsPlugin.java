@@ -10,6 +10,8 @@ import org.gradle.api.plugins.quality.FindBugs;
 import org.gradle.api.plugins.quality.FindBugsPlugin;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Copy of {@link org.gradle.api.plugins.quality.FindBugsPlugin} which
@@ -102,9 +104,19 @@ public class AndroidFindBugsPlugin extends VariantBasedCodeQualityPlugin<FindBug
         taskMapping.map("classes", () -> {
             // the simple "classes = sourceSet.output" may lead to non-existing resources directory
             // being passed to FindBugs Ant task, resulting in an error
+
+            List<String> generatedClasses = new LinkedList<>();
+
+            variant.getJavaCompile().getSource().visit(fileVisitDetails -> {
+                if (!fileVisitDetails.isDirectory() && fileVisitDetails.getPath().endsWith(".java")) {
+                    if (fileVisitDetails.getFile().getAbsolutePath().startsWith(project.getBuildDir().getAbsolutePath())) {
+                        generatedClasses.add(fileVisitDetails.getPath().replace(".java", ""));
+                    }
+                }
+            });
+
             return getOutput(variant)
-                    .filter(f -> !f.getName().matches("R(\\$.*)?\\.class"))
-                    .filter(f -> !f.getName().equals("BuildConfig.class"));
+                    .filter(file -> generatedClasses.parallelStream().noneMatch(generatedClass -> file.getAbsolutePath().endsWith(generatedClass + ".java") || file.getAbsolutePath().contains(generatedClass + "$")));
         });
         taskMapping.map("classpath", () -> getCompileClasspath(variant));
     }

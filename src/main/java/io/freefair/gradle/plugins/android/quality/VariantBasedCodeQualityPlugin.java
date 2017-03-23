@@ -100,7 +100,7 @@ public abstract class VariantBasedCodeQualityPlugin<T extends Task> extends Abst
     /**
      * @see SourceSet#getOutput()
      */
-    protected FileCollection getOutput(BaseVariant androidSourceSet) {
+    protected FileTree getOutput(BaseVariant androidSourceSet) {
         return getProject().fileTree(androidSourceSet.getJavaCompile().getDestinationDir());
     }
 }
