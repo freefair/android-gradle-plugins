@@ -108,10 +108,8 @@ public class AndroidFindBugsPlugin extends VariantBasedCodeQualityPlugin<FindBug
             List<String> generatedClasses = new LinkedList<>();
 
             variant.getJavaCompile().getSource().visit(fileVisitDetails -> {
-                if (!fileVisitDetails.isDirectory() && fileVisitDetails.getPath().endsWith(".java")) {
-                    if (fileVisitDetails.getFile().getAbsolutePath().startsWith(project.getBuildDir().getAbsolutePath())) {
-                        generatedClasses.add(fileVisitDetails.getPath().replace(".java", ""));
-                    }
+                if (!fileVisitDetails.isDirectory() && fileVisitDetails.getPath().endsWith(".java") && fileVisitDetails.getFile().getAbsolutePath().startsWith(project.getBuildDir().getAbsolutePath())) {
+                    generatedClasses.add(fileVisitDetails.getPath().replace(".java", ""));
                 }
             });
 
