@@ -114,7 +114,7 @@ public class AndroidFindBugsPlugin extends VariantBasedCodeQualityPlugin<FindBug
             });
 
             return getOutput(variant)
-                    .filter(file -> generatedClasses.parallelStream().noneMatch(generatedClass -> file.getAbsolutePath().endsWith(generatedClass + ".java") || file.getAbsolutePath().contains(generatedClass + "$")));
+                    .filter(file -> generatedClasses.parallelStream().noneMatch(generatedClass -> file.getAbsolutePath().endsWith(generatedClass + ".class") || file.getAbsolutePath().contains(generatedClass + "$")));
         });
         taskMapping.map("classpath", () -> getCompileClasspath(variant));
     }
