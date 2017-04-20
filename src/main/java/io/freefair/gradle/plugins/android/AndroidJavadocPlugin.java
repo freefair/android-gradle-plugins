@@ -1,6 +1,6 @@
 package io.freefair.gradle.plugins.android;
 
-import com.android.build.gradle.BaseExtension;
+import com.android.build.gradle.TestedExtension;
 import com.android.build.gradle.api.BaseVariant;
 import com.android.build.gradle.internal.pipeline.TransformTask;
 import com.android.build.gradle.internal.transforms.JackTransform;
@@ -43,7 +43,7 @@ public class AndroidJavadocPlugin extends AndroidProjectPlugin {
     }
 
     @Override
-    protected void withAndroid(BaseExtension extension) {
+    protected void withAndroid(TestedExtension extension) {
         super.withAndroid(extension);
         getAndroidVariants().all(variant -> {
             Javadoc javadocTask = getJavadocTask(getProject(), variant);

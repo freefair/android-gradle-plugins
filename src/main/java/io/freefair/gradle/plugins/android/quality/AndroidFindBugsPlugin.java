@@ -1,16 +1,17 @@
 package io.freefair.gradle.plugins.android.quality;
 
 import com.android.build.gradle.api.AndroidSourceSet;
+import com.android.build.gradle.api.BaseVariant;
 import com.google.common.util.concurrent.Callables;
 import org.gradle.api.Incubating;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.internal.ConventionMapping;
-import org.gradle.api.plugins.quality.CodeQualityExtension;
 import org.gradle.api.plugins.quality.FindBugs;
-import org.gradle.api.plugins.quality.FindBugsExtension;
 import org.gradle.api.plugins.quality.FindBugsPlugin;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Copy of {@link org.gradle.api.plugins.quality.FindBugsPlugin} which
@@ -23,10 +24,10 @@ import java.io.File;
  * @see AbstractAndroidCodeQualityPlugin
  */
 @Incubating
-public class AndroidFindBugsPlugin extends AbstractAndroidCodeQualityPlugin<FindBugs> {
+public class AndroidFindBugsPlugin extends VariantBasedCodeQualityPlugin<FindBugs> {
 
     public static final String DEFAULT_FINDBUGS_VERSION = FindBugsPlugin.DEFAULT_FINDBUGS_VERSION;
-    private FindBugsExtension extension;
+    private AndroidFindBugsExtension extension;
 
     @Override
     protected String getToolName() {
@@ -51,8 +52,8 @@ public class AndroidFindBugsPlugin extends AbstractAndroidCodeQualityPlugin<Find
     }
 
     @Override
-    protected CodeQualityExtension createExtension() {
-        extension = project.getExtensions().create("findbugs", FindBugsExtension.class, project);
+    protected VariantBasedCodeQualityExtension createExtension() {
+        extension = project.getExtensions().create("findbugs", AndroidFindBugsExtension.class, project);
         extension.setToolVersion(DEFAULT_FINDBUGS_VERSION);
         return extension;
     }
@@ -95,15 +96,26 @@ public class AndroidFindBugsPlugin extends AbstractAndroidCodeQualityPlugin<Find
     }
 
     @Override
-    protected void configureForSourceSet(final AndroidSourceSet sourceSet, FindBugs task) {
-        task.setDescription("Run FindBugs analysis for " + sourceSet.getName() + " classes");
-        task.setSource(getAllJava(sourceSet));
+    protected void configureForVariant(final BaseVariant variant, FindBugs task) {
+        task.setDescription("Run FindBugs analysis for " + variant.getName() + " classes");
+        task.setSource(getAllJava(variant));
+        task.dependsOn(variant.getJavaCompile());
         ConventionMapping taskMapping = task.getConventionMapping();
         taskMapping.map("classes", () -> {
             // the simple "classes = sourceSet.output" may lead to non-existing resources directory
             // being passed to FindBugs Ant task, resulting in an error
-            return getOutput(sourceSet);
+
+            List<String> generatedClasses = new LinkedList<>();
+
+            variant.getJavaCompile().getSource().visit(fileVisitDetails -> {
+                if (!fileVisitDetails.isDirectory() && fileVisitDetails.getPath().endsWith(".java") && fileVisitDetails.getFile().getAbsolutePath().startsWith(project.getBuildDir().getAbsolutePath())) {
+                    generatedClasses.add(fileVisitDetails.getPath().replace(".java", ""));
+                }
+            });
+
+            return getOutput(variant)
+                    .filter(file -> generatedClasses.parallelStream().noneMatch(generatedClass -> file.getAbsolutePath().endsWith(generatedClass + ".class") || file.getAbsolutePath().contains(generatedClass + "$")));
         });
-        taskMapping.map("classpath", () -> getCompileClasspath(sourceSet));
+        taskMapping.map("classpath", () -> getCompileClasspath(variant));
     }
 }

@@ -24,10 +24,10 @@ import java.util.Arrays;
  * @see AbstractAndroidCodeQualityPlugin
  */
 @Incubating
-public class AndroidPmdPlugin extends AbstractAndroidCodeQualityPlugin<Pmd> {
+public class AndroidPmdPlugin extends SourceSetBasedCodeQualityPlugin<Pmd> {
 
     public static final String DEFAULT_PMD_VERSION = PmdPlugin.DEFAULT_PMD_VERSION;
-    private PmdExtension extension;
+    private AndroidPmdExtension extension;
 
     @Override
     protected String getToolName() {
@@ -40,8 +40,8 @@ public class AndroidPmdPlugin extends AbstractAndroidCodeQualityPlugin<Pmd> {
     }
 
     @Override
-    protected CodeQualityExtension createExtension() {
-        extension = project.getExtensions().create("pmd", PmdExtension.class, project);
+    protected SourceSetBasedCodeQualityExtension createExtension() {
+        extension = project.getExtensions().create("pmd", AndroidPmdExtension.class, project);
         extension.setToolVersion(DEFAULT_PMD_VERSION);
         extension.setRuleSets(new ArrayList<>(Arrays.asList("java-basic")));
         extension.setRuleSetFiles(project.files());
