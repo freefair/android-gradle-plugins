@@ -26,9 +26,9 @@ javadoc.options.links "http://google.github.io/android-gradle-dsl/javadoc/2.3/"
 sourceCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok:1.16.16'
+    compileOnly 'org.projectlombok:lombok:1.16.18'
 
-    compile 'com.android.tools.build:gradle:2.3.1'
+    compile 'com.android.tools.build:gradle:2.3.3'
 
     testCompile 'junit:junit:4.12'
 }
