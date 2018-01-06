@@ -9,16 +9,19 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
 
 android:
   components:
     - tools
+    - platform-tools
+    - tools
+    - build-tools-26.0.2
     - android-26
-    - build-tools-26.0.0
 
 install: ./gradlew assemble --stacktrace
 
-script: ./gradlew check --info
+script: ./gradlew check --stacktrace
 
 deploy:
   provider: script
