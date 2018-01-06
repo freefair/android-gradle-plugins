@@ -2,9 +2,6 @@ package io.freefair.gradle.plugins.android;
 
 import com.android.build.gradle.TestedExtension;
 import com.android.build.gradle.api.BaseVariant;
-import com.android.build.gradle.internal.pipeline.TransformTask;
-import com.android.build.gradle.internal.transforms.JackTransform;
-import com.android.builder.core.JackProcessOptions;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaBasePlugin;
@@ -16,10 +13,6 @@ import org.gradle.util.GUtil;
 
 import java.io.File;
 import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,35 +62,9 @@ public class AndroidJavadocPlugin extends AndroidProjectPlugin {
 
                     javadoc.setClasspath(project.files(javacTask.getDestinationDir()).plus(javacTask.getClasspath()));
                     javadoc.getOptions().setSource(javacTask.getSourceCompatibility());
+                } else {
+                    getProject().getLogger().warn("Failed to configure {}. Unsupported Compiler: {}", javadoc.getName(), variant.getJavaCompiler().getClass().getName());
                 }
-
-                if (variant.getJavaCompiler() instanceof TransformTask) {
-                    TransformTask jackTask = (TransformTask) variant.getJavaCompiler();
-                    JackTransform jackTransform = (JackTransform) jackTask.getTransform();
-
-                    Method getSourceFiles = null;
-                    try {
-                        getSourceFiles = JackTransform.class.getDeclaredMethod("getSourceFiles");
-                        getSourceFiles.setAccessible(true);
-                        Collection<File> sourceFiles = (Collection<File>) getSourceFiles.invoke(jackTransform);
-                        javadoc.setSource(sourceFiles);
-                    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                        project.getLogger().error(e.getLocalizedMessage(), e);
-                    }
-
-                    try {
-                        Field optionsField = JackTransform.class.getDeclaredField("options");
-                        optionsField.setAccessible(true);
-                        JackProcessOptions options = (JackProcessOptions) optionsField.get(jackTransform);
-
-                        javadoc.setClasspath(project.files(options.getClasspaths().toArray()));
-
-                    } catch (NoSuchFieldException | IllegalAccessException e) {
-                        project.getLogger().error(e.getLocalizedMessage(), e);
-                    }
-                    javadoc.getOptions().setSource((String) jackTransform.getParameterInputs().get("sourceCompatibility"));
-                }
-
 
                 //javadoc.exclude '**/BuildConfig.java'
                 javadoc.exclude("**/R.java");

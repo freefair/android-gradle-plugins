@@ -57,9 +57,9 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
             }
         });
 
-        project.getPlugins().withType(AtomPlugin.class, atomPlugin -> {
-            androidExtension = project.getExtensions().getByType(AtomExtension.class);
-            projectType = ProjectType.ATOM;
+        project.getPlugins().withType(FeaturePlugin.class, atomPlugin -> {
+            androidExtension = project.getExtensions().getByType(FeatureExtension.class);
+            projectType = ProjectType.FEATURE;
 
             withAndroid(androidExtension);
             if (!isWithAndroidCalled()) {
@@ -101,8 +101,8 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
                 return ((AppExtension)androidExtension).getApplicationVariants();
             case LIBRARY:
                 return ((LibraryExtension)androidExtension).getLibraryVariants();
-            case ATOM:
-                return ((AtomExtension)androidExtension).getAtomVariants();
+            case FEATURE:
+                return ((FeatureExtension)androidExtension).getFeatureVariants();
             default:
                 throw new IllegalStateException("Unexpected project type: " + projectType);
         }
@@ -129,7 +129,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
             return false;
         }
 
-        return getAndroidExtension().getPublishNonDefault() || getAndroidExtension().getDefaultPublishConfig().equals(variant.getName());
+        return  getAndroidExtension().getDefaultPublishConfig().equals(variant.getName());
     }
 
     @Getter
@@ -137,7 +137,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
     public enum ProjectType {
         APP(AppPlugin.class, AppExtension.class),
         LIBRARY(LibraryPlugin.class, LibraryExtension.class),
-        ATOM(AtomPlugin.class, AtomExtension.class);
+        FEATURE(FeaturePlugin.class, FeatureExtension.class);
 
         private Class<? extends BasePlugin> pluginClass;
         private Class<? extends TestedExtension> extensionClass;
