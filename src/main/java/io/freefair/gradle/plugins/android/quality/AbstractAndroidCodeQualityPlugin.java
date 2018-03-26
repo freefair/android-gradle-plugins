@@ -53,7 +53,7 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task, E extends
 
     protected abstract Class<T> getTaskType();
 
-    Class<? extends Task> getCastedTaskType() {
+    Class<T> getCastedTaskType() {
         return getTaskType();
     }
 

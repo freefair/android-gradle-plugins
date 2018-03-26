@@ -46,7 +46,7 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
 
     private void configureForSourceSets(NamedDomainObjectContainer<AndroidSourceSet> sourceSets) {
         sourceSets.all(sourceSet -> {
-            Task task = project.getTasks().create(getTaskName(sourceSet, getTaskBaseName(), null), getCastedTaskType());
+            T task = project.getTasks().create(getTaskName(sourceSet, getTaskBaseName(), null), getCastedTaskType());
             task.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
             configureForSourceSet(sourceSet, (T)task);
         });
@@ -78,7 +78,7 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
      * @see SourceSet#getCompileClasspath()
      */
     protected FileCollection getCompileClasspath(AndroidSourceSet androidSourceSet) {
-        return getProject().getConfigurations().getByName(androidSourceSet.getImplementationConfigurationName());
+        return getProject().files();
     }
 
     /**
