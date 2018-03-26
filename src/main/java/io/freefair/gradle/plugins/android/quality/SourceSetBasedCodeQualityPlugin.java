@@ -9,13 +9,16 @@ import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.internal.file.FileTreeInternal;
+import org.gradle.api.internal.file.UnionFileCollection;
 import org.gradle.api.internal.file.UnionFileTree;
 import org.gradle.api.internal.jvm.ClassDirectoryBinaryNamingScheme;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.tasks.SourceSet;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -78,7 +81,12 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
      * @see SourceSet#getCompileClasspath()
      */
     protected FileCollection getCompileClasspath(AndroidSourceSet androidSourceSet) {
-        return getProject().files();
+        List<FileCollection> fileCollections = getAllVariants(androidSourceSet)
+                .filter(variant -> variant.getJavaCompile() != null)
+                .map(variant -> variant.getJavaCompile().getClasspath())
+                .collect(Collectors.toList());
+
+        return new UnionFileCollection(fileCollections);
     }
 
     /**
@@ -96,15 +104,19 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
      * @see SourceSet#getOutput()
      */
     protected FileCollection getOutput(AndroidSourceSet androidSourceSet) {
+        List<FileTreeInternal> sourceTrees = getAllVariants(androidSourceSet)
+                .filter(variant -> variant.getJavaCompile() != null)
+                .map(variant -> variant.getJavaCompile().getDestinationDir())
+                .map(outputDir -> (FileTreeInternal) getProject().fileTree(outputDir))
+                .collect(Collectors.toList());
+        return new UnionFileTree(androidSourceSet.getName() + " output", sourceTrees);
+    }
+
+    protected Stream<BaseVariant> getAllVariants(AndroidSourceSet androidSourceSet) {
         Stream<BaseVariant> testVariants = Stream.concat(getTestVariants().stream(), getUnitTestVariants().stream());
         Stream<BaseVariant> variants = Stream.concat(getAndroidVariants().stream(), testVariants);
 
-        FileTreeInternal[] sourceTrees = variants
-                .filter(variant -> variant.getJavaCompile() != null)
-                .filter(variant -> variant.getSourceSets().contains(androidSourceSet))
-                .map(variant -> variant.getJavaCompile().getDestinationDir())
-                .map(outputDir -> (FileTreeInternal) getProject().fileTree(outputDir))
-                .toArray(FileTreeInternal[]::new);
-        return new UnionFileTree(sourceTrees);
+        //noinspection SuspiciousMethodCalls
+        return variants.filter(variant -> variant.getSourceSets().contains(androidSourceSet));
     }
 }

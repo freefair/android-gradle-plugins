@@ -81,7 +81,7 @@ public class AndroidCheckstylePlugin extends SourceSetBasedCodeQualityPlugin<Che
     @Override
     protected void configureForSourceSet(final AndroidSourceSet sourceSet, Checkstyle task) {
         task.setDescription("Run Checkstyle analysis for " + sourceSet.getName() + " classes");
-        task.setClasspath(getCompileClasspath(sourceSet));
+        task.setClasspath(getOutput(sourceSet).plus(getCompileClasspath(sourceSet)));
         task.setSource(getAllJava(sourceSet));
     }
 }
