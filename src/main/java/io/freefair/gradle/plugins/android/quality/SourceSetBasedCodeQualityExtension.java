@@ -1,6 +1,8 @@
 package io.freefair.gradle.plugins.android.quality;
 
 import com.android.build.gradle.api.AndroidSourceSet;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Collection;
 
@@ -10,16 +12,10 @@ import java.util.Collection;
  * @author Lars Grefer
  * @see org.gradle.api.plugins.quality.CodeQualityExtension
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class SourceSetBasedCodeQualityExtension extends AndroidCodeQualityExtension {
 
     private Collection<AndroidSourceSet> sourceSets;
-
-    public Collection<AndroidSourceSet> getSourceSets() {
-        return this.sourceSets;
-    }
-
-    public void setSourceSets(Collection<AndroidSourceSet> sourceSets) {
-        this.sourceSets = sourceSets;
-    }
 
 }

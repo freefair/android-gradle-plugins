@@ -1,6 +1,8 @@
 package io.freefair.gradle.plugins.android.quality;
 
 import com.android.build.gradle.api.BaseVariant;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Collection;
 
@@ -10,16 +12,10 @@ import java.util.Collection;
  * @author Lars Grefer
  * @see org.gradle.api.plugins.quality.CodeQualityExtension
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class VariantBasedCodeQualityExtension extends AndroidCodeQualityExtension {
 
     private Collection<BaseVariant> variants;
-
-    public Collection<BaseVariant> getVariants() {
-        return this.variants;
-    }
-
-    public void setVariants(Collection<BaseVariant> variants) {
-        this.variants = variants;
-    }
 
 }

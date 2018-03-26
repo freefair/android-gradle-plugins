@@ -5,13 +5,19 @@ import com.google.common.util.concurrent.Callables;
 import org.gradle.api.Incubating;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.ConventionMapping;
-import org.gradle.api.plugins.quality.*;
+import org.gradle.api.plugins.quality.Pmd;
+import org.gradle.api.plugins.quality.PmdPlugin;
+import org.gradle.api.plugins.quality.TargetJdk;
+import org.gradle.api.resources.TextResource;
 import org.gradle.util.VersionNumber;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * Copy of {@link org.gradle.api.plugins.quality.PmdPlugin} which
@@ -26,7 +32,6 @@ import java.util.Arrays;
 @Incubating
 public class AndroidPmdPlugin extends SourceSetBasedCodeQualityPlugin<Pmd> {
 
-    public static final String DEFAULT_PMD_VERSION = PmdPlugin.DEFAULT_PMD_VERSION;
     private AndroidPmdExtension extension;
 
     @Override
@@ -42,7 +47,7 @@ public class AndroidPmdPlugin extends SourceSetBasedCodeQualityPlugin<Pmd> {
     @Override
     protected SourceSetBasedCodeQualityExtension createExtension() {
         extension = project.getExtensions().create("pmd", AndroidPmdExtension.class, project);
-        extension.setToolVersion(DEFAULT_PMD_VERSION);
+        extension.setToolVersion(PmdPlugin.DEFAULT_PMD_VERSION);
         extension.setRuleSets(new ArrayList<>(Arrays.asList("java-basic")));
         extension.setRuleSetFiles(project.files());
         conventionMappingOf(extension).map("targetJdk", () -> getDefaultTargetJdk(getJavaPluginConvention().getSourceCompatibility()));
@@ -78,20 +83,20 @@ public class AndroidPmdPlugin extends SourceSetBasedCodeQualityPlugin<Pmd> {
     private void configureTaskConventionMapping(Configuration configuration, Pmd task) {
         ConventionMapping taskMapping = task.getConventionMapping();
         taskMapping.map("pmdClasspath", Callables.returning(configuration));
-        taskMapping.map("ruleSets", () -> extension.getRuleSets());
-        taskMapping.map("ruleSetConfig", () -> extension.getRuleSetConfig());
-        taskMapping.map("ruleSetFiles", () -> extension.getRuleSetFiles());
-        taskMapping.map("ignoreFailures", () -> extension.isIgnoreFailures());
-        taskMapping.map("rulePriority", () -> extension.getRulePriority());
-        taskMapping.map("consoleOutput", () -> extension.isConsoleOutput());
-        taskMapping.map("targetJdk", () -> extension.getTargetJdk());
+        taskMapping.map("ruleSets", (Callable<List<String>>) () -> extension.getRuleSets());
+        taskMapping.map("ruleSetConfig", (Callable<TextResource>) () -> extension.getRuleSetConfig());
+        taskMapping.map("ruleSetFiles", (Callable<FileCollection>) () -> extension.getRuleSetFiles());
+        taskMapping.map("ignoreFailures", (Callable<Boolean>) () -> extension.isIgnoreFailures());
+        taskMapping.map("rulePriority", (Callable<Integer>) () -> extension.getRulePriority());
+        taskMapping.map("consoleOutput", (Callable<Boolean>) () -> extension.isConsoleOutput());
+        taskMapping.map("targetJdk", (Callable<TargetJdk>) () -> extension.getTargetJdk());
     }
 
     private void configureReportsConventionMapping(Pmd task, final String baseName) {
         task.getReports().all(report -> {
             ConventionMapping reportMapping = conventionMappingOf(report);
             reportMapping.map("enabled", Callables.returning(true));
-            reportMapping.map("destination", () -> new File(extension.getReportsDir(), baseName + "." + report.getName()));
+            reportMapping.map("destination", (Callable<File>) () -> new File(extension.getReportsDir(), baseName + "." + report.getName()));
         });
     }
 
