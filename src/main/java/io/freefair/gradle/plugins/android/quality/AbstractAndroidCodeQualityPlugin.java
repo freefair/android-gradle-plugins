@@ -69,7 +69,7 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task, E extends
         return getToolName().toLowerCase();
     }
 
-    protected Class<? extends Plugin> getBasePlugin() {
+    protected Class<? extends Plugin<? extends Project>> getBasePlugin() {
         return JavaBasePlugin.class;
     }
 

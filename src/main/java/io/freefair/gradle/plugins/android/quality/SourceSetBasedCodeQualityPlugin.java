@@ -78,7 +78,7 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
      * @see SourceSet#getCompileClasspath()
      */
     protected FileCollection getCompileClasspath(AndroidSourceSet androidSourceSet) {
-        return getProject().getConfigurations().getByName(androidSourceSet.getCompileConfigurationName());
+        return getProject().getConfigurations().getByName(androidSourceSet.getImplementationConfigurationName());
     }
 
     /**
