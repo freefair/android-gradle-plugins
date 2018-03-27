@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
 }
 
 repositories {
