@@ -17,7 +17,7 @@ android:
     - platform-tools
     - tools
     - build-tools-26.0.2
-    - android-26
+    - android-27
 
 install: ./gradlew assemble --stacktrace
 
