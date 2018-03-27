@@ -8,3 +8,8 @@ plugins {
 android {
     compileSdkVersion 26
 }
+
+repositories {
+    google()
+    jcenter()
+}
