@@ -20,7 +20,7 @@ android:
 
 install: ./gradlew assemble --stacktrace
 
-script: ./gradlew check --stacktrace
+script: ./gradlew check --info
 
 deploy:
   provider: script
