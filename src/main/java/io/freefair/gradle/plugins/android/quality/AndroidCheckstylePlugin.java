@@ -3,14 +3,18 @@ package io.freefair.gradle.plugins.android.quality;
 import com.android.build.gradle.api.AndroidSourceSet;
 import com.google.common.util.concurrent.Callables;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.file.Directory;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.plugins.quality.Checkstyle;
-import org.gradle.api.plugins.quality.CheckstylePlugin;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.resources.TextResource;
+import org.gradle.util.DeprecationLogger;
 
 import java.io.File;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
+import static org.gradle.api.plugins.quality.CheckstylePlugin.DEFAULT_CHECKSTYLE_VERSION;
 
 /**
  * Copy of {@link org.gradle.api.plugins.quality.CheckstylePlugin} which
@@ -24,6 +28,7 @@ import java.util.concurrent.Callable;
  */
 public class AndroidCheckstylePlugin extends SourceSetBasedCodeQualityPlugin<Checkstyle> {
 
+    private static final String CONFIG_DIR_NAME = "config/checkstyle";
     private AndroidCheckstyleExtension extension;
 
     @Override
@@ -39,16 +44,43 @@ public class AndroidCheckstylePlugin extends SourceSetBasedCodeQualityPlugin<Che
     @Override
     protected SourceSetBasedCodeQualityExtension createExtension() {
         extension = project.getExtensions().create("checkstyle", AndroidCheckstyleExtension.class, project);
-        extension.setToolVersion(CheckstylePlugin.DEFAULT_CHECKSTYLE_VERSION);
-        extension.setConfigDir(project.file("config/checkstyle"));
-        extension.setConfig(project.getResources().getText().fromFile((Callable<File>) () -> new File(extension.getConfigDir(), "checkstyle.xml")));
+        extension.setToolVersion(DEFAULT_CHECKSTYLE_VERSION);
+        extension.getConfigDirectory().set(determineConfigurationDirectory());
+        extension.setConfig(project.getResources().getText().fromFile(new Callable<File>() {
+            @Override
+            public File call() {
+                return new File(extension.getConfigDir(), "checkstyle.xml");
+            }
+        }));
         return extension;
+    }
+
+    private Provider<Directory> determineConfigurationDirectory() {
+        return project.provider(() -> {
+            if (usesSubprojectCheckstyleConfiguration()) {
+                DeprecationLogger.nagUserWithDeprecatedIndirectUserCodeCause("Setting the Checkstyle configuration file under 'config/checkstyle' of a sub project", "Use the root project's 'config/checkstyle' directory instead.");
+                return project.getLayout().getProjectDirectory().dir(CONFIG_DIR_NAME);
+            }
+            return project.getRootProject().getLayout().getProjectDirectory().dir(CONFIG_DIR_NAME);
+        });
+    }
+
+    private boolean usesSubprojectCheckstyleConfiguration() {
+        return !isRootProject() && project.file(CONFIG_DIR_NAME).isDirectory();
+    }
+
+    private boolean isRootProject() {
+        return project.equals(project.getRootProject());
+    }
+
+    @Override
+    protected void configureConfiguration(Configuration configuration) {
+        configureDefaultDependencies(configuration);
     }
 
     @Override
     protected void configureTaskDefaults(Checkstyle task, final String baseName) {
-        Configuration configuration = project.getConfigurations().getAt("checkstyle");
-        configureDefaultDependencies(configuration);
+        Configuration configuration = project.getConfigurations().getAt(getConfigurationName());
         configureTaskConventionMapping(configuration, task);
         configureReportsConventionMapping(task, baseName);
     }

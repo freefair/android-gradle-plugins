@@ -3,11 +3,13 @@ package io.freefair.gradle.plugins.android.quality;
 import lombok.EqualsAndHashCode;
 import org.gradle.api.Incubating;
 import org.gradle.api.Project;
+import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.plugins.quality.Pmd;
 import org.gradle.api.plugins.quality.TargetJdk;
 import org.gradle.api.resources.TextResource;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class AndroidPmdExtension extends SourceSetBasedCodeQualityExtension {
     private TargetJdk targetJdk;
     private int rulePriority = 5;
     private TextResource ruleSetConfig;
-    private FileCollection ruleSetFiles;
+    private ConfigurableFileCollection ruleSetFiles;
     private boolean consoleOutput;
 
     public AndroidPmdExtension(Project project) {
@@ -119,6 +121,7 @@ public class AndroidPmdExtension extends SourceSetBasedCodeQualityExtension {
      * @since 2.2
      */
     @Incubating
+    @Nullable
     public TextResource getRuleSetConfig() {
         return ruleSetConfig;
     }
@@ -133,7 +136,7 @@ public class AndroidPmdExtension extends SourceSetBasedCodeQualityExtension {
      * @since 2.2
      */
     @Incubating
-    public void setRuleSetConfig(TextResource ruleSetConfig) {
+    public void setRuleSetConfig(@Nullable TextResource ruleSetConfig) {
         this.ruleSetConfig = ruleSetConfig;
     }
 
@@ -152,7 +155,7 @@ public class AndroidPmdExtension extends SourceSetBasedCodeQualityExtension {
      * Example: ruleSetFiles = files("config/pmd/myRuleSet.xml")
      */
     public void setRuleSetFiles(FileCollection ruleSetFiles) {
-        this.ruleSetFiles = ruleSetFiles;
+        this.ruleSetFiles = project.getLayout().configurableFiles(ruleSetFiles);
     }
 
     /**
@@ -163,7 +166,7 @@ public class AndroidPmdExtension extends SourceSetBasedCodeQualityExtension {
      * @param ruleSetFiles the rule set files to be added
      */
     public void ruleSetFiles(Object... ruleSetFiles) {
-        this.ruleSetFiles.add(project.files(ruleSetFiles));
+        this.ruleSetFiles.from(ruleSetFiles);
     }
 
     /**

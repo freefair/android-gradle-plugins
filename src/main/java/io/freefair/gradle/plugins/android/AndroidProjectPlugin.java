@@ -6,7 +6,11 @@ import com.android.build.gradle.api.TestVariant;
 import com.android.build.gradle.api.UnitTestVariant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.gradle.api.*;
+import org.gradle.api.DomainObjectSet;
+import org.gradle.api.Plugin;
+import org.gradle.api.Project;
+
+import javax.annotation.Nullable;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -139,7 +143,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
         LIBRARY(LibraryPlugin.class, LibraryExtension.class),
         FEATURE(FeaturePlugin.class, FeatureExtension.class);
 
-        private Class<? extends BasePlugin> pluginClass;
+        private Class<? extends BasePlugin<?>> pluginClass;
         private Class<? extends TestedExtension> extensionClass;
 
     }

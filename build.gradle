@@ -1,9 +1,10 @@
 plugins {
     id "maven-publish"
     id "java-gradle-plugin"
-    id "com.gradle.plugin-publish" version "0.9.7"
+    id "com.gradle.plugin-publish" version "0.10.0"
     id "findbugs"
     id "pmd"
+    id "io.freefair.lombok" version "2.7"
 }
 
 repositories {
@@ -21,19 +22,16 @@ tasks.withType(FindBugs) {
 
 group = 'io.freefair.gradle'
 
-javadoc.options.links "http://docs.oracle.com/javase/8/docs/api/"
+javadoc.options.links "https://docs.oracle.com/javase/8/docs/api/"
 javadoc.options.links "https://docs.gradle.org/current/javadoc/"
-javadoc.options.links "http://google.github.io/android-gradle-dsl/javadoc/3.0/"
+javadoc.options.links "https://google.github.io/android-gradle-dsl/javadoc/3.1/"
 
 compileJava.options.compilerArgs += "-Xlint"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok:1.16.20'
-    annotationProcessor 'org.projectlombok:lombok:1.16.20'
-
-    compile 'com.android.tools.build:gradle:3.1.0'
+    compile 'com.android.tools.build:gradle:3.1.4'
 
     testCompile 'junit:junit:4.12'
 }
@@ -91,61 +89,51 @@ pluginBundle {
 
     plugins {
         androidJavadoc {
-            id = "io.freefair.android-javadoc"
             displayName = "Android Javadoc Plugin"
             description = "Generate javadocs for all variants of your android project"
             tags = ['android', 'javadoc']
         }
         androidJavadocJar {
-            id = "io.freefair.android-javadoc-jar"
             displayName = "Android Javadoc Jar Plugin"
             description = "Generate javadoc jars for all variants of your android project"
             tags = ['android', 'maven', 'javadoc', 'jar']
         }
         androidSourcesJar {
-            id = "io.freefair.android-sources-jar"
             displayName = "Android Sources Jar Plugin"
             description = "Generate sources jars for all variants of your android project"
             tags = ['android', 'maven', 'sources', 'jar']
         }
         androidMavenJars {
-            id = "io.freefair.android-maven-jars"
             displayName = "Android Maven Jars Plugin"
             description = "Generate sources and javadoc jars for all variants of your android project"
             tags = ['android', 'maven', 'jar']
         }
         androidCi {
-            id = "io.freefair.android-ci"
             displayName = "Android CI Plugin"
             description = "Properly configure your android project on CI servers (like travis)"
             tags = ['android', 'ci', 'travis']
         }
         androidCiDex {
-            id = "io.freefair.android-ci-dex"
             displayName = "Android CI Plugin"
             description = "Properly configure your android project on CI servers (like travis)"
             tags = ['android', 'ci', 'travis', 'dex']
         }
         androidCiLint {
-            id = "io.freefair.android-ci-lint"
             displayName = "Android CI Plugin"
             description = "Properly configure your android project on CI servers (like travis)"
             tags = ['android', 'ci', 'travis', 'lint']
         }
         androidCheckstyle {
-            id = "io.freefair.android-checkstyle"
             displayName = "Android Checkstyle Plugin"
             description = "Run Checkstyle on your android source-sets"
             tags = ['android', 'checkstyle']
         }
         androidPmd {
-            id = "io.freefair.android-pmd"
             displayName = "Android PMD Plugin"
             description = "Run PMD on your android source-sets"
             tags = ['android', 'pmd']
         }
         androidFindbugs {
-            id = "io.freefair.android-findbugs"
             displayName = "Android FindBugs Plugin"
             description = "Run FindBugs on your android source-sets"
             tags = ['android', 'findbugs']

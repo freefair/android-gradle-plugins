@@ -3,6 +3,7 @@ package io.freefair.gradle.plugins.android.quality;
 import lombok.EqualsAndHashCode;
 import org.gradle.api.Incubating;
 import org.gradle.api.Project;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.resources.TextResource;
 
 import java.io.File;
@@ -23,10 +24,11 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
     private int maxErrors;
     private int maxWarnings = Integer.MAX_VALUE;
     private boolean showViolations = true;
-    private File configDir;
+    private DirectoryProperty configDir;
 
     public AndroidCheckstyleExtension(Project project) {
         this.project = project;
+        configDir = project.getLayout().directoryProperty();
     }
 
     /**
@@ -78,16 +80,17 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
     }
 
     /**
-     * Path to other Checkstyle configuration files. By default, this path is {@code $projectDir/config/checkstyle}
+     * Path to other Checkstyle configuration files. By default, this path is {@code $rootProject.projectDir/config/checkstyle}
      * <p>
      * This path will be exposed as the variable {@code config_loc} in Checkstyle's configuration files.
      * </p>
      * @return path to other Checkstyle configuration files
      * @since 4.0
+     *
      */
     @Incubating
     public File getConfigDir() {
-        return configDir;
+        return configDir.get().getAsFile();
     }
 
     /**
@@ -99,7 +102,18 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
      */
     @Incubating
     public void setConfigDir(File configDir) {
-        this.configDir = configDir;
+        this.configDir.set(configDir);
+    }
+
+    /**
+     * Gets the configuration directory.
+     *
+     * @return The configuration directory
+     * @since 4.7
+     */
+    @Incubating
+    public DirectoryProperty getConfigDirectory() {
+        return configDir;
     }
 
     /**

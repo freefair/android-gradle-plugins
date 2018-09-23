@@ -10,6 +10,7 @@ import org.gradle.api.file.FileTree;
 import org.gradle.api.internal.jvm.ClassDirectoryBinaryNamingScheme;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.compile.JavaCompile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,9 +52,9 @@ public abstract class VariantBasedCodeQualityPlugin<T extends Task> extends Abst
 
     private void configureForVariants(DomainObjectSet<? extends BaseVariant> variants) {
         variants.all(sourceSet -> {
-            Task task = project.getTasks().create(getTaskName(sourceSet, getTaskBaseName(), null), getCastedTaskType());
+            T task = project.getTasks().create(getTaskName(sourceSet, getTaskBaseName(), null), getCastedTaskType());
             task.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
-            configureForVariant(sourceSet, (T)task);
+            configureForVariant(sourceSet, task);
         });
     }
 
@@ -83,7 +84,7 @@ public abstract class VariantBasedCodeQualityPlugin<T extends Task> extends Abst
      * @see SourceSet#getCompileClasspath()
      */
     protected FileCollection getCompileClasspath(BaseVariant variant) {
-        return variant.getJavaCompile().getClasspath();
+        return getJavaCompile(variant).getClasspath();
     }
 
     /**
@@ -94,13 +95,22 @@ public abstract class VariantBasedCodeQualityPlugin<T extends Task> extends Abst
      * @see SourceSet#getAllJava()
      */
     protected static FileTree getAllJava(BaseVariant androidSourceSet) {
-        return androidSourceSet.getJavaCompile().getSource();
+        return getJavaCompile(androidSourceSet).getSource();
     }
 
     /**
      * @see SourceSet#getOutput()
      */
     protected FileTree getOutput(BaseVariant androidSourceSet) {
-        return getProject().fileTree(androidSourceSet.getJavaCompile().getDestinationDir());
+        return getProject().fileTree(getJavaCompile(androidSourceSet).getDestinationDir());
+    }
+
+    static JavaCompile getJavaCompile(BaseVariant variant) {
+        Task javaCompiler = variant.getJavaCompiler();
+        if (javaCompiler instanceof JavaCompile) {
+            return (JavaCompile) javaCompiler;
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 }

@@ -92,6 +92,8 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task, E extends
         configuration.exclude(excludeProperties("log4j", "log4j"));
     }
 
+    protected abstract void configureConfiguration(Configuration configuration);
+
     private Map<String, String> excludeProperties(String group, String module) {
         return ImmutableMap.<String, String>builder()
                 .put("group", group)
@@ -116,19 +118,19 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task, E extends
     protected abstract Callable<Collection<?>> getExtensionElementsCallable();
 
     private void configureTaskRule() {
-        project.getTasks().withType(getCastedTaskType(), (Action<Task>) task -> {
+        project.getTasks().withType(getCastedTaskType(), task -> {
             String prunedName = task.getName().replaceFirst(getTaskBaseName(), "");
             if (prunedName.isEmpty()) {
                 prunedName = task.getName();
             }
             prunedName = ("" + prunedName.charAt(0)).toLowerCase() + prunedName.substring(1);
-            configureTaskDefaults((T) task, prunedName);
+            configureTaskDefaults(task, prunedName);
         });
     }
 
     protected abstract void configureTaskDefaults(T task, String baseName);
 
-    protected void withBasePlugin(Action<Plugin> action) {
+    protected void withBasePlugin(Action<Plugin<?>> action) {
         project.getPlugins().withType(getBasePlugin(), action);
     }
 

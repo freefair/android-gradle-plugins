@@ -61,10 +61,14 @@ public class AndroidFindBugsPlugin extends VariantBasedCodeQualityPlugin<FindBug
     }
 
     @Override
+    protected void configureConfiguration(Configuration configuration) {
+        configureDefaultDependencies(configuration);
+    }
+
+    @Override
     protected void configureTaskDefaults(FindBugs task, String baseName) {
         task.setPluginClasspath(project.getConfigurations().getAt("findbugsPlugins"));
-        Configuration configuration = project.getConfigurations().getAt("findbugs");
-        configureDefaultDependencies(configuration);
+        Configuration configuration = project.getConfigurations().getAt(getConfigurationName());
         configureTaskConventionMapping(configuration, task);
         configureReportsConventionMapping(task, baseName);
     }
@@ -103,7 +107,7 @@ public class AndroidFindBugsPlugin extends VariantBasedCodeQualityPlugin<FindBug
     protected void configureForVariant(final BaseVariant variant, FindBugs task) {
         task.setDescription("Run FindBugs analysis for " + variant.getName() + " classes");
         task.setSource(getAllJava(variant));
-        task.dependsOn(variant.getJavaCompile());
+        task.dependsOn(variant.getJavaCompiler());
         ConventionMapping taskMapping = task.getConventionMapping();
         taskMapping.map("classes", () -> {
             // the simple "classes = sourceSet.output" may lead to non-existing resources directory
@@ -111,7 +115,7 @@ public class AndroidFindBugsPlugin extends VariantBasedCodeQualityPlugin<FindBug
 
             List<String> generatedClasses = new LinkedList<>();
 
-            variant.getJavaCompile().getSource().visit(fileVisitDetails -> {
+            getJavaCompile(variant).getSource().visit(fileVisitDetails -> {
                 if (!fileVisitDetails.isDirectory() && fileVisitDetails.getPath().endsWith(".java") && fileVisitDetails.getFile().getAbsolutePath().startsWith(project.getBuildDir().getAbsolutePath())) {
                     generatedClasses.add(fileVisitDetails.getPath().replace(".java", ""));
                 }

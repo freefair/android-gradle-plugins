@@ -14,6 +14,8 @@ import org.gradle.api.internal.file.UnionFileTree;
 import org.gradle.api.internal.jvm.ClassDirectoryBinaryNamingScheme;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.compile.AbstractCompile;
+import org.gradle.api.tasks.compile.JavaCompile;
 
 import java.util.Collection;
 import java.util.List;
@@ -51,7 +53,7 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
         sourceSets.all(sourceSet -> {
             T task = project.getTasks().create(getTaskName(sourceSet, getTaskBaseName(), null), getCastedTaskType());
             task.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
-            configureForSourceSet(sourceSet, (T)task);
+            configureForSourceSet(sourceSet, task);
         });
     }
 
@@ -82,8 +84,10 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
      */
     protected FileCollection getCompileClasspath(AndroidSourceSet androidSourceSet) {
         List<FileCollection> fileCollections = getAllVariants(androidSourceSet)
-                .filter(variant -> variant.getJavaCompile() != null)
-                .map(variant -> variant.getJavaCompile().getClasspath())
+                .map(BaseVariant::getJavaCompiler)
+                .filter(JavaCompile.class::isInstance)
+                .map(JavaCompile.class::cast)
+                .map(JavaCompile::getClasspath)
                 .collect(Collectors.toList());
 
         return new UnionFileCollection(fileCollections);
@@ -105,8 +109,10 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
      */
     protected FileCollection getOutput(AndroidSourceSet androidSourceSet) {
         List<FileTreeInternal> sourceTrees = getAllVariants(androidSourceSet)
-                .filter(variant -> variant.getJavaCompile() != null)
-                .map(variant -> variant.getJavaCompile().getDestinationDir())
+                .map(BaseVariant::getJavaCompiler)
+                .filter(JavaCompile.class::isInstance)
+                .map(JavaCompile.class::cast)
+                .map(AbstractCompile::getDestinationDir)
                 .map(outputDir -> (FileTreeInternal) getProject().fileTree(outputDir))
                 .collect(Collectors.toList());
         return new UnionFileTree(androidSourceSet.getName() + " output", sourceTrees);
