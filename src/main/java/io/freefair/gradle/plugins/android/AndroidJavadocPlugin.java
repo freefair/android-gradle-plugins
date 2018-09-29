@@ -2,17 +2,15 @@ package io.freefair.gradle.plugins.android;
 
 import com.android.build.gradle.TestedExtension;
 import com.android.build.gradle.api.BaseVariant;
+import org.gradle.api.JavaVersion;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.tasks.compile.JavaCompile;
 import org.gradle.api.tasks.javadoc.Javadoc;
 import org.gradle.external.javadoc.StandardJavadocDocletOptions;
-import org.gradle.internal.jvm.Jvm;
-import org.gradle.util.GUtil;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,9 +72,13 @@ public class AndroidJavadocPlugin extends AndroidProjectPlugin {
                     realOptions.docEncoding("UTF-8");
                     realOptions.charSet("UTF-8");
 
-                    Serializable javaVersion = GUtil.elvis(Jvm.current().getJavaVersion().getMajorVersion(), '8');
-                    realOptions.links("http://docs.oracle.com/javase/" + javaVersion + "/docs/api/");
-                    realOptions.linksOffline("http://developer.android.com/reference/", getAndroidExtension().getSdkDirectory() + "/docs/reference");
+                    String majorVersion = JavaVersion.current().getMajorVersion();
+                    if (Integer.parseInt(majorVersion) < 11) {
+                        realOptions.links("https://docs.oracle.com/javase/" + majorVersion + "/docs/api/");
+                    } else {
+                        realOptions.links("https://docs.oracle.com/en/java/javase/" + majorVersion + "/docs/api/");
+                    }
+                    realOptions.links("https://developer.android.com/reference/");
                 }
 
                 javadoc.setFailOnError(false);
