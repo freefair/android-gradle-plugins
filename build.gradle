@@ -4,7 +4,7 @@ plugins {
     id "com.gradle.plugin-publish" version "0.10.0"
     id "findbugs"
     id "pmd"
-    id "io.freefair.lombok" version "2.7"
+    id "io.freefair.lombok" version "2.7.2"
 }
 
 repositories {
@@ -21,9 +21,11 @@ tasks.withType(FindBugs) {
 
 group = 'io.freefair.gradle'
 
-javadoc.options.links "https://docs.oracle.com/javase/8/docs/api/"
-javadoc.options.links "https://docs.gradle.org/current/javadoc/"
-javadoc.options.links "https://google.github.io/android-gradle-dsl/javadoc/3.1/"
+def javaVersion = JavaVersion.current()
+
+javadoc.options.links "https://docs.oracle.com/javase/$javaVersion.majorVersion/docs/api/"
+javadoc.options.links "https://docs.gradle.org/$gradle.gradleVersion/javadoc/"
+javadoc.options.links "https://google.github.io/android-gradle-dsl/javadoc/3.2/"
 
 compileJava.options.compilerArgs += "-Xlint"
 
@@ -87,7 +89,7 @@ gradlePlugin {
 }
 
 pluginBundle {
-    website = "https://github.com/freefair/android-gradle-plugins"
+    website = "https://github.com/freefair/gradle-plugins/tree/${version == 'unspecified' ? 'master' : version}"
     vcsUrl = 'https://github.com/freefair/android-gradle-plugins'
     tags = ['android']
 
