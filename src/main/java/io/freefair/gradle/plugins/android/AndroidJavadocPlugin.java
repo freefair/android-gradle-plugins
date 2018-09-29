@@ -55,16 +55,12 @@ public class AndroidJavadocPlugin extends AndroidProjectPlugin {
 
                 javadoc.dependsOn(variant.getJavaCompiler());
 
-                if (variant.getJavaCompiler() instanceof JavaCompile) {
-                    JavaCompile javacTask = (JavaCompile) variant.getJavaCompiler();
+                JavaCompile javacTask = getJavaCompile(variant);
 
-                    javadoc.setSource(javacTask.getSource());
+                javadoc.setSource(javacTask.getSource());
 
-                    javadoc.setClasspath(project.files(javacTask.getDestinationDir()).plus(javacTask.getClasspath()));
-                    javadoc.getOptions().setSource(javacTask.getSourceCompatibility());
-                } else {
-                    getProject().getLogger().warn("Failed to configure {}. Unsupported Compiler: {}", javadoc.getName(), variant.getJavaCompiler().getClass().getName());
-                }
+                javadoc.setClasspath(project.files(javacTask.getDestinationDir()).plus(javacTask.getClasspath()));
+                javadoc.getOptions().setSource(javacTask.getSourceCompatibility());
 
                 //javadoc.exclude '**/BuildConfig.java'
                 javadoc.exclude("**/R.java");

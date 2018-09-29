@@ -9,7 +9,14 @@ import lombok.Getter;
 import org.gradle.api.DomainObjectSet;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.Task;
+import org.gradle.api.file.FileCollection;
+import org.gradle.api.file.FileTree;
+import org.gradle.api.internal.jvm.ClassDirectoryBinaryNamingScheme;
+import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.compile.JavaCompile;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -37,7 +44,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
     private boolean applyCalled = false;
 
     @Override
-    public void apply(Project project) {
+    public void apply(@Nonnull Project project) {
         this.project = project;
         applyCalled = true;
 
@@ -72,7 +79,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
         });
 
         project.afterEvaluate(project1 -> {
-            if (projectType == null)
+            if (androidExtension == null || projectType == null)
                 project1.getLogger().warn("No android plugin found on project {}", project);
         });
     }
@@ -83,7 +90,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
 
     @SuppressWarnings("WeakerAccess")
     public TestedExtension getAndroidExtension() {
-        if (projectType == null) {
+        if (androidExtension == null || projectType == null) {
             if (isApplyCalled()) {
                 throw new IllegalStateException("No android plugin found");
             } else {
@@ -96,7 +103,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
 
     @SuppressWarnings("WeakerAccess")
     public DomainObjectSet<? extends BaseVariant> getAndroidVariants() {
-        if (projectType == null) {
+        if (androidExtension == null || projectType == null) {
             throw new IllegalStateException("No android plugin found");
         }
 
@@ -112,16 +119,18 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
         }
     }
 
+    @Nonnull
     public DomainObjectSet<TestVariant> getTestVariants() {
-        if (projectType == null) {
+        if (androidExtension == null || projectType == null) {
             throw new IllegalStateException("No android plugin found");
         }
 
         return androidExtension.getTestVariants();
     }
 
+    @Nonnull
     public DomainObjectSet<UnitTestVariant> getUnitTestVariants() {
-        if (projectType == null) {
+        if (androidExtension == null || projectType == null) {
             throw new IllegalStateException("No android plugin found");
         }
 
@@ -136,6 +145,56 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
         return  getAndroidExtension().getDefaultPublishConfig().equals(variant.getName());
     }
 
+    /**
+     * Returns the name of a task for this source set.
+     *
+     * @param verb The action, may be null.
+     * @param target The target, may be null
+     * @return The task name, generally of the form ${verb}${name}${noun}
+     * @see SourceSet#getTaskName(String, String)
+     */
+    protected static String getTaskName(BaseVariant variant, String verb, String target) {
+        return new ClassDirectoryBinaryNamingScheme(variant.getName()).getTaskName(verb, target);
+    }
+
+    /**
+     * Returns the classpath used to compile this source.
+     *
+     * @return The classpath. Never returns null.
+     * @see SourceSet#getCompileClasspath()
+     */
+    protected FileCollection getCompileClasspath(BaseVariant variant) {
+        return getJavaCompile(variant).getClasspath();
+    }
+
+    /**
+     * All Java source files for this source set. This includes, for example, source which is directly compiled, and
+     * source which is indirectly compiled through joint compilation.
+     *
+     * @return the Java source. Never returns null.
+     * @see SourceSet#getAllJava()
+     */
+    protected static FileTree getAllJava(BaseVariant androidSourceSet) {
+        return getJavaCompile(androidSourceSet).getSource();
+    }
+
+    /**
+     * @see SourceSet#getOutput()
+     */
+    protected FileTree getOutput(BaseVariant androidSourceSet) {
+        return getProject().fileTree(getJavaCompile(androidSourceSet).getDestinationDir());
+    }
+
+    @Nonnull
+    protected static JavaCompile getJavaCompile(BaseVariant variant) {
+        Task javaCompiler = variant.getJavaCompiler();
+        if (javaCompiler instanceof JavaCompile) {
+            return (JavaCompile) javaCompiler;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
     @Getter
     @AllArgsConstructor
     public enum ProjectType {
@@ -145,6 +204,5 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
 
         private Class<? extends BasePlugin<?>> pluginClass;
         private Class<? extends TestedExtension> extensionClass;
-
     }
 }

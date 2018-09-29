@@ -8,9 +8,8 @@ plugins {
 }
 
 repositories {
-    mavenCentral()
+    maven { url "https://plugins.gradle.org/m2/" }
     google()
-    jcenter()
 }
 
 tasks.withType(FindBugs) {
@@ -32,6 +31,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     compile 'com.android.tools.build:gradle:3.2.0'
+    compile 'io.freefair.gradle:lombok-plugin:2.7.2'
 
     testCompile 'junit:junit:4.12'
 }
@@ -42,6 +42,10 @@ gradlePlugin {
         androidJavadoc {
             id = "io.freefair.android-javadoc"
             implementationClass = "io.freefair.gradle.plugins.android.AndroidJavadocPlugin"
+        }
+        androidLombok {
+            id = "io.freefair.android-lombok"
+            implementationClass = "io.freefair.gradle.plugins.android.AndroidLombokPlugin"
         }
         androidJavadocJar {
             id = "io.freefair.android-javadoc-jar"
@@ -92,6 +96,11 @@ pluginBundle {
             displayName = "Android Javadoc Plugin"
             description = "Generate javadocs for all variants of your android project"
             tags = ['android', 'javadoc']
+        }
+        androidLombok {
+            displayName = "Android Lombok Plugin"
+            description = "Automatic Lombok and Delombok configuration for your android project"
+            tags = ['android', 'lombok']
         }
         androidJavadocJar {
             displayName = "Android Javadoc Jar Plugin"
