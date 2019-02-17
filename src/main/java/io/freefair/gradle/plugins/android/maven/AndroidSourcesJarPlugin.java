@@ -5,7 +5,8 @@ import io.freefair.gradle.plugins.android.AndroidProjectPlugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Dependency;
-import org.gradle.jvm.tasks.Jar;
+import org.gradle.api.tasks.bundling.Jar;
+import org.gradle.api.tasks.compile.JavaCompile;
 
 import static org.codehaus.groovy.runtime.StringGroovyMethods.capitalize;
 
@@ -34,7 +35,7 @@ public class AndroidSourcesJarPlugin extends AndroidProjectPlugin {
 
                 jar.setClassifier("sources");
                 jar.setAppendix(variant.getName());
-                jar.from(variant.getJavaCompiler().property("source"));
+                jar.from(variant.getJavaCompileProvider().map(JavaCompile::getSource));
             });
 
             allSourcesJarTask.dependsOn(sourcesJarTask);

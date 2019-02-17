@@ -107,7 +107,7 @@ public class AndroidFindBugsPlugin extends VariantBasedCodeQualityPlugin<FindBug
     protected void configureForVariant(final BaseVariant variant, FindBugs task) {
         task.setDescription("Run FindBugs analysis for " + variant.getName() + " classes");
         task.setSource(getAllJava(variant));
-        task.dependsOn(variant.getJavaCompiler());
+        task.dependsOn(variant.getJavaCompileProvider());
         ConventionMapping taskMapping = task.getConventionMapping();
         taskMapping.map("classes", () -> {
             // the simple "classes = sourceSet.output" may lead to non-existing resources directory

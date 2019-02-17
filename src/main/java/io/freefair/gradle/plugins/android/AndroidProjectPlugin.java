@@ -187,12 +187,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
 
     @Nonnull
     protected static JavaCompile getJavaCompile(BaseVariant variant) {
-        Task javaCompiler = variant.getJavaCompiler();
-        if (javaCompiler instanceof JavaCompile) {
-            return (JavaCompile) javaCompiler;
-        } else {
-            throw new IllegalArgumentException();
-        }
+        return variant.getJavaCompileProvider().get();
     }
 
     @Getter

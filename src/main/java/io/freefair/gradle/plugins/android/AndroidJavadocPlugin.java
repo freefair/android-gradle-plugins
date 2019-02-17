@@ -51,7 +51,7 @@ public class AndroidJavadocPlugin extends AndroidProjectPlugin {
                 javadoc.setDescription("Generate Javadoc for the " + variant.getName() + " variant");
                 javadoc.setGroup(JavaBasePlugin.DOCUMENTATION_GROUP);
 
-                javadoc.dependsOn(variant.getJavaCompiler());
+                javadoc.dependsOn(variant.getJavaCompileProvider());
 
                 JavaCompile javacTask = getJavaCompile(variant);
 
