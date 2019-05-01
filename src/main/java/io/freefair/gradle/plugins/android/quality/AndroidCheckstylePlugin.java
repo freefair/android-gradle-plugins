@@ -46,12 +46,7 @@ public class AndroidCheckstylePlugin extends SourceSetBasedCodeQualityPlugin<Che
         extension = project.getExtensions().create("checkstyle", AndroidCheckstyleExtension.class, project);
         extension.setToolVersion(DEFAULT_CHECKSTYLE_VERSION);
         extension.getConfigDirectory().set(determineConfigurationDirectory());
-        extension.setConfig(project.getResources().getText().fromFile(new Callable<File>() {
-            @Override
-            public File call() {
-                return new File(extension.getConfigDir(), "checkstyle.xml");
-            }
-        }));
+        extension.setConfig(project.getResources().getText().fromFile((Callable<File>) () -> new File(extension.getConfigDir(), "checkstyle.xml")));
         return extension;
     }
 

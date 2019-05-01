@@ -6,6 +6,7 @@ import org.gradle.api.JavaVersion;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaBasePlugin;
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.compile.JavaCompile;
 import org.gradle.api.tasks.javadoc.Javadoc;
 import org.gradle.external.javadoc.StandardJavadocDocletOptions;
@@ -18,15 +19,15 @@ import static org.codehaus.groovy.runtime.StringGroovyMethods.capitalize;
 
 public class AndroidJavadocPlugin extends AndroidProjectPlugin {
 
-    private Map<String, Javadoc> javadocTasks = new HashMap<>();
+    private Map<String, TaskProvider<Javadoc>> javadocTasks = new HashMap<>();
 
-    private Task allJavadocTask;
+    private TaskProvider<Task> allJavadocTask;
 
     @Override
     public void apply(Project project) {
         super.apply(project);
 
-        allJavadocTask = project.getTasks().create("javadoc", ajdTasks -> {
+        allJavadocTask = project.getTasks().register("javadoc", ajdTasks -> {
             ajdTasks.setDescription("Generate Javadoc for all variants");
             ajdTasks.setGroup(JavaBasePlugin.DOCUMENTATION_GROUP);
         });
@@ -37,23 +38,23 @@ public class AndroidJavadocPlugin extends AndroidProjectPlugin {
     protected void withAndroid(TestedExtension extension) {
         super.withAndroid(extension);
         getAndroidVariants().all(variant -> {
-            Javadoc javadocTask = getJavadocTask(getProject(), variant);
+            TaskProvider<Javadoc> javadocTask = getJavadocTask(getProject(), variant);
 
-            allJavadocTask.dependsOn(javadocTask);
+            allJavadocTask.configure(t -> t.dependsOn(javadocTask));
         });
     }
 
-    public Javadoc getJavadocTask(Project project, BaseVariant variant) {
+    public TaskProvider<Javadoc> getJavadocTask(Project project, BaseVariant variant) {
 
         if (!javadocTasks.containsKey(variant.getName())) {
 
-            Javadoc task = project.getTasks().create("javadoc" + capitalize((CharSequence) variant.getName()), Javadoc.class, javadoc -> {
+            TaskProvider<Javadoc> task = project.getTasks().register("javadoc" + capitalize((CharSequence) variant.getName()), Javadoc.class, javadoc -> {
                 javadoc.setDescription("Generate Javadoc for the " + variant.getName() + " variant");
                 javadoc.setGroup(JavaBasePlugin.DOCUMENTATION_GROUP);
 
                 javadoc.dependsOn(variant.getJavaCompileProvider());
 
-                JavaCompile javacTask = getJavaCompile(variant);
+                JavaCompile javacTask = getJavaCompile(variant).get();
 
                 javadoc.setSource(javacTask.getSource());
 

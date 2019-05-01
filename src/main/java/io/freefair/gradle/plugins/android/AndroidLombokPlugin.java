@@ -3,8 +3,8 @@ package io.freefair.gradle.plugins.android;
 import com.android.build.gradle.TestedExtension;
 import io.freefair.gradle.plugins.lombok.Delombok;
 import io.freefair.gradle.plugins.lombok.LombokPlugin;
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.compile.JavaCompile;
-import org.gradle.api.tasks.javadoc.Javadoc;
 
 import static org.codehaus.groovy.runtime.StringGroovyMethods.capitalize;
 
@@ -31,28 +31,37 @@ public class AndroidLombokPlugin extends AndroidProjectPlugin {
         });
 
         getAndroidVariants().forEach(variant -> {
-            String delombokName = "delombok" + capitalize((CharSequence)variant.getName());
+            String delombokName = "delombok" + capitalize((CharSequence) variant.getName());
 
-            Delombok delombok = getProject().getTasks().create(delombokName, Delombok.class);
-            delombok.setDescription("Runs delombok on the " + delombokName + " variant");
+            TaskProvider<Delombok> delombokProvider = getProject().getTasks().register(delombokName, Delombok.class, delombok -> {
 
-            JavaCompile compileJava = getJavaCompile(variant);
-            compileJava.dependsOn(lombokPlugin.getGenerateLombokConfig());
-            compileJava.getOptions().getCompilerArgs().add("-Xlint:-processing");
+                delombok.setDescription("Runs delombok on the " + delombokName + " variant");
+            });
+
+            TaskProvider<JavaCompile> compileJava = getJavaCompile(variant);
+            compileJava.configure(cj -> {
+                cj.dependsOn(lombokPlugin.getGenerateLombokConfig());
+                cj.getOptions().getCompilerArgs().add("-Xlint:-processing");
+            });
+
             getProject().afterEvaluate(p -> {
-                delombok.getEncoding().set(compileJava.getOptions().getEncoding());
-                delombok.getClasspath().from(getCompileClasspath(variant));
-                compileJava.getInputs().file(lombokPlugin.getGenerateLombokConfig().get().getOutputFile());
+                compileJava.configure(cj -> {
+                    cj.getInputs().file(lombokPlugin.getGenerateLombokConfig().get().getOutputFile());
+                });
 
-                variant.getSourceSets().forEach(sourceProvider -> {
-                    delombok.getInput().from(sourceProvider.getJavaDirectories());
+                delombokProvider.configure(delombok -> {
+                    delombok.getEncoding().set(compileJava.get().getOptions().getEncoding());
+                    delombok.getClasspath().from(getCompileClasspath(variant));
+
+                    variant.getSourceSets().forEach(sourceProvider -> {
+                        delombok.getInput().from(sourceProvider.getJavaDirectories());
+                    });
                 });
             });
 
             getProject().getPlugins().withType(AndroidJavadocPlugin.class, androidJavadocPlugin -> {
-                Javadoc javadocTask = androidJavadocPlugin.getJavadocTask(getProject(), variant);
-
-                javadocTask.setSource(delombok);
+                androidJavadocPlugin.getJavadocTask(getProject(), variant)
+                        .configure(javadoc -> javadoc.setSource(delombokProvider));
             });
         });
     }

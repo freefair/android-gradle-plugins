@@ -20,7 +20,7 @@ public abstract class VariantBasedCodeQualityPlugin<T extends Task> extends Abst
     protected void withAndroid(TestedExtension extension) {
         super.withAndroid(extension);
         configureVariantRule();
-        configureCheckTaskDependents();
+        configureCheckTask();
     }
 
     @Override
@@ -51,6 +51,10 @@ public abstract class VariantBasedCodeQualityPlugin<T extends Task> extends Abst
             task.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
             configureForVariant(sourceSet, task);
         });
+    }
+
+    private void configureCheckTask() {
+        withBasePlugin(plugin -> configureCheckTaskDependents());
     }
 
     private void configureCheckTaskDependents() {

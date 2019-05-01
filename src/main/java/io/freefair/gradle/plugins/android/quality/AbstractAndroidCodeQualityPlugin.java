@@ -90,6 +90,7 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task, E extends
         configuration.exclude(excludeProperties("org.slf4j", "log4j-over-slf4j"));
         configuration.exclude(excludeProperties("commons-logging", "commons-logging"));
         configuration.exclude(excludeProperties("log4j", "log4j"));
+        configureConfiguration(configuration);
     }
 
     protected abstract void configureConfiguration(Configuration configuration);

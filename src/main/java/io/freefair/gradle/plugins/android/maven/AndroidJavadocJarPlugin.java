@@ -6,6 +6,7 @@ import io.freefair.gradle.plugins.android.AndroidProjectPlugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Dependency;
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.javadoc.Javadoc;
 import org.gradle.jvm.tasks.Jar;
 
@@ -13,7 +14,7 @@ import static org.codehaus.groovy.runtime.StringGroovyMethods.capitalize;
 
 public class AndroidJavadocJarPlugin extends AndroidProjectPlugin {
 
-    private Task allJavadocJarTask;
+    private TaskProvider<Task> allJavadocJarTask;
 
     @Override
     public void apply(Project project) {
@@ -21,7 +22,7 @@ public class AndroidJavadocJarPlugin extends AndroidProjectPlugin {
 
         project.getPluginManager().apply(AndroidJavadocPlugin.class);
 
-        allJavadocJarTask = project.getTasks().create("javadocJar", ajdjTask -> {
+        allJavadocJarTask = project.getTasks().register("javadocJar", ajdjTask -> {
             ajdjTask.setDescription("Generate the javadoc jar for all variants");
             ajdjTask.setGroup("jar");
         });
@@ -35,9 +36,9 @@ public class AndroidJavadocJarPlugin extends AndroidProjectPlugin {
         getAndroidVariants().all(variant -> {
 
             AndroidJavadocPlugin androidJavadocPlugin = getProject().getPlugins().findPlugin(AndroidJavadocPlugin.class);
-            Javadoc javadocTask = androidJavadocPlugin.getJavadocTask(getProject(), variant);
+            TaskProvider<Javadoc> javadocTask = androidJavadocPlugin.getJavadocTask(getProject(), variant);
 
-            Jar javadocJarTask = getProject().getTasks().create("javadoc" + capitalize((CharSequence) variant.getName()) + "Jar", Jar.class, jar -> {
+            TaskProvider<Jar> javadocJarTask = getProject().getTasks().register("javadoc" + capitalize((CharSequence) variant.getName()) + "Jar", Jar.class, jar -> {
                 jar.dependsOn(javadocTask);
 
                 jar.setDescription("Generate the javadoc jar for the " + variant.getName() + " variant");
@@ -45,10 +46,10 @@ public class AndroidJavadocJarPlugin extends AndroidProjectPlugin {
 
                 jar.getArchiveAppendix().set(variant.getName());
                 jar.getArchiveClassifier().set("javadoc");
-                jar.from(javadocTask.getDestinationDir());
+                jar.from(javadocTask.get().getDestinationDir());
             });
 
-            allJavadocJarTask.dependsOn(javadocJarTask);
+            allJavadocJarTask.configure(t -> t.dependsOn(javadocJarTask));
 
             if (publishVariant(variant)) {
                 getProject().getArtifacts().add(Dependency.ARCHIVES_CONFIGURATION, javadocJarTask);

@@ -9,11 +9,14 @@ import lombok.Getter;
 import org.gradle.api.DomainObjectSet;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
+import org.gradle.api.Transformer;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.internal.jvm.ClassDirectoryBinaryNamingScheme;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.TaskProvider;
+import org.gradle.api.tasks.compile.AbstractCompile;
 import org.gradle.api.tasks.compile.JavaCompile;
 
 import javax.annotation.Nonnull;
@@ -163,8 +166,8 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
      * @return The classpath. Never returns null.
      * @see SourceSet#getCompileClasspath()
      */
-    protected FileCollection getCompileClasspath(BaseVariant variant) {
-        return getJavaCompile(variant).getClasspath();
+    protected Provider<FileCollection> getCompileClasspath(BaseVariant variant) {
+        return getJavaCompile(variant).map(JavaCompile::getClasspath);
     }
 
     /**
@@ -174,20 +177,22 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
      * @return the Java source. Never returns null.
      * @see SourceSet#getAllJava()
      */
-    protected static FileTree getAllJava(BaseVariant androidSourceSet) {
-        return getJavaCompile(androidSourceSet).getSource();
+    protected static Provider<FileTree> getAllJava(BaseVariant androidSourceSet) {
+        return getJavaCompile(androidSourceSet).map(JavaCompile::getSource);
     }
 
     /**
      * @see SourceSet#getOutput()
      */
-    protected FileTree getOutput(BaseVariant androidSourceSet) {
-        return getProject().fileTree(getJavaCompile(androidSourceSet).getDestinationDir());
+    protected Provider<FileTree> getOutput(BaseVariant androidSourceSet) {
+        return getJavaCompile(androidSourceSet)
+                .map(AbstractCompile::getDestinationDir)
+                .map(dir -> getProject().fileTree(dir));
     }
 
     @Nonnull
-    protected static JavaCompile getJavaCompile(BaseVariant variant) {
-        return variant.getJavaCompileProvider().get();
+    protected static TaskProvider<JavaCompile> getJavaCompile(BaseVariant variant) {
+        return variant.getJavaCompileProvider();
     }
 
     @Getter

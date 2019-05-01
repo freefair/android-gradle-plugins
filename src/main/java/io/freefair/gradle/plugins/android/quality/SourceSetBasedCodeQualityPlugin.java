@@ -13,10 +13,7 @@ import org.gradle.api.internal.file.UnionFileCollection;
 import org.gradle.api.internal.file.UnionFileTree;
 import org.gradle.api.internal.jvm.ClassDirectoryBinaryNamingScheme;
 import org.gradle.api.plugins.JavaBasePlugin;
-import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SourceSet;
-import org.gradle.api.tasks.compile.AbstractCompile;
-import org.gradle.api.tasks.compile.JavaCompile;
 
 import java.util.Collection;
 import java.util.List;
@@ -33,7 +30,7 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
     protected void withAndroid(TestedExtension extension) {
         super.withAndroid(extension);
         configureSourceSetRule();
-        configureCheckTaskDependents();
+        configureCheckTask();
     }
 
     @Override
@@ -56,6 +53,10 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
             task.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
             configureForSourceSet(sourceSet, task);
         });
+    }
+
+    private void configureCheckTask() {
+        withBasePlugin(plugin -> configureCheckTaskDependents());
     }
 
     private void configureCheckTaskDependents() {
