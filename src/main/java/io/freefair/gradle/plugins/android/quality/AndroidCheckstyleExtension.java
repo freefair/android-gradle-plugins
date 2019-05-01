@@ -28,7 +28,7 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
 
     public AndroidCheckstyleExtension(Project project) {
         this.project = project;
-        configDir = project.getLayout().directoryProperty();
+        configDir = project.getObjects().directoryProperty();
     }
 
     /**
@@ -50,7 +50,6 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
      *
      * @since 2.2
      */
-    @Incubating
     public TextResource getConfig() {
         return config;
     }
@@ -60,7 +59,6 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
      *
      * @since 2.2
      */
-    @Incubating
     public void setConfig(TextResource config) {
         this.config = config;
     }
@@ -84,9 +82,9 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
      * <p>
      * This path will be exposed as the variable {@code config_loc} in Checkstyle's configuration files.
      * </p>
+     *
      * @return path to other Checkstyle configuration files
      * @since 4.0
-     *
      */
     @Incubating
     public File getConfigDir() {
@@ -94,10 +92,11 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
     }
 
     /**
-     * Path to other Checkstyle configuration files. By default, this path is {@code $projectDir/config/checkstyle}
+     * Path to other Checkstyle configuration files. By default, this path is {@code $rootProject.projectDir/config/checkstyle}
      * <p>
      * This path will be exposed as the variable {@code config_loc} in Checkstyle's configuration files.
      * </p>
+     *
      * @since 4.0
      */
     @Incubating
@@ -122,8 +121,8 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
      * <p>
      * Example: maxErrors = 42
      *
-     * @since 3.4
      * @return the maximum number of errors allowed
+     * @since 3.4
      */
     public int getMaxErrors() {
         return maxErrors;
@@ -132,8 +131,8 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
     /**
      * Set the maximum number of errors that are tolerated before breaking the build.
      *
-     * @since 3.4
      * @param maxErrors number of errors allowed
+     * @since 3.4
      */
     public void setMaxErrors(int maxErrors) {
         this.maxErrors = maxErrors;
@@ -145,8 +144,8 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
      * <p>
      * Example: maxWarnings = 1000
      *
-     * @since 3.4
      * @return the maximum number of warnings allowed
+     * @since 3.4
      */
     public int getMaxWarnings() {
         return maxWarnings;
@@ -155,8 +154,8 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
     /**
      * Set the maximum number of warnings that are tolerated before breaking the build.
      *
-     * @since 3.4
      * @param maxWarnings number of warnings allowed
+     * @since 3.4
      */
     public void setMaxWarnings(int maxWarnings) {
         this.maxWarnings = maxWarnings;
@@ -164,7 +163,7 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
 
     /**
      * Whether rule violations are to be displayed on the console. Defaults to <tt>true</tt>.
-     *
+     * <p>
      * Example: showViolations = false
      */
     public boolean isShowViolations() {
@@ -173,7 +172,7 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
 
     /**
      * Whether rule violations are to be displayed on the console. Defaults to <tt>true</tt>.
-     *
+     * <p>
      * Example: showViolations = false
      */
     public void setShowViolations(boolean showViolations) {
