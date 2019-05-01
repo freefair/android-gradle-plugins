@@ -12,6 +12,7 @@ import java.util.Collection;
  * @author Lars Grefer
  * @see org.gradle.api.plugins.quality.FindBugsExtension
  */
+@Deprecated
 @EqualsAndHashCode(callSuper = true)
 public class AndroidFindBugsExtension extends VariantBasedCodeQualityExtension {
 
