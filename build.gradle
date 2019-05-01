@@ -2,7 +2,6 @@ plugins {
     id "maven-publish"
     id "java-gradle-plugin"
     id "com.gradle.plugin-publish" version "0.10.1"
-    id "pmd"
     id "io.freefair.lombok" version "3.2.1"
 }
 
