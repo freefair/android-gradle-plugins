@@ -109,7 +109,7 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task, E extends
         String sourceSets = getExtensionElementsName();
         Callable<Collection<?>> ssCallable = getExtensionElementsCallable();
 
-        extensionMapping.map(sourceSets, Callables.returning(new ArrayList()));
+        extensionMapping.map(sourceSets, Callables.returning(new ArrayList<>()));
         extensionMapping.map("reportsDir", () -> project.getExtensions().getByType(ReportingExtension.class).file(getReportName()));
         withBasePlugin(plugin -> extensionMapping.map(sourceSets, ssCallable));
     }

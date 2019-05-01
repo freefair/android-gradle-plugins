@@ -18,7 +18,7 @@ public class AndroidLombokPlugin extends AndroidProjectPlugin {
         super.withAndroid(extension);
 
         LombokPlugin lombokPlugin = getProject().getPlugins().apply(LombokPlugin.class);
-        lombokPlugin.getLombokExtension().setVersion("1.16.20");
+        lombokPlugin.getLombokExtension().getVersion().set("1.16.20");
         lombokPlugin.getLombokExtension().getConfig().put("lombok.addGeneratedAnnotation", "false");
         lombokPlugin.getLombokExtension().getConfig().put("lombok.addJavaxGeneratedAnnotation", "false");
         lombokPlugin.getLombokExtension().getConfig().put("lombok.anyConstructor.suppressConstructorProperties", "true");
@@ -42,7 +42,7 @@ public class AndroidLombokPlugin extends AndroidProjectPlugin {
             getProject().afterEvaluate(p -> {
                 delombok.getEncoding().set(compileJava.getOptions().getEncoding());
                 delombok.getClasspath().from(getCompileClasspath(variant));
-                compileJava.getInputs().file(lombokPlugin.getGenerateLombokConfig().getOutputFile());
+                compileJava.getInputs().file(lombokPlugin.getGenerateLombokConfig().get().getOutputFile());
 
                 variant.getSourceSets().forEach(sourceProvider -> {
                     delombok.getInput().from(sourceProvider.getJavaDirectories());

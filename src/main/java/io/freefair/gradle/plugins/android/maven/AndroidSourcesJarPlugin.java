@@ -33,8 +33,8 @@ public class AndroidSourcesJarPlugin extends AndroidProjectPlugin {
                 jar.setDescription("Generate the sources jar for the " + variant.getName() + " variant");
                 jar.setGroup("jar");
 
-                jar.setClassifier("sources");
-                jar.setAppendix(variant.getName());
+                jar.getArchiveClassifier().set("sources");
+                jar.getArchiveAppendix().set(variant.getName());
                 jar.from(variant.getJavaCompileProvider().map(JavaCompile::getSource));
             });
 

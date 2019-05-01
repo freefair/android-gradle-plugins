@@ -43,8 +43,8 @@ public class AndroidJavadocJarPlugin extends AndroidProjectPlugin {
                 jar.setDescription("Generate the javadoc jar for the " + variant.getName() + " variant");
                 jar.setGroup("jar");
 
-                jar.setAppendix(variant.getName());
-                jar.setClassifier("javadoc");
+                jar.getArchiveAppendix().set(variant.getName());
+                jar.getArchiveClassifier().set("javadoc");
                 jar.from(javadocTask.getDestinationDir());
             });
 

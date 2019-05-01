@@ -3,7 +3,6 @@ package io.freefair.gradle.plugins.android.quality;
 import com.android.build.gradle.api.AndroidSourceSet;
 import com.android.build.gradle.api.BaseVariant;
 import com.google.common.util.concurrent.Callables;
-import org.gradle.api.Incubating;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.plugins.quality.FindBugs;
@@ -26,7 +25,7 @@ import java.util.concurrent.Callable;
  * @see org.gradle.api.plugins.quality.FindBugsPlugin
  * @see AbstractAndroidCodeQualityPlugin
  */
-@Incubating
+@Deprecated
 public class AndroidFindBugsPlugin extends VariantBasedCodeQualityPlugin<FindBugs> {
 
     private AndroidFindBugsExtension extension;
