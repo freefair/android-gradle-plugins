@@ -1,14 +1,12 @@
 package io.freefair.gradle.plugins.android.quality;
 
+import com.android.build.gradle.AppPlugin;
 import io.freefair.gradle.plugins.android.AbstractGradlePluginTest;
-import org.gradle.testkit.runner.BuildResult;
-import org.gradle.testkit.runner.GradleRunner;
+import org.gradle.api.Project;
+import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Test;
 
 import java.io.IOException;
-
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS;
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author Lars Grefer
@@ -17,16 +15,16 @@ public class AndroidCodeQualityPluginsTest extends AbstractGradlePluginTest {
 
     @Test
     public void testAllCodeQualityPlugins() throws IOException {
-        loadBuildFileFromClasspath("/quality-all.gradle");
-        setPackageName("io.freefair.android.test.allCodeQualityTest");
 
-        BuildResult result = GradleRunner.create()
+        Project project = ProjectBuilder.builder()
                 .withProjectDir(testProjectDir.getRoot())
-                .withArguments("tasks", "--stacktrace")
-                .withPluginClasspath()
-                .withDebug(true)
                 .build();
 
-        assertEquals(result.task(":tasks").getOutcome(), SUCCESS);
+        setPackageName("io.freefair.android.test.allCodeQualityTest");
+
+        project.getPlugins().apply(AppPlugin.class);
+        project.getPlugins().apply(AndroidPmdPlugin.class);
+        project.getPlugins().apply(AndroidCheckstylePlugin.class);
+        project.getPlugins().apply(AndroidFindBugsPlugin.class);
     }
 }
