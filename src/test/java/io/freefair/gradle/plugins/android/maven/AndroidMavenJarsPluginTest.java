@@ -1,44 +1,35 @@
 package io.freefair.gradle.plugins.android.maven;
 
-import io.freefair.gradle.plugins.android.AbstractGradlePluginTest;
-import org.gradle.testkit.runner.BuildResult;
-import org.gradle.testkit.runner.GradleRunner;
+import com.android.build.gradle.AppPlugin;
+import com.android.build.gradle.LibraryPlugin;
+import org.gradle.api.Project;
+import org.gradle.testfixtures.ProjectBuilder;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
+public class AndroidMavenJarsPluginTest {
 
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS;
-import static org.junit.Assert.*;
+    private Project project;
 
-public class AndroidMavenJarsPluginTest extends AbstractGradlePluginTest {
-
-    @Test
-    public void testApp() throws IOException {
-        loadBuildFileFromClasspath("/maven-jars-app.gradle");
-        setPackageName("io.freefair.android.test.mavenJarsApp");
-
-        BuildResult result = GradleRunner.create()
-                .withProjectDir(testProjectDir.getRoot())
-                .withArguments("assemble", "--stacktrace")
-                .withPluginClasspath()
-                .withDebug(true)
-                .build();
-
-        assertEquals(result.task(":assemble").getOutcome(), SUCCESS);
+    @Before
+    public void setUp() {
+        project = ProjectBuilder.builder().build();
     }
 
     @Test
-    public void testLibrary() throws IOException {
-        loadBuildFileFromClasspath("/maven-jars-library.gradle");
-        setPackageName("io.freefair.android.test.mavenJarsLib");
+    public void apply_app() {
+        project.getPlugins().apply(AppPlugin.class);
+        project.getPlugins().apply(AndroidMavenJarsPlugin.class);
+    }
 
-        BuildResult result = GradleRunner.create()
-                .withProjectDir(testProjectDir.getRoot())
-                .withArguments("assemble", "--stacktrace")
-                .withPluginClasspath()
-                .withDebug(true)
-                .build();
+    @Test
+    public void apply_lib() {
+        project.getPlugins().apply(LibraryPlugin.class);
+        project.getPlugins().apply(AndroidMavenJarsPlugin.class);
+    }
 
-        assertEquals(result.task(":assemble").getOutcome(), SUCCESS);
+    @Test
+    public void apply_alone() {
+        project.getPlugins().apply(AndroidMavenJarsPlugin.class);
     }
 }

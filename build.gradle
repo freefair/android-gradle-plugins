@@ -3,6 +3,7 @@ plugins {
     id "java-gradle-plugin"
     id "com.gradle.plugin-publish" version "0.10.1"
     id "io.freefair.lombok" version "3.2.1"
+    id "jacoco"
 }
 
 repositories {

@@ -1,4 +1,4 @@
-package io.freefair.gradle.plugins.android.ci;
+package io.freefair.gradle.plugins.android.maven;
 
 import com.android.build.gradle.AppPlugin;
 import com.android.build.gradle.LibraryPlugin;
@@ -7,7 +7,7 @@ import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CiPluginTest {
+public class AndroidJavadocJarPluginTest {
 
     private Project project;
 
@@ -19,17 +19,17 @@ public class CiPluginTest {
     @Test
     public void apply_app() {
         project.getPlugins().apply(AppPlugin.class);
-        project.getPlugins().apply(CiPlugin.class);
+        project.getPlugins().apply(AndroidJavadocJarPlugin.class);
     }
 
     @Test
     public void apply_lib() {
         project.getPlugins().apply(LibraryPlugin.class);
-        project.getPlugins().apply(CiPlugin.class);
+        project.getPlugins().apply(AndroidJavadocJarPlugin.class);
     }
 
     @Test
     public void apply_alone() {
-        project.getPlugins().apply(CiPlugin.class);
+        project.getPlugins().apply(AndroidJavadocJarPlugin.class);
     }
 }
