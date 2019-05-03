@@ -19,6 +19,7 @@ def javaVersion = JavaVersion.current()
 javadoc.options.links "https://docs.oracle.com/javase/$javaVersion.majorVersion/docs/api/"
 javadoc.options.links "https://docs.gradle.org/$gradle.gradleVersion/javadoc/"
 javadoc.options.links "https://google.github.io/android-gradle-dsl/javadoc/3.4/"
+javadoc.failOnError = false
 
 compileJava.options.compilerArgs += "-Xlint"
 
