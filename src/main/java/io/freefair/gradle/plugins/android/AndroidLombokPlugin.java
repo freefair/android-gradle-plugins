@@ -1,8 +1,9 @@
 package io.freefair.gradle.plugins.android;
 
 import com.android.build.gradle.TestedExtension;
-import io.freefair.gradle.plugins.lombok.Delombok;
+import io.freefair.gradle.plugins.lombok.LombokBasePlugin;
 import io.freefair.gradle.plugins.lombok.LombokPlugin;
+import io.freefair.gradle.plugins.lombok.tasks.Delombok;
 import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.compile.JavaCompile;
 
@@ -18,16 +19,17 @@ public class AndroidLombokPlugin extends AndroidProjectPlugin {
         super.withAndroid(extension);
 
         LombokPlugin lombokPlugin = getProject().getPlugins().apply(LombokPlugin.class);
-        lombokPlugin.getLombokExtension().getVersion().set("1.16.20");
-        lombokPlugin.getLombokExtension().getConfig().put("lombok.addGeneratedAnnotation", "false");
-        lombokPlugin.getLombokExtension().getConfig().put("lombok.addJavaxGeneratedAnnotation", "false");
-        lombokPlugin.getLombokExtension().getConfig().put("lombok.anyConstructor.suppressConstructorProperties", "true");
+        LombokBasePlugin lombokBasePlugin = lombokPlugin.getLombokBasePlugin();
+        lombokBasePlugin.getLombokExtension().getVersion().set("1.16.20");
+        lombokBasePlugin.getLombokExtension().getConfig().put("lombok.addGeneratedAnnotation", "false");
+        lombokBasePlugin.getLombokExtension().getConfig().put("lombok.addJavaxGeneratedAnnotation", "false");
+        lombokBasePlugin.getLombokExtension().getConfig().put("lombok.anyConstructor.suppressConstructorProperties", "true");
 
         extension.getSourceSets().all(androidSourceSet -> {
             getProject().getConfigurations().getByName(androidSourceSet.getCompileOnlyConfigurationName())
-                    .extendsFrom(lombokPlugin.getLombokConfiguration());
+                    .extendsFrom(lombokBasePlugin.getLombokConfiguration());
             getProject().getConfigurations().getByName(androidSourceSet.getAnnotationProcessorConfigurationName())
-                    .extendsFrom(lombokPlugin.getLombokConfiguration());
+                    .extendsFrom(lombokBasePlugin.getLombokConfiguration());
         });
 
         getAndroidVariants().forEach(variant -> {

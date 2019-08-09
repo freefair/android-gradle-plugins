@@ -26,6 +26,7 @@ script: ./gradlew check --info
 
 deploy:
   provider: script
-  script: ./gradlew clean publishPlugins -Pversion=$TRAVIS_TAG -Pgradle.publish.key=$GRADLE_PUBLISH_KEY -Pgradle.publish.secret=$GRADLE_PUBLISH_SECRET
+  script: ./gradlew publishPlugins -Pversion=$TRAVIS_TAG -Pgradle.publish.key=$GRADLE_PUBLISH_KEY -Pgradle.publish.secret=$GRADLE_PUBLISH_SECRET
   on:
     tags: true
+    jdk: openjdk11

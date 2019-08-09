@@ -3,6 +3,7 @@ plugins {
     id "java-gradle-plugin"
     id "com.gradle.plugin-publish" version "0.10.1"
     id "io.freefair.lombok" version "3.8.4"
+    id 'io.freefair.git-version' version '3.8.4'
     id "jacoco"
 }
 
@@ -26,8 +27,8 @@ compileJava.options.compilerArgs += "-Xlint"
 sourceCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    compile 'com.android.tools.build:gradle:3.4.0'
-    compile 'io.freefair.gradle:lombok-plugin:3.2.1'
+    compile 'com.android.tools.build:gradle:3.4.2'
+    compile 'io.freefair.gradle:lombok-plugin:3.8.4'
 
     testCompile 'junit:junit:4.12'
 }
