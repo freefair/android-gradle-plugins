@@ -20,9 +20,9 @@ android:
     - build-tools-28.0.3
     - android-28
 
-install: ./gradlew assemble --stacktrace
+install: ./gradlew clean -s
 
-script: ./gradlew check --info
+script: ./gradlew build -s
 
 deploy:
   provider: script
