@@ -56,6 +56,10 @@ gradlePlugin {
             id = "io.freefair.android-maven-jars"
             implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidMavenJarsPlugin"
         }
+        androidSoftwareComponents {
+            id = "io.freefair.android-software-components"
+            implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidComponentPlugin"
+        }
         androidCi {
             id = "io.freefair.android-ci"
             implementationClass = "io.freefair.gradle.plugins.android.ci.CiPlugin"
@@ -79,6 +83,14 @@ gradlePlugin {
         androidFindbugs {
             id = "io.freefair.android-findbugs"
             implementationClass = "io.freefair.gradle.plugins.android.quality.AndroidFindBugsPlugin"
+        }
+        androidMavenPublish {
+            id = "io.freefair.android-maven-publish"
+            implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidMavenPublishPlugin"
+        }
+        androidMavenPublish {
+            id = "io.freefair.android-maven-publish-all-variants"
+            implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidMavenPublishAllVariantsPlugin"
         }
     }
 }
@@ -114,6 +126,11 @@ pluginBundle {
             description = "Generate sources and javadoc jars for all variants of your android project"
             tags = ['android', 'maven', 'jar']
         }
+        androidSoftwareComponents {
+            displayName = "Android SoftwareComponents plugin"
+            description = "Adds a software component for each android variant to project.components"
+            tags = ['android', 'publishing']
+        }
         androidCi {
             displayName = "Android CI Plugin"
             description = "Properly configure your android project on CI servers (like travis)"
@@ -143,6 +160,16 @@ pluginBundle {
             displayName = "Android FindBugs Plugin"
             description = "Run FindBugs on your android source-sets"
             tags = ['android', 'findbugs']
+        }
+        androidMavenPublish {
+            displayName = "Android Maven Publish Plugin"
+            description = "Android Maven Publish Plugin"
+            tags = ['android', 'maven', 'publication', 'publishing']
+        }
+        androidMavenPublishAllVariants {
+            displayName = "Android Maven Publish All Variants Plugin"
+            description = "Android Maven Publish All Variants Plugin"
+            tags = ['android', 'maven', 'publication', 'publishing']
         }
     }
 

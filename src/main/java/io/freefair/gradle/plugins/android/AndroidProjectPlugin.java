@@ -96,7 +96,8 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
         if (androidExtension == null || projectType == null) {
             if (isApplyCalled()) {
                 throw new IllegalStateException("No android plugin found");
-            } else {
+            }
+            else {
                 throw new IllegalArgumentException("super.apply() not called");
             }
         }
@@ -112,11 +113,11 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
 
         switch (projectType) {
             case APP:
-                return ((AppExtension)androidExtension).getApplicationVariants();
+                return ((AppExtension) androidExtension).getApplicationVariants();
             case LIBRARY:
-                return ((LibraryExtension)androidExtension).getLibraryVariants();
+                return ((LibraryExtension) androidExtension).getLibraryVariants();
             case FEATURE:
-                return ((FeatureExtension)androidExtension).getFeatureVariants();
+                return ((FeatureExtension) androidExtension).getFeatureVariants();
             default:
                 throw new IllegalStateException("Unexpected project type: " + projectType);
         }
@@ -145,13 +146,13 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
             return false;
         }
 
-        return  getAndroidExtension().getDefaultPublishConfig().equals(variant.getName());
+        return getAndroidExtension().getDefaultPublishConfig().equals(variant.getName());
     }
 
     /**
      * Returns the name of a task for this source set.
      *
-     * @param verb The action, may be null.
+     * @param verb   The action, may be null.
      * @param target The target, may be null
      * @return The task name, generally of the form ${verb}${name}${noun}
      * @see SourceSet#getTaskName(String, String)
