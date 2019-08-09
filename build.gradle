@@ -88,7 +88,7 @@ gradlePlugin {
             id = "io.freefair.android-maven-publish"
             implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidMavenPublishPlugin"
         }
-        androidMavenPublish {
+        androidMavenPublishAllVariants {
             id = "io.freefair.android-maven-publish-all-variants"
             implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidMavenPublishAllVariantsPlugin"
         }
