@@ -28,7 +28,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     compile 'com.android.tools.build:gradle:3.5.0'
-    compile 'io.freefair.gradle:lombok-plugin:3.8.4'
+    compile 'io.freefair.gradle:lombok-plugin:4.0.0'
 
     testCompile 'junit:junit:4.12'
 }
