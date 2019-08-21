@@ -3,7 +3,7 @@ plugins {
     id "java-gradle-plugin"
     id "com.gradle.plugin-publish" version "0.10.1"
     id "io.freefair.lombok" version "3.8.4"
-    id 'io.freefair.git-version' version '3.8.4'
+    id 'io.freefair.git-version' version '4.0.0'
     id "jacoco"
 }
 
