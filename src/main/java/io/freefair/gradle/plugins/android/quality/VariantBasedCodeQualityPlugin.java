@@ -13,6 +13,7 @@ import java.util.concurrent.Callable;
 
 /**
  * @author Lars Grefer
+ * @see org.gradle.api.plugins.quality.internal.AbstractCodeQualityPlugin
  */
 public abstract class VariantBasedCodeQualityPlugin<T extends Task> extends AbstractAndroidCodeQualityPlugin<T, VariantBasedCodeQualityExtension> {
 

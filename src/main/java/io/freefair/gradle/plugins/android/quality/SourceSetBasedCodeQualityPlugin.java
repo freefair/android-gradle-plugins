@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 
 /**
  * @author Lars Grefer
+ * @see org.gradle.api.plugins.quality.internal.AbstractCodeQualityPlugin
  */
 public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends AbstractAndroidCodeQualityPlugin<T, SourceSetBasedCodeQualityExtension> {
 
