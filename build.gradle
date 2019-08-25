@@ -97,7 +97,7 @@ gradlePlugin {
 }
 
 pluginBundle {
-    website = "https://github.com/freefair/gradle-plugins/tree/${version == 'unspecified' ? 'master' : version}"
+    website = "https://docs.freefair.io/android-gradle-plugins/$version/"
     vcsUrl = 'https://github.com/freefair/android-gradle-plugins'
     tags = ['android']
 
