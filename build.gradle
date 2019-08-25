@@ -4,6 +4,7 @@ plugins {
     id "com.gradle.plugin-publish" version "0.10.1"
     id "io.freefair.lombok" version "3.8.4"
     id 'io.freefair.git-version' version '3.8.4'
+    id "io.freefair.aggregate-javadoc-jar" version "3.8.4"
     id "jacoco"
 }
 
@@ -176,4 +177,12 @@ pluginBundle {
     mavenCoordinates {
         groupId = project.group
     }
+}
+
+task uploadDocumentation(type: io.freefair.gradle.plugins.okhttp.tasks.UploadFile) {
+    dependsOn "aggregateJavadocJar"
+    username = "user"
+    password = findProperty('freefairDocsPass')
+    file = aggregateJavadocJar.archiveFile
+    url = "https://docs.freefair.io/api/$project.version?path=android-gradle-plugins"
 }
