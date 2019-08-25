@@ -3,11 +3,13 @@ package io.freefair.gradle.plugins.android.quality;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.gradle.api.Incubating;
 import org.gradle.api.Project;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.plugins.quality.Pmd;
 import org.gradle.api.plugins.quality.TargetJdk;
+import org.gradle.api.provider.Property;
 import org.gradle.api.resources.TextResource;
 
 import javax.annotation.Nullable;
@@ -32,8 +34,12 @@ public class AndroidPmdExtension extends SourceSetBasedCodeQualityExtension {
     private ConfigurableFileCollection ruleSetFiles;
     private boolean consoleOutput;
 
+    private Property<Boolean> incrementalAnalysis;
+
     public AndroidPmdExtension(Project project) {
         this.project = project;
+        // TODO: Enable this by default when toolVersion >= 6.0.0 if it's stable enough.
+        this.incrementalAnalysis = project.getObjects().property(Boolean.class).convention(false);
     }
 
     /**
@@ -200,5 +206,17 @@ public class AndroidPmdExtension extends SourceSetBasedCodeQualityExtension {
      */
     public void setConsoleOutput(boolean consoleOutput) {
         this.consoleOutput = consoleOutput;
+    }
+
+    /**
+     * Controls whether to use incremental analysis or not.
+     *
+     * This is only supported for PMD 6.0.0 or better. See <a href="https://pmd.github.io/pmd-6.15.0/pmd_userdocs_incremental_analysis.html"></a> for more details.
+     *
+     * @since 5.6
+     */
+    @Incubating
+    public Property<Boolean> getIncrementalAnalysis() {
+        return incrementalAnalysis;
     }
 }

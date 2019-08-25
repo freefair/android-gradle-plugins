@@ -94,6 +94,8 @@ public class AndroidPmdPlugin extends SourceSetBasedCodeQualityPlugin<Pmd> {
         taskMapping.map("rulePriority", (Callable<Integer>) () -> extension.getRulePriority());
         taskMapping.map("consoleOutput", (Callable<Boolean>) () -> extension.isConsoleOutput());
         taskMapping.map("targetJdk", (Callable<TargetJdk>) () -> extension.getTargetJdk());
+
+        task.getIncrementalAnalysis().convention(extension.getIncrementalAnalysis());
     }
 
     private void configureReportsConventionMapping(Pmd task, final String baseName) {
