@@ -5,6 +5,7 @@ plugins {
     id "io.freefair.lombok" version "4.0.1"
     id 'io.freefair.git-version' version '4.0.1'
     id "io.freefair.aggregate-javadoc-jar" version "4.0.1"
+    id "io.freefair.javadoc-links" version "4.0.1"
     id "jacoco"
 }
 
@@ -18,7 +19,6 @@ group = 'io.freefair.gradle'
 
 def javaVersion = JavaVersion.current()
 
-javadoc.options.links "https://docs.oracle.com/javase/$javaVersion.majorVersion/docs/api/"
 javadoc.options.links "https://docs.gradle.org/$gradle.gradleVersion/javadoc/"
 javadoc.options.links "https://google.github.io/android-gradle-dsl/javadoc/3.4/"
 javadoc.failOnError = false

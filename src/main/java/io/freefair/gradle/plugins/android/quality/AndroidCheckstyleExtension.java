@@ -117,7 +117,7 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
 
     /**
      * The maximum number of errors that are tolerated before breaking the build
-     * or setting the failure property. Defaults to <tt>0</tt>.
+     * or setting the failure property. Defaults to {@code 0}.
      * <p>
      * Example: maxErrors = 42
      *
@@ -140,7 +140,7 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
 
     /**
      * The maximum number of warnings that are tolerated before breaking the build
-     * or setting the failure property. Defaults to <tt>Integer.MAX_VALUE</tt>.
+     * or setting the failure property. Defaults to {@link Integer#MAX_VALUE}.
      * <p>
      * Example: maxWarnings = 1000
      *
@@ -162,7 +162,7 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
     }
 
     /**
-     * Whether rule violations are to be displayed on the console. Defaults to <tt>true</tt>.
+     * Whether rule violations are to be displayed on the console. Defaults to {@code true}.
      * <p>
      * Example: showViolations = false
      */
@@ -171,7 +171,7 @@ public class AndroidCheckstyleExtension extends SourceSetBasedCodeQualityExtensi
     }
 
     /**
-     * Whether rule violations are to be displayed on the console. Defaults to <tt>true</tt>.
+     * Whether rule violations are to be displayed on the console. Defaults to {@code true}.
      * <p>
      * Example: showViolations = false
      */
