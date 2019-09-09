@@ -2,7 +2,7 @@ plugins {
     id "maven-publish"
     id "java-gradle-plugin"
     id "com.gradle.plugin-publish" version "0.10.1"
-    id "io.freefair.lombok" version "4.0.1"
+    id "io.freefair.lombok" version "4.0.2"
     id 'io.freefair.git-version' version '4.0.1'
     id "io.freefair.aggregate-javadoc-jar" version "4.0.1"
     id "io.freefair.javadoc-links" version "4.0.1"
