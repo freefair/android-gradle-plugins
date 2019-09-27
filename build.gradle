@@ -2,10 +2,10 @@ plugins {
     id "maven-publish"
     id "java-gradle-plugin"
     id "com.gradle.plugin-publish" version "0.10.1"
-    id "io.freefair.lombok" version "4.1.0"
-    id 'io.freefair.git-version' version '4.1.0'
-    id "io.freefair.aggregate-javadoc-jar" version "4.1.0"
-    id "io.freefair.javadoc-links" version "4.1.0"
+    id "io.freefair.lombok" version "4.1.1"
+    id 'io.freefair.git-version' version '4.1.1'
+    id "io.freefair.aggregate-javadoc-jar" version "4.1.1"
+    id "io.freefair.javadoc-links" version "4.1.1"
     id "jacoco"
 }
 
@@ -29,7 +29,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     compile 'com.android.tools.build:gradle:3.5.0'
-    compile 'io.freefair.gradle:lombok-plugin:4.1.0'
+    compile 'io.freefair.gradle:lombok-plugin:4.1.1'
 
     testCompile 'junit:junit:4.12'
 }
