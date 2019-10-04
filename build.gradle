@@ -28,7 +28,7 @@ compileJava.options.compilerArgs += "-Xlint"
 sourceCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    compile 'com.android.tools.build:gradle:3.5.0'
+    compile 'com.android.tools.build:gradle:3.5.1'
     compile 'io.freefair.gradle:lombok-plugin:4.1.1'
 
     testCompile 'junit:junit:4.12'
