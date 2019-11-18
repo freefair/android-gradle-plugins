@@ -25,6 +25,5 @@ public class AndroidCodeQualityPluginsTest extends AbstractGradlePluginTest {
         project.getPlugins().apply(AppPlugin.class);
         project.getPlugins().apply(AndroidPmdPlugin.class);
         project.getPlugins().apply(AndroidCheckstylePlugin.class);
-        project.getPlugins().apply(AndroidFindBugsPlugin.class);
     }
 }
