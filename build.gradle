@@ -105,9 +105,9 @@ gradlePlugin {
             id = "io.freefair.android-maven-publish-all-variants"
             implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidMavenPublishAllVariantsPlugin"
         }
-        androidAspectjPostCompileWeaving {
-            id = "io.freefair.android.aspectj.post-compile-weaving"
-            implementationClass = "io.freefair.gradle.plugins.android.aspectj.AndroidAspectJPostCompileWeavingPlugin"
+        androidAspectjTransfrom {
+            id = "io.freefair.android.aspectj.transform"
+            implementationClass = "io.freefair.gradle.plugins.android.aspectj.AndroidAspectJTransformPlugin"
         }
     }
 }
@@ -188,9 +188,9 @@ pluginBundle {
             description = "Android Maven Publish All Variants Plugin"
             tags = ['android', 'maven', 'publication', 'publishing']
         }
-        androidAspectjPostCompileWeaving {
-            displayName = "Android AspectJ Post-Compile Weaving Plugin"
-            description = "Android AspectJ Post-Compile Weaving Plugin"
+        androidAspectjTransfrom {
+            displayName = "Android AspectJ Transform Plugin"
+            description = "Android AspectJ Transform Plugin"
             tags = ['android', 'aspectj', 'ajc', 'weaving']
         }
     }

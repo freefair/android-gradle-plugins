@@ -20,11 +20,13 @@ public class AspectJTransform extends Transform {
     private final Project project;
     private final TestedExtension testedExtension;
     private final FileCollection aspectjClasspath;
+    private final FileCollection aspectpath;
 
-    AspectJTransform(Project project, TestedExtension testedExtension, FileCollection aspectjClasspath) {
+    AspectJTransform(Project project, TestedExtension testedExtension, FileCollection aspectjClasspath, FileCollection aspectpath) {
         this.project = project;
         this.testedExtension = testedExtension;
         this.aspectjClasspath = aspectjClasspath;
+        this.aspectpath = aspectpath;
     }
 
     @Override
@@ -67,6 +69,7 @@ public class AspectJTransform extends Transform {
     public Collection<SecondaryFile> getSecondaryFiles() {
         ArrayList<SecondaryFile> secondaryFiles = new ArrayList<>();
         secondaryFiles.add(SecondaryFile.nonIncremental(aspectjClasspath));
+        secondaryFiles.add(SecondaryFile.nonIncremental(aspectpath));
         return secondaryFiles;
     }
 
@@ -96,6 +99,7 @@ public class AspectJTransform extends Transform {
         spec.setCompileClasspath(new ArrayList<>());
         spec.setWorkingDir(project.getProjectDir());
         spec.setAspectJClasspath(aspectjClasspath);
+        spec.getAspectJCompileOptions().getAspectpath().from(aspectpath);
 
         JavaVersion sourceCompatibility = testedExtension.getCompileOptions().getSourceCompatibility();
         if (sourceCompatibility != null) {
@@ -108,6 +112,7 @@ public class AspectJTransform extends Transform {
         }
 
         spec.getAspectJCompileOptions().getEncoding().set(testedExtension.getCompileOptions().getEncoding());
+        spec.getAspectJCompileOptions().getBootclasspath().from(testedExtension.getBootClasspath());
 
         return spec;
     }
