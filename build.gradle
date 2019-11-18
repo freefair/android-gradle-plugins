@@ -41,6 +41,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 dependencies {
     compile 'com.android.tools.build:gradle:3.5.2'
     compile 'io.freefair.gradle:lombok-plugin:4.1.3'
+    compile 'io.freefair.gradle:aspectj-plugin:4.1.3'
 
     testCompile 'junit:junit:4.12'
 }
@@ -103,6 +104,10 @@ gradlePlugin {
         androidMavenPublishAllVariants {
             id = "io.freefair.android-maven-publish-all-variants"
             implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidMavenPublishAllVariantsPlugin"
+        }
+        androidAspectjPostCompileWeaving {
+            id = "io.freefair.android.aspectj.post-compile-weaving"
+            implementationClass = "io.freefair.gradle.plugins.android.aspectj.AndroidAspectJPostCompileWeavingPlugin"
         }
     }
 }
@@ -182,6 +187,11 @@ pluginBundle {
             displayName = "Android Maven Publish All Variants Plugin"
             description = "Android Maven Publish All Variants Plugin"
             tags = ['android', 'maven', 'publication', 'publishing']
+        }
+        androidAspectjPostCompileWeaving {
+            displayName = "Android AspectJ Post-Compile Weaving Plugin"
+            description = "Android AspectJ Post-Compile Weaving Plugin"
+            tags = ['android', 'aspectj', 'ajc', 'weaving']
         }
     }
 
