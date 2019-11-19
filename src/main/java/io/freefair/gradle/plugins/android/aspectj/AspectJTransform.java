@@ -15,6 +15,9 @@ import org.gradle.process.internal.JavaExecHandleFactory;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * @author Lars Grefer
+ */
 public class AspectJTransform extends Transform {
 
     private final Project project;

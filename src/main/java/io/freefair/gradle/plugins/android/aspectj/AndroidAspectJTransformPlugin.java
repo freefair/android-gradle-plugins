@@ -8,6 +8,8 @@ import org.gradle.api.artifacts.Configuration;
 
 /**
  * Implements AspectJ Post-Compile Weaving using the {@link com.android.build.api.transform.Transform} API.
+ *
+ * @author Lars Grefer
  */
 @Incubating
 public class AndroidAspectJTransformPlugin extends AndroidProjectPlugin {

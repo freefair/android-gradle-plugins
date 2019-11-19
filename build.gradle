@@ -105,6 +105,10 @@ gradlePlugin {
             id = "io.freefair.android.aspectj.transform"
             implementationClass = "io.freefair.gradle.plugins.android.aspectj.AndroidAspectJTransformPlugin"
         }
+        androidAspectjPostCompileWeaving {
+            id = "io.freefair.android.aspectj.post-compile-weaving"
+            implementationClass = "io.freefair.gradle.plugins.android.aspectj.AndroidAspectJPostCompileWeavingPlugin"
+        }
     }
 }
 
@@ -183,6 +187,10 @@ pluginBundle {
             displayName = "Android AspectJ Transform Plugin"
             description = "Android AspectJ Transform Plugin"
             tags = ['android', 'aspectj', 'ajc', 'weaving']
+        }
+        androidAspectjPostCompileWeaving {
+            displayName = "Android AspectJ Post-Compile Weaving Plugin"
+            description = "Android AspectJ Post-Compile Weaving Plugin"
         }
     }
 
