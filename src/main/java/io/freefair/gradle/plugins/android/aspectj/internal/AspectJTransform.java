@@ -1,4 +1,4 @@
-package io.freefair.gradle.plugins.android.aspectj;
+package io.freefair.gradle.plugins.android.aspectj.internal;
 
 import com.android.build.api.transform.*;
 import com.android.build.gradle.TestedExtension;
@@ -25,7 +25,7 @@ public class AspectJTransform extends Transform {
     private final FileCollection aspectjClasspath;
     private final FileCollection aspectpath;
 
-    AspectJTransform(Project project, TestedExtension testedExtension, FileCollection aspectjClasspath, FileCollection aspectpath) {
+    public AspectJTransform(Project project, TestedExtension testedExtension, FileCollection aspectjClasspath, FileCollection aspectpath) {
         this.project = project;
         this.testedExtension = testedExtension;
         this.aspectjClasspath = aspectjClasspath;

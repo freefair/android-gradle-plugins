@@ -2,6 +2,7 @@ package io.freefair.gradle.plugins.android.aspectj;
 
 import com.android.build.gradle.TestedExtension;
 import io.freefair.gradle.plugins.android.AndroidProjectPlugin;
+import io.freefair.gradle.plugins.android.aspectj.internal.AspectJTransform;
 import io.freefair.gradle.plugins.aspectj.AspectJBasePlugin;
 import org.gradle.api.Incubating;
 import org.gradle.api.artifacts.Configuration;
