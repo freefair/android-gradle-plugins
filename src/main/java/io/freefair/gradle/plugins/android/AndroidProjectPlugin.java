@@ -9,13 +9,11 @@ import lombok.Getter;
 import org.gradle.api.DomainObjectSet;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Transformer;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.internal.jvm.ClassDirectoryBinaryNamingScheme;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SourceSet;
-import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.compile.AbstractCompile;
 import org.gradle.api.tasks.compile.JavaCompile;
 
@@ -168,7 +166,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
      * @see SourceSet#getCompileClasspath()
      */
     protected Provider<FileCollection> getCompileClasspath(BaseVariant variant) {
-        return getJavaCompile(variant).map(JavaCompile::getClasspath);
+        return variant.getJavaCompileProvider().map(JavaCompile::getClasspath);
     }
 
     /**
@@ -179,21 +177,16 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
      * @see SourceSet#getAllJava()
      */
     protected static Provider<FileTree> getAllJava(BaseVariant androidSourceSet) {
-        return getJavaCompile(androidSourceSet).map(JavaCompile::getSource);
+        return androidSourceSet.getJavaCompileProvider().map(JavaCompile::getSource);
     }
 
     /**
      * @see SourceSet#getOutput()
      */
     protected Provider<FileTree> getOutput(BaseVariant androidSourceSet) {
-        return getJavaCompile(androidSourceSet)
+        return androidSourceSet.getJavaCompileProvider()
                 .map(AbstractCompile::getDestinationDir)
                 .map(dir -> getProject().fileTree(dir));
-    }
-
-    @Nonnull
-    protected static TaskProvider<JavaCompile> getJavaCompile(BaseVariant variant) {
-        return variant.getJavaCompileProvider();
     }
 
     @Getter

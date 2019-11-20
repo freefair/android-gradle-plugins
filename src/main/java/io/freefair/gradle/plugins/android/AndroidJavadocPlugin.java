@@ -54,7 +54,7 @@ public class AndroidJavadocPlugin extends AndroidProjectPlugin {
 
                 javadoc.dependsOn(variant.getJavaCompileProvider());
 
-                JavaCompile javacTask = getJavaCompile(variant).get();
+                JavaCompile javacTask = variant.getJavaCompileProvider().get();
 
                 javadoc.setSource(javacTask.getSource());
 

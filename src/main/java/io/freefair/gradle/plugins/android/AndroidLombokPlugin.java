@@ -40,7 +40,7 @@ public class AndroidLombokPlugin extends AndroidProjectPlugin {
                 delombok.setDescription("Runs delombok on the " + delombokName + " variant");
             });
 
-            TaskProvider<JavaCompile> compileJava = getJavaCompile(variant);
+            TaskProvider<JavaCompile> compileJava = variant.getJavaCompileProvider();
             compileJava.configure(cj -> {
                 cj.dependsOn(lombokPlugin.getGenerateLombokConfig());
                 cj.getOptions().getCompilerArgs().add("-Xlint:-processing");
