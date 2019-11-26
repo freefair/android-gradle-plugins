@@ -58,6 +58,9 @@ public class AndroidAspectJPostCompileWeavingPlugin extends AndroidProjectPlugin
             AjcAction action = getProject().getObjects().newInstance(AjcAction.class);
 
             action.getOptions().getInpath().from(javaCompile.getDestinationDir());
+            action.getOptions().getBootclasspath().from(getAndroidExtension().getBootClasspath());
+            action.getOptions().getBootclasspath().from(javaCompile.getOptions().getBootstrapClasspath());
+            action.getOptions().getExtdirs().from(javaCompile.getOptions().getExtensionDirs());
             action.getClasspath().from(basePlugin.getAspectjConfiguration());
 
             variant.getSourceSets().forEach(sourceProvider -> {
