@@ -43,7 +43,7 @@ dependencies {
     compile 'io.freefair.gradle:lombok-plugin:4.1.4'
     compile 'io.freefair.gradle:aspectj-plugin:4.1.6'
 
-    testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.13'
 }
 
 gradlePlugin {
