@@ -50,7 +50,8 @@ public class AndroidPmdPlugin extends SourceSetBasedCodeQualityPlugin<Pmd> {
         extension.setToolVersion(PmdPlugin.DEFAULT_PMD_VERSION);
         extension.setRuleSets(new ArrayList<String>(Arrays.asList("category/java/errorprone.xml")));
         extension.setRuleSetFiles(project.getLayout().files());
-        conventionMappingOf(extension).map("targetJdk", () -> getDefaultTargetJdk(getJavaPluginConvention().getSourceCompatibility()));
+        conventionMappingOf(extension).map("targetJdk", () ->
+                getDefaultTargetJdk(getJavaPluginConvention().getSourceCompatibility()));
         return extension;
     }
 
@@ -95,14 +96,14 @@ public class AndroidPmdPlugin extends SourceSetBasedCodeQualityPlugin<Pmd> {
         taskMapping.map("consoleOutput", (Callable<Boolean>) () -> extension.isConsoleOutput());
         taskMapping.map("targetJdk", (Callable<TargetJdk>) () -> extension.getTargetJdk());
 
+        task.getMaxFailures().convention(extension.getMaxFailures());
         task.getIncrementalAnalysis().convention(extension.getIncrementalAnalysis());
     }
 
     private void configureReportsConventionMapping(Pmd task, final String baseName) {
         task.getReports().all(report -> {
-            ConventionMapping reportMapping = conventionMappingOf(report);
-            reportMapping.map("enabled", Callables.returning(true));
-            reportMapping.map("destination", (Callable<File>) () -> new File(extension.getReportsDir(), baseName + "." + report.getName()));
+            report.getRequired().convention(true);
+            report.getOutputLocation().convention(project.getLayout().getProjectDirectory().file(project.provider(() -> new File(extension.getReportsDir(), baseName + "." + report.getName()).getAbsolutePath())));
         });
     }
 
