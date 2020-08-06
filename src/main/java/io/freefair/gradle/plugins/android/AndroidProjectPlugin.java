@@ -69,16 +69,6 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
             }
         });
 
-        project.getPlugins().withType(FeaturePlugin.class, atomPlugin -> {
-            androidExtension = project.getExtensions().getByType(FeatureExtension.class);
-            projectType = ProjectType.FEATURE;
-
-            withAndroid(androidExtension);
-            if (!isWithAndroidCalled()) {
-                throw new RuntimeException("call super() in withAndroid()");
-            }
-        });
-
         project.afterEvaluate(project1 -> {
             if (androidExtension == null || projectType == null)
                 project1.getLogger().warn("No android plugin found on project {}", project);
@@ -114,8 +104,6 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
                 return ((AppExtension) androidExtension).getApplicationVariants();
             case LIBRARY:
                 return ((LibraryExtension) androidExtension).getLibraryVariants();
-            case FEATURE:
-                return ((FeatureExtension) androidExtension).getFeatureVariants();
             default:
                 throw new IllegalStateException("Unexpected project type: " + projectType);
         }
@@ -193,10 +181,9 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
     @AllArgsConstructor
     public enum ProjectType {
         APP(AppPlugin.class, AppExtension.class),
-        LIBRARY(LibraryPlugin.class, LibraryExtension.class),
-        FEATURE(FeaturePlugin.class, FeatureExtension.class);
+        LIBRARY(LibraryPlugin.class, LibraryExtension.class);
 
-        private Class<? extends BasePlugin<?>> pluginClass;
+        private Class<? extends Plugin<Project>> pluginClass;
         private Class<? extends TestedExtension> extensionClass;
     }
 }

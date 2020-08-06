@@ -2,13 +2,14 @@ package io.freefair.gradle.plugins.android.quality;
 
 import com.android.build.gradle.api.AndroidSourceSet;
 import com.google.common.util.concurrent.Callables;
+import org.gradle.api.Action;
 import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.file.Directory;
+import org.gradle.api.artifacts.DependencySet;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.plugins.quality.Checkstyle;
-import org.gradle.api.provider.Provider;
+import org.gradle.api.plugins.quality.CheckstyleExtension;
+import org.gradle.api.reporting.SingleFileReport;
 import org.gradle.api.resources.TextResource;
-import org.gradle.util.DeprecationLogger;
 
 import java.io.File;
 import java.util.Map;
@@ -45,27 +46,9 @@ public class AndroidCheckstylePlugin extends SourceSetBasedCodeQualityPlugin<Che
     protected SourceSetBasedCodeQualityExtension createExtension() {
         extension = project.getExtensions().create("checkstyle", AndroidCheckstyleExtension.class, project);
         extension.setToolVersion(DEFAULT_CHECKSTYLE_VERSION);
-        extension.getConfigDirectory().set(determineConfigurationDirectory());
-        extension.setConfig(project.getResources().getText().fromFile((Callable<File>) () -> new File(extension.getConfigDir(), "checkstyle.xml")));
+        extension.getConfigDirectory().convention(project.getRootProject().getLayout().getProjectDirectory().dir(CONFIG_DIR_NAME));
+        extension.setConfig(project.getResources().getText().fromFile(extension.getConfigDirectory().file("checkstyle.xml")));
         return extension;
-    }
-
-    private Provider<Directory> determineConfigurationDirectory() {
-        return project.provider(() -> {
-            if (usesSubprojectCheckstyleConfiguration()) {
-                DeprecationLogger.nagUserWithDeprecatedIndirectUserCodeCause("Setting the Checkstyle configuration file under 'config/checkstyle' of a sub project", "Use the root project's 'config/checkstyle' directory instead.");
-                return project.getLayout().getProjectDirectory().dir(CONFIG_DIR_NAME);
-            }
-            return project.getRootProject().getLayout().getProjectDirectory().dir(CONFIG_DIR_NAME);
-        });
-    }
-
-    private boolean usesSubprojectCheckstyleConfiguration() {
-        return !isRootProject() && project.file(CONFIG_DIR_NAME).isDirectory();
-    }
-
-    private boolean isRootProject() {
-        return project.equals(project.getRootProject());
     }
 
     @Override
@@ -81,7 +64,12 @@ public class AndroidCheckstylePlugin extends SourceSetBasedCodeQualityPlugin<Che
     }
 
     private void configureDefaultDependencies(Configuration configuration) {
-        configuration.defaultDependencies(dependencies -> dependencies.add(project.getDependencies().create("com.puppycrawl.tools:checkstyle:" + extension.getToolVersion())));
+        configuration.defaultDependencies(new Action<DependencySet>() {
+            @Override
+            public void execute(DependencySet dependencies) {
+                dependencies.add(project.getDependencies().create("com.puppycrawl.tools:checkstyle:" + extension.getToolVersion()));
+            }
+        });
     }
 
     private void configureTaskConventionMapping(Configuration configuration, Checkstyle task) {
@@ -94,14 +82,16 @@ public class AndroidCheckstylePlugin extends SourceSetBasedCodeQualityPlugin<Che
         taskMapping.map("maxErrors", (Callable<Integer>) () -> extension.getMaxErrors());
         taskMapping.map("maxWarnings", (Callable<Integer>) () -> extension.getMaxWarnings());
 
-        task.setConfigDir(project.provider(() -> extension.getConfigDir()));
+        task.getConfigDirectory().convention(extension.getConfigDirectory());
     }
 
     private void configureReportsConventionMapping(Checkstyle task, final String baseName) {
-        task.getReports().all(report -> {
-            ConventionMapping reportMapping = conventionMappingOf(report);
-            reportMapping.map("enabled", Callables.returning(true));
-            reportMapping.map("destination", (Callable<File>) () -> new File(extension.getReportsDir(), baseName + "." + report.getName()));
+        task.getReports().all(new Action<SingleFileReport>() {
+            @Override
+            public void execute(final SingleFileReport report) {
+                report.getRequired().convention(true);
+                report.getOutputLocation().convention(project.getLayout().getProjectDirectory().file(project.provider(() -> new File(extension.getReportsDir(), baseName + "." + report.getName()).getAbsolutePath())));
+            }
         });
     }
 
