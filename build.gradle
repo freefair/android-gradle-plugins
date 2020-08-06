@@ -19,7 +19,6 @@ apply plugin: "maven-publish"
 apply plugin: "com.gradle.plugin-publish"
 apply plugin: "jacoco"
 apply plugin: "io.freefair.lombok"
-apply plugin: "io.freefair.aggregate-javadoc-jar"
 apply plugin: "io.freefair.javadoc-links"
 
 repositories {
@@ -29,6 +28,8 @@ repositories {
 }
 
 group = 'io.freefair.gradle'
+
+java.withJavadocJar()
 
 javadoc.options.links "https://docs.gradle.org/$gradle.gradleVersion/javadoc/"
 javadoc.options.links "https://google.github.io/android-gradle-dsl/javadoc/3.4/"
@@ -200,9 +201,9 @@ pluginBundle {
 }
 
 task uploadDocumentation(type: io.freefair.gradle.plugins.okhttp.tasks.UploadFile) {
-    dependsOn "aggregateJavadocJar"
+    dependsOn "javadocJar"
     username = "user"
     password = findProperty('freefairDocsPass')
-    file = aggregateJavadocJar.archiveFile
+    file = javadocJar.archiveFile
     url = "https://docs.freefair.io/api/$project.version?path=android-gradle-plugins"
 }
