@@ -1,6 +1,6 @@
 package io.freefair.gradle.plugins.android.quality;
 
-import com.android.build.gradle.api.AndroidSourceSet;
+import com.android.build.api.dsl.AndroidSourceSet;
 import com.google.common.util.concurrent.Callables;
 import org.gradle.api.Incubating;
 import org.gradle.api.JavaVersion;

@@ -1,15 +1,16 @@
 package io.freefair.gradle.plugins.android.quality;
 
+import com.android.build.api.dsl.AndroidSourceSet;
 import com.android.build.gradle.TestedExtension;
-import com.android.build.gradle.api.AndroidSourceSet;
+import com.android.build.gradle.api.AndroidSourceDirectorySet;
 import com.android.build.gradle.api.BaseVariant;
 import com.google.common.collect.Iterables;
 import org.gradle.api.NamedDomainObjectContainer;
 import org.gradle.api.Task;
+import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.internal.file.FileTreeInternal;
-import org.gradle.api.internal.file.UnionFileCollection;
 import org.gradle.api.internal.file.UnionFileTree;
 import org.gradle.api.internal.jvm.ClassDirectoryBinaryNamingScheme;
 import org.gradle.api.plugins.JavaBasePlugin;
@@ -48,7 +49,7 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
         configureForSourceSets(getAndroidExtension().getSourceSets());
     }
 
-    private void configureForSourceSets(NamedDomainObjectContainer<AndroidSourceSet> sourceSets) {
+    private void configureForSourceSets(NamedDomainObjectContainer<? extends AndroidSourceSet> sourceSets) {
         sourceSets.all(sourceSet -> {
             T task = project.getTasks().create(getTaskName(sourceSet, getTaskBaseName(), null), getCastedTaskType());
             task.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
@@ -86,11 +87,13 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
      * @see SourceSet#getCompileClasspath()
      */
     protected FileCollection getCompileClasspath(AndroidSourceSet androidSourceSet) {
-        List<FileCollection> fileCollections = getAllVariants(androidSourceSet)
-                .map(variant -> variant.getJavaCompileProvider().get().getClasspath())
-                .collect(Collectors.toList());
+        ConfigurableFileCollection compileClasspath = project.files();
 
-        return new UnionFileCollection(fileCollections);
+        getAllVariants(androidSourceSet)
+                .map(variant -> variant.getJavaCompileProvider().get().getClasspath())
+                .forEach(compileClasspath::from);
+
+        return compileClasspath;
     }
 
     /**
@@ -101,7 +104,7 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
      * @see SourceSet#getAllJava()
      */
     protected static FileTree getAllJava(AndroidSourceSet androidSourceSet) {
-        return androidSourceSet.getJava().getSourceFiles();
+        return ((AndroidSourceDirectorySet)androidSourceSet.getJava()).getSourceFiles();
     }
 
     /**

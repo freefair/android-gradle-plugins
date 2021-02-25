@@ -1,6 +1,6 @@
 package io.freefair.gradle.plugins.android.aspectj.internal;
 
-import com.android.build.gradle.api.AndroidSourceSet;
+import com.android.build.api.dsl.AndroidSourceSet;
 import io.freefair.gradle.plugins.aspectj.WeavingSourceSet;
 import lombok.Data;
 import org.gradle.api.file.FileCollection;
