@@ -7,14 +7,3 @@ updates:
   open-pull-requests-limit: 10
   assignees:
   - larsgrefer
-  ignore:
-  - dependency-name: io.freefair.gradle:aspectj-plugin
-    versions:
-    - 5.3.0
-    - 5.3.3.3
-  - dependency-name: junit:junit
-    versions:
-    - 4.13.2
-  - dependency-name: com.android.tools.build:gradle
-    versions:
-    - 4.1.2
