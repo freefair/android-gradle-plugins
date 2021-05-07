@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
+@Deprecated
 public class AndroidComponentPlugin extends AndroidProjectPlugin {
 
     private final SoftwareComponentFactory softwareComponentFactory;

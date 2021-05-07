@@ -9,15 +9,16 @@ buildscript {
         classpath "io.freefair.gradle:git-plugin:${freefairGradleVersion}"
         classpath "io.freefair.gradle:lombok-plugin:${freefairGradleVersion}"
         classpath "io.freefair.gradle:maven-plugin:${freefairGradleVersion}"
-        classpath "com.gradle.publish:plugin-publish-plugin:0.14.0"
     }
 }
 
+plugins {
+    id "com.gradle.plugin-publish" version "0.14.0"
+    id "java-gradle-plugin"
+}
+
 apply plugin: "io.freefair.git-version"
-apply plugin: "java-gradle-plugin"
 apply plugin: "maven-publish"
-apply plugin: "com.gradle.plugin-publish"
-apply plugin: "jacoco"
 apply plugin: "io.freefair.lombok"
 apply plugin: "io.freefair.javadoc-links"
 
@@ -143,11 +144,6 @@ pluginBundle {
             displayName = "Android Maven Jars Plugin"
             description = "Generate sources and javadoc jars for all variants of your android project"
             tags = ['android', 'maven', 'jar']
-        }
-        androidSoftwareComponents {
-            displayName = "Android SoftwareComponents plugin"
-            description = "Adds a software component for each android variant to project.components"
-            tags = ['android', 'publishing']
         }
         androidCi {
             displayName = "Android CI Plugin"

@@ -16,12 +16,9 @@ import javax.annotation.Nonnull;
 
 public class AndroidMavenPublishBasePlugin extends AndroidProjectPlugin {
 
-    private AndroidComponentPlugin androidComponentPlugin;
-
     @Override
     public void apply(@Nonnull Project project) {
         project.getPlugins().apply(MavenPublishPlugin.class);
-        androidComponentPlugin = project.getPlugins().apply(AndroidComponentPlugin.class);
         super.apply(project);
     }
 
@@ -50,7 +47,9 @@ public class AndroidMavenPublishBasePlugin extends AndroidProjectPlugin {
             throw new IllegalStateException(variant.getClass().getName());
         }
 
-        mavenPublication.from(androidComponentPlugin.getVariantComponents().get(variant.getName()));
+        getProject().afterEvaluate(p -> {
+            mavenPublication.from(p.getComponents().getByName(variant.getName()));
+        });
 
         getProject().getPlugins().withType(AndroidJavadocJarPlugin.class, androidJavadocJarPlugin -> {
             TaskProvider<Jar> javadocJarTask = androidJavadocJarPlugin.getVariantJavadocJarTasks().get(variant.getName());
