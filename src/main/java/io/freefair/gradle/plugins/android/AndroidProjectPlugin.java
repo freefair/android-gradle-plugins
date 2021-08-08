@@ -173,7 +173,7 @@ public abstract class AndroidProjectPlugin implements Plugin<Project> {
      */
     protected Provider<FileTree> getOutput(BaseVariant androidSourceSet) {
         return androidSourceSet.getJavaCompileProvider()
-                .map(AbstractCompile::getDestinationDir)
+                .map(AbstractCompile::getDestinationDirectory)
                 .map(dir -> getProject().fileTree(dir));
     }
 

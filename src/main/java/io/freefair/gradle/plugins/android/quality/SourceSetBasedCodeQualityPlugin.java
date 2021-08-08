@@ -112,7 +112,7 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
      */
     protected FileCollection getOutput(AndroidSourceSet androidSourceSet) {
         List<FileTreeInternal> sourceTrees = getAllVariants(androidSourceSet)
-                .map(baseVariant -> baseVariant.getJavaCompileProvider().get().getDestinationDir())
+                .map(baseVariant -> baseVariant.getJavaCompileProvider().get().getDestinationDirectory())
                 .map(destinationDir -> (FileTreeInternal) getProject().fileTree(destinationDir))
                 .collect(Collectors.toList());
         return new UnionFileTree(androidSourceSet.getName() + " output", sourceTrees);

@@ -58,7 +58,7 @@ public class AndroidJavadocPlugin extends AndroidProjectPlugin {
 
                 javadoc.setSource(javacTask.getSource());
 
-                javadoc.setClasspath(project.files(javacTask.getDestinationDir()).plus(javacTask.getClasspath()));
+                javadoc.setClasspath(project.files(javacTask.getDestinationDirectory()).plus(javacTask.getClasspath()));
                 javadoc.getOptions().setSource(javacTask.getSourceCompatibility());
 
                 //javadoc.exclude '**/BuildConfig.java'

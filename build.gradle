@@ -1,11 +1,9 @@
 buildscript {
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        gradlePluginPortal()
     }
     dependencies {
-        def freefairGradleVersion = "5.3.3.3"
+        def freefairGradleVersion = "6.1.0-m3"
         classpath "io.freefair.gradle:git-plugin:${freefairGradleVersion}"
         classpath "io.freefair.gradle:lombok-plugin:${freefairGradleVersion}"
         classpath "io.freefair.gradle:maven-plugin:${freefairGradleVersion}"
@@ -24,7 +22,7 @@ apply plugin: "io.freefair.javadoc-links"
 
 repositories {
     mavenCentral()
-    maven { url "https://plugins.gradle.org/m2/" }
+    gradlePluginPortal()
     google()
 }
 

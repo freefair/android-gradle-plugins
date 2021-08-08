@@ -12,6 +12,7 @@ import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.plugins.ReportingBasePlugin;
 import org.gradle.api.reporting.ReportingExtension;
 
@@ -135,7 +136,12 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task, E extends
         project.getPlugins().withType(getBasePlugin(), action);
     }
 
+    @Deprecated
     protected JavaPluginConvention getJavaPluginConvention() {
         return project.getConvention().getPlugin(JavaPluginConvention.class);
+    }
+
+    protected JavaPluginExtension getJavaPluginExtension() {
+        return project.getExtensions().getByType(JavaPluginExtension.class);
     }
 }

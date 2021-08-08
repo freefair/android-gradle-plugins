@@ -51,7 +51,7 @@ public class AndroidPmdPlugin extends SourceSetBasedCodeQualityPlugin<Pmd> {
         extension.setRuleSets(new ArrayList<String>(Arrays.asList("category/java/errorprone.xml")));
         extension.setRuleSetFiles(project.getLayout().files());
         conventionMappingOf(extension).map("targetJdk", () ->
-                getDefaultTargetJdk(getJavaPluginConvention().getSourceCompatibility()));
+                getDefaultTargetJdk(getJavaPluginExtension().getSourceCompatibility()));
         return extension;
     }
 
