@@ -1,0 +1,15 @@
+apply plugin: "com.android.application"
+apply plugin: "io.freefair.android-lombok"
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        applicationId "foo.bar"
+        minSdkVersion 14
+        targetSdkVersion 29
+        versionCode 19
+    }
+
+
+}

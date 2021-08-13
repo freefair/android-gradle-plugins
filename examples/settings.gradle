@@ -1,0 +1,5 @@
+rootProject.name = 'android-gradle-plugins-examples'
+
+includeBuild '..'
+
+include ":lombok"

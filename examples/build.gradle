@@ -1,0 +1,18 @@
+buildscript {
+    dependencies {
+        classpath "io.freefair.gradle:android-gradle-plugins"
+    }
+
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        google()
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        google()
+    }
+}
