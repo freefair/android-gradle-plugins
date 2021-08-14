@@ -1,13 +1,11 @@
 package io.freefair.gradle.plugins.android.quality;
 
 import com.android.build.api.dsl.AndroidSourceSet;
-import com.google.common.util.concurrent.Callables;
 import org.gradle.api.Action;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.DependencySet;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.plugins.quality.Checkstyle;
-import org.gradle.api.plugins.quality.CheckstyleExtension;
 import org.gradle.api.reporting.SingleFileReport;
 import org.gradle.api.resources.TextResource;
 
@@ -74,7 +72,7 @@ public class AndroidCheckstylePlugin extends SourceSetBasedCodeQualityPlugin<Che
 
     private void configureTaskConventionMapping(Configuration configuration, Checkstyle task) {
         ConventionMapping taskMapping = task.getConventionMapping();
-        taskMapping.map("checkstyleClasspath", Callables.returning(configuration));
+        taskMapping.map("checkstyleClasspath", () -> configuration);
         taskMapping.map("config", (Callable<TextResource>) () -> extension.getConfig());
         taskMapping.map("configProperties", (Callable<Map<String, Object>>) () -> extension.getConfigProperties());
         taskMapping.map("ignoreFailures", (Callable<Boolean>) () -> extension.isIgnoreFailures());

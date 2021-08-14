@@ -1,8 +1,10 @@
 package io.freefair.gradle.plugins.android.maven;
 
 import com.android.build.gradle.TestedExtension;
-import com.android.build.gradle.api.*;
-import com.google.common.collect.ImmutableSet;
+import com.android.build.gradle.api.ApkVariant;
+import com.android.build.gradle.api.ApplicationVariant;
+import com.android.build.gradle.api.FeatureVariant;
+import com.android.build.gradle.api.LibraryVariant;
 import io.freefair.gradle.plugins.android.AndroidProjectPlugin;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -131,7 +133,7 @@ public class AndroidComponentPlugin extends AndroidProjectPlugin {
         }
 
         @Incubating
-        public static final Set<String> UNPUBLISHABLE_VARIANT_ARTIFACTS = ImmutableSet.of(
+        public static final Set<String> UNPUBLISHABLE_VARIANT_ARTIFACTS = Set.of(
                 ArtifactTypeDefinition.JVM_CLASS_DIRECTORY,
                 ArtifactTypeDefinition.JVM_RESOURCES_DIRECTORY,
                 ArtifactTypeDefinition.DIRECTORY_TYPE,

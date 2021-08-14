@@ -36,10 +36,10 @@ javadoc.failOnError = false
 
 compileJava.options.compilerArgs += "-Xlint"
 
-sourceCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_11
 
 dependencies {
-    api 'com.android.tools.build:gradle:4.2.2'
+    api 'com.android.tools.build:gradle:7.0.0'
     api 'io.freefair.gradle:lombok-plugin:6.1.0'
     api 'io.freefair.gradle:aspectj-plugin:6.1.0'
 

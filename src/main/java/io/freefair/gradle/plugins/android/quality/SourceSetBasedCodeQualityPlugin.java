@@ -4,7 +4,6 @@ import com.android.build.api.dsl.AndroidSourceSet;
 import com.android.build.gradle.TestedExtension;
 import com.android.build.gradle.api.AndroidSourceDirectorySet;
 import com.android.build.gradle.api.BaseVariant;
-import com.google.common.collect.Iterables;
 import org.gradle.api.NamedDomainObjectContainer;
 import org.gradle.api.Task;
 import org.gradle.api.file.ConfigurableFileCollection;
@@ -63,7 +62,12 @@ public abstract class SourceSetBasedCodeQualityPlugin<T extends Task> extends Ab
 
     private void configureCheckTaskDependents() {
         final String taskBaseName = getTaskBaseName();
-        project.getTasks().getByName("check").dependsOn((Callable) () -> Iterables.transform(extension.getSourceSets(), sourceSet -> getTaskName(sourceSet, taskBaseName, null)));
+        project.getTasks().getByName("check").dependsOn((Callable) () -> {
+            return extension.getSourceSets()
+                    .stream()
+                    .map(sourceSet -> getTaskName(sourceSet, taskBaseName, null))
+                    .collect(Collectors.toList());
+        });
     }
 
     protected abstract void configureForSourceSet(AndroidSourceSet sourceSet, T task);

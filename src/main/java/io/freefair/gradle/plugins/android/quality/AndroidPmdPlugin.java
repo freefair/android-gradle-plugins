@@ -1,7 +1,6 @@
 package io.freefair.gradle.plugins.android.quality;
 
 import com.android.build.api.dsl.AndroidSourceSet;
-import com.google.common.util.concurrent.Callables;
 import org.gradle.api.Incubating;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.artifacts.Configuration;
@@ -87,7 +86,7 @@ public class AndroidPmdPlugin extends SourceSetBasedCodeQualityPlugin<Pmd> {
 
     private void configureTaskConventionMapping(Configuration configuration, Pmd task) {
         ConventionMapping taskMapping = task.getConventionMapping();
-        taskMapping.map("pmdClasspath", Callables.returning(configuration));
+        taskMapping.map("pmdClasspath", () -> configuration);
         taskMapping.map("ruleSets", (Callable<List<String>>) () -> extension.getRuleSets());
         taskMapping.map("ruleSetConfig", (Callable<TextResource>) () -> extension.getRuleSetConfig());
         taskMapping.map("ruleSetFiles", (Callable<FileCollection>) () -> extension.getRuleSetFiles());

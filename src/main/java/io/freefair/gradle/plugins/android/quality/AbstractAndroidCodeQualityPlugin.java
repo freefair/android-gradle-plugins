@@ -1,8 +1,6 @@
 package io.freefair.gradle.plugins.android.quality;
 
 import com.android.build.api.dsl.AndroidSourceSet;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.util.concurrent.Callables;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -16,9 +14,7 @@ import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.plugins.ReportingBasePlugin;
 import org.gradle.api.reporting.ReportingExtension;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 /**
@@ -97,10 +93,7 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task, E extends
     protected abstract void configureConfiguration(Configuration configuration);
 
     private Map<String, String> excludeProperties(String group, String module) {
-        return ImmutableMap.<String, String>builder()
-                .put("group", group)
-                .put("module", module)
-                .build();
+        return Map.of("group", group, "module", module);
     }
 
     protected abstract E createExtension();
@@ -111,7 +104,7 @@ public abstract class AbstractAndroidCodeQualityPlugin<T extends Task, E extends
         String sourceSets = getExtensionElementsName();
         Callable<Collection<?>> ssCallable = getExtensionElementsCallable();
 
-        extensionMapping.map(sourceSets, Callables.returning(new ArrayList<>()));
+        extensionMapping.map(sourceSets, ArrayList::new);
         extensionMapping.map("reportsDir", () -> project.getExtensions().getByType(ReportingExtension.class).file(getReportName()));
         withBasePlugin(plugin -> extensionMapping.map(sourceSets, ssCallable));
     }

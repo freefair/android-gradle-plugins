@@ -2,7 +2,6 @@ package io.freefair.gradle.plugins.android.quality;
 
 import com.android.build.gradle.TestedExtension;
 import com.android.build.gradle.api.BaseVariant;
-import com.google.common.collect.Iterables;
 import org.gradle.api.DomainObjectSet;
 import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaBasePlugin;
@@ -10,6 +9,7 @@ import org.gradle.api.plugins.JavaBasePlugin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 /**
  * @author Lars Grefer
@@ -60,7 +60,11 @@ public abstract class VariantBasedCodeQualityPlugin<T extends Task> extends Abst
 
     private void configureCheckTaskDependents() {
         final String taskBaseName = getTaskBaseName();
-        project.getTasks().getByName("check").dependsOn((Callable) () -> Iterables.transform(extension.getVariants(), variant -> getTaskName(variant, taskBaseName, null)));
+        project.getTasks().getByName("check").dependsOn((Callable<Iterable<String>>) () -> {
+            return extension.getVariants().stream()
+                    .map(variant -> getTaskName(variant, taskBaseName, null))
+                    .collect(Collectors.toList());
+        });
     }
 
     protected abstract void configureForVariant(BaseVariant sourceSet, T task);
