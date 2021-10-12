@@ -39,7 +39,7 @@ compileJava.options.compilerArgs += "-Xlint"
 sourceCompatibility = JavaVersion.VERSION_11
 
 dependencies {
-    api 'com.android.tools.build:gradle:7.0.2'
+    api 'com.android.tools.build:gradle:7.0.3'
     api 'io.freefair.gradle:lombok-plugin:6.1.0'
     api 'io.freefair.gradle:aspectj-plugin:6.1.0'
 
