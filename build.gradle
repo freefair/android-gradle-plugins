@@ -3,7 +3,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        def freefairGradleVersion = "6.1.0"
+        def freefairGradleVersion = "6.3.0"
         classpath "io.freefair.gradle:git-plugin:${freefairGradleVersion}"
         classpath "io.freefair.gradle:lombok-plugin:${freefairGradleVersion}"
         classpath "io.freefair.gradle:maven-plugin:${freefairGradleVersion}"
