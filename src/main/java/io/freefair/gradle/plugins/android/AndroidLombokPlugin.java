@@ -53,7 +53,6 @@ public class AndroidLombokPlugin extends AndroidProjectPlugin {
 
             TaskProvider<JavaCompile> compileJava = variant.getJavaCompileProvider();
             compileJava.configure(cj -> {
-                cj.dependsOn(lombokPlugin.getCheckLombokConfigs());
                 cj.getOptions().getCompilerArgs().add("-Xlint:-processing");
             });
 
