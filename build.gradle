@@ -39,7 +39,7 @@ compileJava.options.compilerArgs += "-Xlint"
 sourceCompatibility = JavaVersion.VERSION_11
 
 dependencies {
-    api 'com.android.tools.build:gradle:7.0.4'
+    api 'com.android.tools.build:gradle:7.1.0'
     api 'io.freefair.gradle:lombok-plugin:6.2.0'
     api 'io.freefair.gradle:aspectj-plugin:6.2.0'
 
@@ -68,10 +68,6 @@ gradlePlugin {
         androidMavenJars {
             id = "io.freefair.android-maven-jars"
             implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidMavenJarsPlugin"
-        }
-        androidSoftwareComponents {
-            id = "io.freefair.android-software-components"
-            implementationClass = "io.freefair.gradle.plugins.android.maven.AndroidComponentPlugin"
         }
         androidCi {
             id = "io.freefair.android-ci"
