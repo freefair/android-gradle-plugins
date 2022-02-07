@@ -41,7 +41,7 @@ sourceCompatibility = JavaVersion.VERSION_11
 dependencies {
     api 'com.android.tools.build:gradle:7.1.1'
     api 'io.freefair.gradle:lombok-plugin:6.2.0'
-    api 'io.freefair.gradle:aspectj-plugin:6.2.0'
+    api 'io.freefair.gradle:aspectj-plugin:6.3.0'
 
     testImplementation 'junit:junit:4.13.2'
 }
