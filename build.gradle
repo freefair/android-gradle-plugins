@@ -3,7 +3,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        def freefairGradleVersion = "6.3.0"
+        def freefairGradleVersion = "6.4.0"
         classpath "io.freefair.gradle:git-plugin:${freefairGradleVersion}"
         classpath "io.freefair.gradle:lombok-plugin:${freefairGradleVersion}"
         classpath "io.freefair.gradle:maven-plugin:${freefairGradleVersion}"
@@ -40,7 +40,7 @@ sourceCompatibility = JavaVersion.VERSION_11
 
 dependencies {
     api 'com.android.tools.build:gradle:7.1.1'
-    api 'io.freefair.gradle:lombok-plugin:6.2.0'
+    api 'io.freefair.gradle:lombok-plugin:6.4.0'
     api 'io.freefair.gradle:aspectj-plugin:6.2.0'
 
     testImplementation 'junit:junit:4.13.2'
