@@ -5,16 +5,21 @@ import io.freefair.gradle.plugins.android.AndroidProjectPlugin;
 import io.freefair.gradle.plugins.android.aspectj.internal.AndroidWeavingSourceSet;
 import io.freefair.gradle.plugins.aspectj.AjcAction;
 import io.freefair.gradle.plugins.aspectj.AspectJBasePlugin;
+import io.freefair.gradle.plugins.aspectj.AspectJCompileOptions;
+import io.freefair.gradle.util.TaskUtils;
 import org.gradle.api.Incubating;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.internal.plugins.DslObject;
+import org.gradle.api.tasks.ClasspathNormalizer;
 import org.gradle.api.tasks.compile.JavaCompile;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+
+import static io.freefair.gradle.util.TaskUtils.registerNested;
 
 /**
  * Implements AspectJ Post-Compile Weaving by adding an {@link AjcAction} to the {@link JavaCompile} tasks.
@@ -57,11 +62,13 @@ public class AndroidAspectJPostCompileWeavingPlugin extends AndroidProjectPlugin
 
             AjcAction action = getProject().getObjects().newInstance(AjcAction.class);
 
-            action.getOptions().getInpath().from(javaCompile.getDestinationDirectory());
+            action.getAdditionalInpath().from(javaCompile.getDestinationDirectory());
             action.getOptions().getBootclasspath().from(getAndroidExtension().getBootClasspath());
             action.getOptions().getBootclasspath().from(javaCompile.getOptions().getBootstrapClasspath());
             action.getOptions().getExtdirs().from(javaCompile.getOptions().getExtensionDirs());
-            action.getClasspath().from(basePlugin.getAspectjConfiguration());
+
+            ConfigurableFileCollection searchPath = getProject().files(variant.getCompileClasspath(null), aspectpaths.values());
+            action.getClasspath().from(basePlugin.getAspectjRuntime().inferAspectjClasspath(searchPath));
 
             variant.getSourceSets().forEach(sourceProvider -> {
                 String sourceSetName = sourceProvider.getName();
@@ -70,13 +77,7 @@ public class AndroidAspectJPostCompileWeavingPlugin extends AndroidProjectPlugin
                 action.getOptions().getAspectpath().from(aspectpaths.get(sourceSetName));
             });
 
-            try {
-                Method addToTask = AjcAction.class.getDeclaredMethod("addToTask", Task.class);
-                addToTask.setAccessible(true);
-                addToTask.invoke(action, javaCompile);
-            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
+            action.addToTask(javaCompile);
         }));
     }
 }

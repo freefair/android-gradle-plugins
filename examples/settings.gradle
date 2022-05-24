@@ -3,3 +3,6 @@ rootProject.name = 'android-gradle-plugins-examples'
 includeBuild '..'
 
 include ":lombok"
+
+include ":aspectj:aspect"
+include ":aspectj:post-compile"

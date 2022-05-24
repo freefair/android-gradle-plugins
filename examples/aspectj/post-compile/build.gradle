@@ -1,0 +1,17 @@
+apply plugin: "com.android.application"
+apply plugin: "io.freefair.android.aspectj.post-compile-weaving"
+
+android {
+    compileSdkVersion 32
+
+    defaultConfig {
+        applicationId "foo.bar"
+        minSdkVersion 14
+        targetSdkVersion 32
+        versionCode 19
+    }
+}
+
+dependencies {
+    aspect project(":aspectj:aspect")
+}
