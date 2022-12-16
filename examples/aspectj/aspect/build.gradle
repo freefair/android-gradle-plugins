@@ -6,3 +6,8 @@ plugins {
 dependencies {
     implementation "org.aspectj:aspectjrt:1.9.9.1"
 }
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}

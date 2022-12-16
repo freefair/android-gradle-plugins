@@ -1,34 +1,19 @@
-buildscript {
-    repositories {
-        gradlePluginPortal()
-    }
-    dependencies {
-        def freefairGradleVersion = "6.4.3"
-        classpath "io.freefair.gradle:git-plugin:${freefairGradleVersion}"
-        classpath "io.freefair.gradle:lombok-plugin:${freefairGradleVersion}"
-        classpath "io.freefair.gradle:maven-plugin:${freefairGradleVersion}"
-    }
-}
-
 plugins {
     id "com.gradle.plugin-publish" version "0.21.0"
     id "java-gradle-plugin"
+    id "io.freefair.git-version" version "6.6"
+    id "io.freefair.lombok" version "6.6"
+    id "io.freefair.javadoc-links" version "6.6"
+    id "maven-publish"
 }
 
-apply plugin: "io.freefair.git-version"
-apply plugin: "maven-publish"
-apply plugin: "io.freefair.lombok"
-apply plugin: "io.freefair.javadoc-links"
-
 repositories {
-    mavenCentral()
     gradlePluginPortal()
     google()
+    mavenCentral()
 }
 
 group = 'io.freefair.gradle'
-
-java.withJavadocJar()
 
 javadoc.options.links "https://docs.gradle.org/$gradle.gradleVersion/javadoc/"
 javadoc.options.links "https://developer.android.com/reference/tools/gradle-api/7.0/"
@@ -36,11 +21,17 @@ javadoc.failOnError = false
 
 compileJava.options.compilerArgs += "-Xlint"
 
-sourceCompatibility = JavaVersion.VERSION_11
+java {
+    withSourcesJar()
+    withJavadocJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
 
 dependencies {
-    api 'com.android.tools.build:gradle:7.3.1'
-    api 'io.freefair.gradle:lombok-plugin:6.4.3'
+    api 'com.android.tools.build:gradle:7.4.0-rc01'
+    api 'io.freefair.gradle:lombok-plugin:6.6'
     api 'io.freefair.gradle:aspectj-plugin:6.6'
     implementation 'io.freefair.gradle:plugin-utils:6.6'
 

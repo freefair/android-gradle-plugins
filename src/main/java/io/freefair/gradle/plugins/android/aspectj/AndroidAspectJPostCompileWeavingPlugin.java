@@ -1,5 +1,6 @@
 package io.freefair.gradle.plugins.android.aspectj;
 
+import com.android.build.api.variant.AndroidComponentsExtension;
 import com.android.build.gradle.TestedExtension;
 import io.freefair.gradle.plugins.android.AndroidProjectPlugin;
 import io.freefair.gradle.plugins.android.aspectj.internal.AndroidWeavingSourceSet;
