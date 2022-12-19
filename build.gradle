@@ -1,12 +1,10 @@
 import io.freefair.gradle.plugins.okhttp.tasks.UploadFile
 
 plugins {
-    id "com.gradle.plugin-publish" version "0.21.0"
-    id "java-gradle-plugin"
+    id "com.gradle.plugin-publish" version "1.1.0"
     id "io.freefair.git-version" version "6.6.1"
     id "io.freefair.lombok" version "6.6.1"
     id "io.freefair.javadoc-links" version "6.6.1"
-    id "maven-publish"
 }
 
 repositories {
@@ -21,7 +19,11 @@ javadoc.options.links "https://docs.gradle.org/$gradle.gradleVersion/javadoc/"
 javadoc.options.links "https://developer.android.com/reference/tools/gradle-api/7.4/"
 javadoc.failOnError = false
 
-compileJava.options.compilerArgs += "-Xlint"
+jar {
+    manifest {
+        attributes 'Implementation-Version': "$project.version"
+    }
+}
 
 java {
     withSourcesJar()
