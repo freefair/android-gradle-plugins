@@ -13,11 +13,17 @@ repositories {
     mavenCentral()
 }
 
-group = 'io.freefair.gradle'
+def freefairGradleVersion = "6.6.1"
 
-javadoc.options.links "https://docs.gradle.org/$gradle.gradleVersion/javadoc/"
-javadoc.options.links "https://developer.android.com/reference/tools/gradle-api/7.4/"
-javadoc.failOnError = false
+group = 'io.freefair.gradle'
+description = "FreeFair Android Gradle Plugins"
+
+tasks.withType(Javadoc).configureEach {
+    options.addBooleanOption("Xdoclint:-missing", true)
+    options.links "https://docs.gradle.org/$gradle.gradleVersion/javadoc/"
+    options.links "https://developer.android.com/reference/tools/gradle-api/7.4/"
+    options.links "https://docs.freefair.io/gradle-plugins/$freefairGradleVersion/api"
+}
 
 jar {
     manifest {
@@ -37,9 +43,9 @@ test.useJUnitPlatform()
 
 dependencies {
     api 'com.android.tools.build:gradle:7.4.0-rc01'
-    api 'io.freefair.gradle:lombok-plugin:6.6.1'
-    api 'io.freefair.gradle:aspectj-plugin:6.6.1'
-    implementation 'io.freefair.gradle:plugin-utils:6.6.1'
+    api "io.freefair.gradle:lombok-plugin:$freefairGradleVersion"
+    api "io.freefair.gradle:aspectj-plugin:$freefairGradleVersion"
+    implementation "io.freefair.gradle:plugin-utils:$freefairGradleVersion"
 
     testImplementation platform("org.junit:junit-bom:5.9.1")
 
@@ -91,6 +97,52 @@ pluginBundle {
     website = "https://docs.freefair.io/android-gradle-plugins/$version/"
     vcsUrl = 'https://github.com/freefair/android-gradle-plugins'
     tags = ['android']
+}
+
+plugins.withId("maven-publish") {
+    project.apply plugin: 'io.freefair.maven-central.validate-poms'
+
+    publishing {
+        publications.withType(MavenPublication) {
+            pom {
+                url = 'https://github.com/freefair/android-gradle-plugins'
+                name = provider { project.description }
+                description = provider { project.description }
+                inceptionYear = '2016'
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://github.com/freefair/android-gradle-plugins/blob/master/LICENSE'
+                    }
+                }
+                organization {
+                    name = 'FreeFair'
+                    url = 'https://github.com/freefair'
+                }
+                developers {
+                    developer {
+                        id = 'larsgrefer'
+                        name = 'Lars Grefer'
+                        email = 'github@larsgrefer.de'
+                        timezone = 'Europe/Berlin'
+                    }
+                }
+                ciManagement {
+                    system = 'GitHub Actions'
+                    url = 'https://github.com/freefair/android-gradle-plugins/actions'
+                }
+                issueManagement {
+                    system = 'GitHub Issues'
+                    url = 'https://github.com/freefair/android-gradle-plugins/issues'
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/freefair/android-gradle-plugins.git'
+                    developerConnection = 'scm:git:git@github.com:freefair/android-gradle-plugins.git'
+                    url = 'https://github.com/freefair/android-gradle-plugins/'
+                }
+            }
+        }
+    }
 }
 
 tasks.register('uploadDocumentation', UploadFile) {
