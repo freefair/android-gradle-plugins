@@ -1,11 +1,13 @@
-package io.freefair.gradle.plugins.android;
+package io.freefair.gradle.plugins.android.lombok;
 
 import com.android.build.api.dsl.CommonExtension;
 import com.android.build.api.variant.AndroidComponentsExtension;
 import com.android.build.api.variant.Variant;
+import com.android.build.gradle.BasePlugin;
+import io.freefair.gradle.plugins.android.AndroidJavadocPlugin;
+import io.freefair.gradle.plugins.android.AndroidProjectUtil;
 import io.freefair.gradle.plugins.lombok.LombokBasePlugin;
 import io.freefair.gradle.plugins.lombok.LombokPlugin;
-import io.freefair.gradle.plugins.lombok.internal.AndroidConfigUtil;
 import io.freefair.gradle.plugins.lombok.tasks.Delombok;
 import io.freefair.gradle.plugins.lombok.tasks.LombokConfig;
 import lombok.Getter;
@@ -34,6 +36,10 @@ public class AndroidLombokPlugin implements Plugin<Project> {
         LombokPlugin lombokPlugin = project.getPlugins().apply(LombokPlugin.class);
         lombokBasePlugin = lombokPlugin.getLombokBasePlugin();
 
+        project.getPlugins().withType(BasePlugin.class, this::withAndroidPlugin);
+    }
+
+    private void withAndroidPlugin(BasePlugin basePlugin) {
         CommonExtension<?, ?, ?, ?> android = AndroidProjectUtil.getAndroidExtension(project);
         AndroidComponentsExtension<?, ?, ?> androidComponents = AndroidProjectUtil.getAndroidComponentsExtension(project);
 

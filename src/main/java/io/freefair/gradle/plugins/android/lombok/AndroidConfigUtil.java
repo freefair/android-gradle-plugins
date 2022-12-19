@@ -1,6 +1,7 @@
-package io.freefair.gradle.plugins.lombok.internal;
+package io.freefair.gradle.plugins.android.lombok;
 
 import com.android.build.api.variant.Variant;
+import io.freefair.gradle.plugins.lombok.internal.CleanLombokConfig;
 import io.freefair.gradle.plugins.lombok.tasks.LombokConfig;
 import lombok.experimental.UtilityClass;
 import org.codehaus.groovy.runtime.StringGroovyMethods;
