@@ -42,7 +42,7 @@ java {
 test.useJUnitPlatform()
 
 dependencies {
-    api 'com.android.tools.build:gradle:7.4.0-rc01'
+    api 'com.android.tools.build:gradle:8.0.0-alpha09'
     api "io.freefair.gradle:lombok-plugin:$freefairGradleVersion"
     api "io.freefair.gradle:aspectj-plugin:$freefairGradleVersion"
     implementation "io.freefair.gradle:plugin-utils:$freefairGradleVersion"
