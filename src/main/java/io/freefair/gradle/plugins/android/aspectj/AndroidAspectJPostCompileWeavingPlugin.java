@@ -1,84 +1,105 @@
 package io.freefair.gradle.plugins.android.aspectj;
 
+import com.android.build.api.artifact.ScopedArtifact;
+import com.android.build.api.dsl.CommonExtension;
 import com.android.build.api.variant.AndroidComponentsExtension;
-import com.android.build.gradle.TestedExtension;
-import io.freefair.gradle.plugins.android.AndroidProjectPlugin;
-import io.freefair.gradle.plugins.android.aspectj.internal.AndroidWeavingSourceSet;
-import io.freefair.gradle.plugins.aspectj.AjcAction;
+import com.android.build.api.variant.ScopedArtifacts;
 import io.freefair.gradle.plugins.aspectj.AspectJBasePlugin;
-import io.freefair.gradle.plugins.aspectj.AspectJCompileOptions;
-import io.freefair.gradle.util.TaskUtils;
-import org.gradle.api.Incubating;
-import org.gradle.api.Task;
+import kotlin.Pair;
+import org.gradle.api.Plugin;
+import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.file.ConfigurableFileCollection;
-import org.gradle.api.internal.plugins.DslObject;
-import org.gradle.api.tasks.ClasspathNormalizer;
-import org.gradle.api.tasks.compile.JavaCompile;
+import org.gradle.api.tasks.TaskProvider;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.freefair.gradle.util.TaskUtils.registerNested;
+public class AndroidAspectJPostCompileWeavingPlugin implements Plugin<Project> {
 
-/**
- * Implements AspectJ Post-Compile Weaving by adding an {@link AjcAction} to the {@link JavaCompile} tasks.
- *
- * @author Lars Grefer
- * @see io.freefair.gradle.plugins.aspectj.AspectJPostCompileWeavingPlugin
- */
-@Incubating
-public class AndroidAspectJPostCompileWeavingPlugin extends AndroidProjectPlugin {
+    private final Map<String, Configuration> buildTypeInpaths = new HashMap<>();
+    private final Map<String, Configuration> buildTypeAspectpaths = new HashMap<>();
 
-    private Map<String, Configuration> aspectpaths = new HashMap<>();
-    private Map<String, Configuration> inpaths = new HashMap<>();
+    private final Map<String, Configuration> flavorInpaths = new HashMap<>();
+    private final Map<String, Configuration> flavorAspectpaths = new HashMap<>();
+
+    private final Map<String, Configuration> variantInpaths = new HashMap<>();
+    private final Map<String, Configuration> variantAspectpaths = new HashMap<>();
+
 
     @Override
-    protected void withAndroid(TestedExtension extension) {
-        super.withAndroid(extension);
+    public void apply(Project project) {
+        project.getPlugins().apply(AspectJBasePlugin.class);
 
-        getProject().getLogger().warn("The android aspectj support is still incubating and subject to change.");
+        Configuration inpath = project.getConfigurations().create("inpath");
+        Configuration aspectpath = project.getConfigurations().create("aspect");
 
-        AspectJBasePlugin basePlugin = getProject().getPlugins().apply(AspectJBasePlugin.class);
+        CommonExtension<?, ?, ?, ?> android = project.getExtensions().getByType(CommonExtension.class);
+        AndroidComponentsExtension<?, ?, ?> androidComponents = project.getExtensions().getByType(AndroidComponentsExtension.class);
 
-        extension.getSourceSets().all(sourceSet -> {
+        android.getBuildTypes().configureEach(buildType -> {
+            String buildTypeName = buildType.getName();
 
-            AndroidWeavingSourceSet weavingSourceSet = new AndroidWeavingSourceSet(sourceSet);
-            new DslObject(sourceSet).getConvention().add("aspectj", weavingSourceSet);
+            Configuration buildTypeInpath = project.getConfigurations().create(buildTypeName + "Inpath");
+            buildTypeInpath.extendsFrom(inpath);
+            buildTypeInpaths.put(buildTypeName, buildTypeInpath);
 
-            Configuration aspectpath = getProject().getConfigurations().create(weavingSourceSet.getAspectConfigurationName());
-            weavingSourceSet.setAspectPath(aspectpath);
-            aspectpaths.put(sourceSet.getName(), aspectpath);
-
-            Configuration inpath = getProject().getConfigurations().create(weavingSourceSet.getInpathConfigurationName());
-            weavingSourceSet.setInPath(inpath);
-            inpaths.put(sourceSet.getName(), inpath);
-
-            getProject().getConfigurations().getByName(sourceSet.getImplementationConfigurationName()).extendsFrom(aspectpath);
-            getProject().getConfigurations().getByName(sourceSet.getCompileOnlyConfigurationName()).extendsFrom(inpath);
+            Configuration buildTypeAspectpath = project.getConfigurations().create(buildTypeName + "Aspect");
+            buildTypeAspectpath.extendsFrom(aspectpath);
+            buildTypeAspectpaths.put(buildTypeName, buildTypeAspectpath);
         });
 
-        getAndroidVariants().all(variant -> variant.getJavaCompileProvider().configure(javaCompile -> {
+        android.getProductFlavors().configureEach(productFlavor -> {
+            String flavorName = productFlavor.getName();
 
-            AjcAction action = getProject().getObjects().newInstance(AjcAction.class);
+            Configuration flavorInpath = project.getConfigurations().create(flavorName + "Inpath");
+            flavorInpath.extendsFrom(inpath);
+            flavorInpaths.put(flavorName, flavorInpath);
 
-            action.getAdditionalInpath().from(javaCompile.getDestinationDirectory());
-            action.getOptions().getBootclasspath().from(getAndroidExtension().getBootClasspath());
-            action.getOptions().getBootclasspath().from(javaCompile.getOptions().getBootstrapClasspath());
-            action.getOptions().getExtdirs().from(javaCompile.getOptions().getExtensionDirs());
+            Configuration flavorAspectpath = project.getConfigurations().create(flavorName + "Aspect");
+            flavorAspectpath.extendsFrom(aspectpath);
+            flavorAspectpaths.put(flavorName, flavorAspectpath);
+        });
 
-            ConfigurableFileCollection searchPath = getProject().files(variant.getCompileClasspath(null), aspectpaths.values());
-            action.getClasspath().from(basePlugin.getAspectjRuntime().inferAspectjClasspath(searchPath));
+        androidComponents.beforeVariants(androidComponents.selector().all(), variantBuilder -> {
+            String variantName = variantBuilder.getName();
 
-            variant.getSourceSets().forEach(sourceProvider -> {
-                String sourceSetName = sourceProvider.getName();
+            Configuration variantInpath = project.getConfigurations().create(variantName + "Inpath");
+            variantInpaths.put(variantName, variantInpath);
+            variantInpath.extendsFrom(buildTypeInpaths.get(variantBuilder.getBuildType()));
 
-                action.getOptions().getInpath().from(inpaths.get(sourceSetName));
-                action.getOptions().getAspectpath().from(aspectpaths.get(sourceSetName));
+            Configuration variantAspectpath = project.getConfigurations().create(variantName + "Aspect");
+            variantAspectpaths.put(variantName, variantAspectpath);
+            variantAspectpath.extendsFrom(buildTypeAspectpaths.get(variantBuilder.getBuildType()));
+
+            for (Pair<String, String> productFlavor : variantBuilder.getProductFlavors()) {
+                String flavorName = productFlavor.getSecond();
+
+                variantInpath.extendsFrom(flavorInpaths.get(flavorName));
+                variantAspectpath.extendsFrom(flavorAspectpaths.get(flavorName));
+            }
+
+        });
+
+        androidComponents.onVariants(androidComponents.selector().all(), variant -> {
+
+            TaskProvider<AjcWeave> register = project.getTasks().register(variant.getName() + "AjcWeave", AjcWeave.class, ajcWeave -> {
+                ajcWeave.setSourceCompatibility(android.getCompileOptions().getSourceCompatibility().getMajorVersion());
+                ajcWeave.setTargetCompatibility(android.getCompileOptions().getTargetCompatibility().getMajorVersion());
+                ajcWeave.getOptions().setEncoding(android.getCompileOptions().getTargetCompatibility().getMajorVersion());
+
+                ajcWeave.getAjcOptions().getInpath().from(variantInpaths.get(variant.getName()));
+                ajcWeave.getAjcOptions().getAspectpath().from(variantAspectpaths.get(variant.getName()));
+                ajcWeave.setClasspath(variant.getCompileClasspath());
             });
 
-            action.addToTask(javaCompile);
-        }));
+            variant.getArtifacts()
+                    .forScope(ScopedArtifacts.Scope.PROJECT)
+                    .use(register)
+                    .toTransform(ScopedArtifact.CLASSES.INSTANCE,
+                            AjcWeave::getAllJars,
+                            AjcWeave::getAllDirs,
+                            AjcWeave::getOutput);
+        });
+
     }
 }

@@ -1,19 +1,21 @@
 package io.freefair.gradle.plugins.android.ci;
 
-import com.android.build.gradle.TestedExtension;
-import io.freefair.gradle.plugins.android.AndroidProjectPlugin;
+import com.android.build.api.dsl.CommonExtension;
+import io.freefair.gradle.plugins.android.AndroidProjectUtil;
+import org.gradle.api.Plugin;
+import org.gradle.api.Project;
 
-public class CiLintPlugin extends AndroidProjectPlugin {
+public class CiLintPlugin implements Plugin<Project> {
 
     @Override
-    protected void withAndroid(TestedExtension extension) {
-        super.withAndroid(extension);
+    public void apply(Project project) {
         if (CiUtil.isCi()) {
-            extension.getLintOptions().setHtmlReport(false);
-            extension.getLintOptions().setXmlReport(false);
+            CommonExtension<?, ?, ?, ?> extension = AndroidProjectUtil.getAndroidExtension(project);
 
-            extension.getLintOptions().setTextReport(true);
-            extension.getLintOptions().textOutput("stdout");
+            extension.getLint().setHtmlReport(false);
+            extension.getLint().setXmlReport(false);
+
+            extension.getLint().setTextReport(true);
         }
     }
 }

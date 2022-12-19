@@ -8,7 +8,6 @@ public class CiPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
 
-        project.getPluginManager().apply(CiDexPlugin.class);
         project.getPluginManager().apply(CiLintPlugin.class);
 
     }

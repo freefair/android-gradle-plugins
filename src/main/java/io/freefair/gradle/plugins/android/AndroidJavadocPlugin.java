@@ -1,8 +1,10 @@
 package io.freefair.gradle.plugins.android;
 
-import com.android.build.gradle.TestedExtension;
-import com.android.build.gradle.api.BaseVariant;
+import com.android.build.api.dsl.CommonExtension;
+import com.android.build.api.variant.AndroidComponentsExtension;
+import com.android.build.api.variant.Variant;
 import org.gradle.api.JavaVersion;
+import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaBasePlugin;
@@ -12,12 +14,13 @@ import org.gradle.api.tasks.javadoc.Javadoc;
 import org.gradle.external.javadoc.StandardJavadocDocletOptions;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.codehaus.groovy.runtime.StringGroovyMethods.capitalize;
 
-public class AndroidJavadocPlugin extends AndroidProjectPlugin {
+public class AndroidJavadocPlugin implements Plugin<Project> {
 
     private Map<String, TaskProvider<Javadoc>> javadocTasks = new HashMap<>();
 
@@ -25,47 +28,45 @@ public class AndroidJavadocPlugin extends AndroidProjectPlugin {
 
     @Override
     public void apply(Project project) {
-        super.apply(project);
-
         allJavadocTask = project.getTasks().register("javadoc", ajdTasks -> {
             ajdTasks.setDescription("Generate Javadoc for all variants");
             ajdTasks.setGroup(JavaBasePlugin.DOCUMENTATION_GROUP);
         });
 
-    }
+        AndroidComponentsExtension<?, ?, ?> androidComponents = project.getExtensions().getByType(AndroidComponentsExtension.class);
 
-    @Override
-    protected void withAndroid(TestedExtension extension) {
-        super.withAndroid(extension);
-        getAndroidVariants().all(variant -> {
-            TaskProvider<Javadoc> javadocTask = getJavadocTask(getProject(), variant);
+        androidComponents.onVariants(androidComponents.selector().all(), variant -> {
+            TaskProvider<Javadoc> javadocTask = getJavadocTask(project, variant);
 
             allJavadocTask.configure(t -> t.dependsOn(javadocTask));
         });
     }
 
-    public TaskProvider<Javadoc> getJavadocTask(Project project, BaseVariant variant) {
+    public TaskProvider<Javadoc> getJavadocTask(Project project, Variant variant) {
 
         if (!javadocTasks.containsKey(variant.getName())) {
 
-            TaskProvider<Javadoc> task = project.getTasks().register("javadoc" + capitalize((CharSequence) variant.getName()), Javadoc.class, javadoc -> {
+            TaskProvider<Javadoc> task = project.getTasks().register("javadoc" + capitalize(variant.getName()), Javadoc.class, javadoc -> {
                 javadoc.setDescription("Generate Javadoc for the " + variant.getName() + " variant");
                 javadoc.setGroup(JavaBasePlugin.DOCUMENTATION_GROUP);
 
-                javadoc.dependsOn(variant.getJavaCompileProvider());
+                TaskProvider<JavaCompile> javaCompileTaskProvider = AndroidProjectUtil.getJavaCompileTaskProvider(project, variant);
 
-                JavaCompile javacTask = variant.getJavaCompileProvider().get();
+                javadoc.dependsOn(javaCompileTaskProvider);
 
-                javadoc.setSource(javacTask.getSource());
+                javadoc.setSource(variant.getSources().getJava().getAll());
 
-                javadoc.setClasspath(project.files(javacTask.getDestinationDirectory()).plus(javacTask.getClasspath()));
-                javadoc.getOptions().setSource(javacTask.getSourceCompatibility());
+                javadoc.setClasspath(variant.getCompileClasspath());
+
+                CommonExtension<?, ?, ?, ?> android = AndroidProjectUtil.getAndroidExtension(project);
+
+                javadoc.getOptions().setSource(android.getCompileOptions().getSourceCompatibility().getMajorVersion());
 
                 //javadoc.exclude '**/BuildConfig.java'
                 javadoc.exclude("**/R.java");
 
                 javadoc.getOptions().encoding("UTF-8");
-                javadoc.getOptions().setBootClasspath(getAndroidExtension().getBootClasspath());
+                javadoc.getOptions().setBootClasspath(new ArrayList<>(javaCompileTaskProvider.get().getOptions().getBootstrapClasspath().getFiles()));
 
                 if (javadoc.getOptions() instanceof StandardJavadocDocletOptions) {
                     StandardJavadocDocletOptions realOptions = (StandardJavadocDocletOptions) javadoc.getOptions();
@@ -91,7 +92,7 @@ public class AndroidJavadocPlugin extends AndroidProjectPlugin {
                     docsDir = new File(project.getBuildDir(), "docs");
                 }
                 File javadocDir = new File(docsDir, "javadoc");
-                javadoc.setDestinationDir(new File(javadocDir, variant.getDirName()));
+                javadoc.setDestinationDir(new File(javadocDir, variant.getName()));
             });
 
             javadocTasks.put(variant.getName(), task);
