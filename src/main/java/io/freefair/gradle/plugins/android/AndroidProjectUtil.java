@@ -15,15 +15,15 @@ import org.gradle.api.tasks.compile.JavaCompile;
 @UtilityClass
 public class AndroidProjectUtil {
 
-    public CommonExtension<?, ?, ?, ?> getAndroidExtension(Project project) {
+    public static CommonExtension<?, ?, ?, ?> getAndroidExtension(Project project) {
         return project.getExtensions().getByType(CommonExtension.class);
     }
 
-    public AndroidComponentsExtension<?,?,?> getAndroidComponentsExtension(Project project) {
+    public static AndroidComponentsExtension<?,?,?> getAndroidComponentsExtension(Project project) {
         return project.getExtensions().getByType(AndroidComponentsExtension.class);
     }
 
-    public TaskProvider<JavaCompile> getJavaCompileTaskProvider(Project project, Variant variant) {
+    public static TaskProvider<JavaCompile> getJavaCompileTaskProvider(Project project, Variant variant) {
         String variantName = variant.getName();
 
         String compileTaskName = "compile" + StringGroovyMethods.capitalize(variantName) + "JavaWithJavac";

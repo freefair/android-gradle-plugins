@@ -78,13 +78,17 @@ public class AndroidAspectJPostCompileWeavingPlugin implements Plugin<Project> {
         androidComponents.beforeVariants(androidComponents.selector().all(), variantBuilder -> {
             String variantName = variantBuilder.getName();
 
-            Configuration variantInpath = project.getConfigurations().create(variantName + "Inpath");
+            Configuration variantInpath = project.getConfigurations().maybeCreate(variantName + "Inpath");
             variantInpaths.put(variantName, variantInpath);
-            variantInpath.extendsFrom(buildTypeInpaths.get(variantBuilder.getBuildType()));
+            if (!buildTypeInpaths.containsKey(variantName)) {
+                variantInpath.extendsFrom(buildTypeInpaths.get(variantBuilder.getBuildType()));
+            }
 
-            Configuration variantAspectpath = project.getConfigurations().create(variantName + "Aspect");
+            Configuration variantAspectpath = project.getConfigurations().maybeCreate(variantName + "Aspect");
             variantAspectpaths.put(variantName, variantAspectpath);
-            variantAspectpath.extendsFrom(buildTypeAspectpaths.get(variantBuilder.getBuildType()));
+            if (!buildTypeAspectpaths.containsKey(variantName)) {
+                variantAspectpath.extendsFrom(buildTypeAspectpaths.get(variantBuilder.getBuildType()));
+            }
 
             for (Pair<String, String> productFlavor : variantBuilder.getProductFlavors()) {
                 String flavorName = productFlavor.getSecond();
