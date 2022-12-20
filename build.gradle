@@ -42,7 +42,7 @@ java {
 test.useJUnitPlatform()
 
 dependencies {
-    api 'com.android.tools.build:gradle:7.4.0-rc01'
+    api 'com.android.tools.build:gradle-api:7.4.0-rc01'
     api "io.freefair.gradle:lombok-plugin:$freefairGradleVersion"
     api "io.freefair.gradle:aspectj-plugin:$freefairGradleVersion"
     implementation "io.freefair.gradle:plugin-utils:$freefairGradleVersion"
@@ -53,6 +53,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.junit.jupiter:junit-jupiter-params'
     testImplementation 'org.mockito:mockito-core:4.10.0'
+
+    testRuntimeOnly 'com.android.tools.build:gradle:7.4.0-rc01'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 

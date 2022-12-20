@@ -26,17 +26,4 @@ class AndroidAspectJPostCompileWeavingPluginTest {
         project.getPlugins().apply(AndroidAspectJPostCompileWeavingPlugin.class);
     }
 
-    @Test
-    void testApp_reverse() {
-        project.getPlugins().apply(AndroidAspectJPostCompileWeavingPlugin.class);
-        project.getPlugins().apply("com.android.application");
-    }
-
-    @Test
-    void testLib_reverse() {
-        project.getPlugins().apply(AndroidAspectJPostCompileWeavingPlugin.class);
-        project.getPlugins().apply("com.android.library");
-    }
-
-
 }

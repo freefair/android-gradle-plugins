@@ -26,16 +26,4 @@ class AndroidLombokPluginTest {
         project.getPlugins().apply(AndroidLombokPlugin.class);
     }
 
-    @Test
-    void testApp_reverse() {
-        project.getPlugins().apply(AndroidLombokPlugin.class);
-        project.getPlugins().apply("com.android.application");
-    }
-
-    @Test
-    void testLib_reverse() {
-        project.getPlugins().apply(AndroidLombokPlugin.class);
-        project.getPlugins().apply("com.android.library");
-    }
-
 }
