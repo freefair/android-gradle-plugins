@@ -106,7 +106,7 @@ plugins.withId("maven-publish") {
     project.apply plugin: 'io.freefair.maven-central.validate-poms'
 
     publishing {
-        publications.withType(MavenPublication) {
+        publications.withType(MavenPublication).configureEach {
             pom {
                 url = 'https://github.com/freefair/android-gradle-plugins'
                 name = provider { project.description }
