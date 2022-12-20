@@ -8,6 +8,9 @@ import org.codehaus.groovy.runtime.StringGroovyMethods;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskProvider;
 
+/**
+ * @author Lars Grefer
+ */
 @UtilityClass
 public class AndroidConfigUtil {
 

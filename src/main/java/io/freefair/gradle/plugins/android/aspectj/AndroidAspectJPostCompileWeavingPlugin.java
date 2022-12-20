@@ -4,6 +4,7 @@ import com.android.build.api.artifact.ScopedArtifact;
 import com.android.build.api.dsl.CommonExtension;
 import com.android.build.api.variant.AndroidComponentsExtension;
 import com.android.build.api.variant.ScopedArtifacts;
+import com.android.build.gradle.BasePlugin;
 import io.freefair.gradle.plugins.aspectj.AspectJBasePlugin;
 import kotlin.Pair;
 import org.gradle.api.Plugin;
@@ -14,7 +15,15 @@ import org.gradle.api.tasks.TaskProvider;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Lars Grefer
+ */
 public class AndroidAspectJPostCompileWeavingPlugin implements Plugin<Project> {
+
+    private Project project;
+
+    private Configuration inpath;
+    private Configuration aspectpath;
 
     private final Map<String, Configuration> buildTypeInpaths = new HashMap<>();
     private final Map<String, Configuration> buildTypeAspectpaths = new HashMap<>();
@@ -28,10 +37,16 @@ public class AndroidAspectJPostCompileWeavingPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
+        this.project = project;
         project.getPlugins().apply(AspectJBasePlugin.class);
 
-        Configuration inpath = project.getConfigurations().create("inpath");
-        Configuration aspectpath = project.getConfigurations().create("aspect");
+        inpath = project.getConfigurations().create("inpath");
+        aspectpath = project.getConfigurations().create("aspect");
+
+        project.getPlugins().withType(BasePlugin.class, this::withAndroidPlugin);
+    }
+
+    private void withAndroidPlugin(BasePlugin basePlugin) {
 
         CommonExtension<?, ?, ?, ?> android = project.getExtensions().getByType(CommonExtension.class);
         AndroidComponentsExtension<?, ?, ?> androidComponents = project.getExtensions().getByType(AndroidComponentsExtension.class);
@@ -100,6 +115,5 @@ public class AndroidAspectJPostCompileWeavingPlugin implements Plugin<Project> {
                             AjcWeave::getAllDirs,
                             AjcWeave::getOutput);
         });
-
     }
 }

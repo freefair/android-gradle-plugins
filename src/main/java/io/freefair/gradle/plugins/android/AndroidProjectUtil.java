@@ -9,6 +9,9 @@ import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.compile.JavaCompile;
 
+/**
+ * @author Lars Grefer
+ */
 @UtilityClass
 public class AndroidProjectUtil {
 

@@ -1,11 +1,11 @@
-package io.freefair.gradle.plugins.android.lombok;
+package io.freefair.gradle.plugins.android.aspectj;
 
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class AndroidLombokPluginTest {
+class AndroidAspectJPostCompileWeavingPluginTest {
 
     private Project project;
 
@@ -17,25 +17,26 @@ class AndroidLombokPluginTest {
     @Test
     void testApp() {
         project.getPlugins().apply("com.android.application");
-        project.getPlugins().apply(AndroidLombokPlugin.class);
+        project.getPlugins().apply(AndroidAspectJPostCompileWeavingPlugin.class);
     }
 
     @Test
     void testLib() {
         project.getPlugins().apply("com.android.library");
-        project.getPlugins().apply(AndroidLombokPlugin.class);
+        project.getPlugins().apply(AndroidAspectJPostCompileWeavingPlugin.class);
     }
 
     @Test
     void testApp_reverse() {
-        project.getPlugins().apply(AndroidLombokPlugin.class);
+        project.getPlugins().apply(AndroidAspectJPostCompileWeavingPlugin.class);
         project.getPlugins().apply("com.android.application");
     }
 
     @Test
     void testLib_reverse() {
-        project.getPlugins().apply(AndroidLombokPlugin.class);
+        project.getPlugins().apply(AndroidAspectJPostCompileWeavingPlugin.class);
         project.getPlugins().apply("com.android.library");
     }
+
 
 }

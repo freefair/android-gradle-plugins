@@ -20,6 +20,9 @@ import java.util.Map;
 
 import static org.codehaus.groovy.runtime.StringGroovyMethods.capitalize;
 
+/**
+ * @author Lars Grefer
+ */
 public class AndroidJavadocPlugin implements Plugin<Project> {
 
     private Map<String, TaskProvider<Javadoc>> javadocTasks = new HashMap<>();
@@ -33,7 +36,7 @@ public class AndroidJavadocPlugin implements Plugin<Project> {
             ajdTasks.setGroup(JavaBasePlugin.DOCUMENTATION_GROUP);
         });
 
-        AndroidComponentsExtension<?, ?, ?> androidComponents = project.getExtensions().getByType(AndroidComponentsExtension.class);
+        AndroidComponentsExtension<?, ?, ?> androidComponents = AndroidProjectUtil.getAndroidComponentsExtension(project);
 
         androidComponents.onVariants(androidComponents.selector().all(), variant -> {
             TaskProvider<Javadoc> javadocTask = getJavadocTask(project, variant);
