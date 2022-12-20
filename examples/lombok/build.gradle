@@ -2,6 +2,7 @@ apply plugin: "com.android.application"
 apply plugin: "io.freefair.android-lombok"
 
 android {
+    namespace 'io.freefair.demo'
     compileSdk 33
 
     defaultConfig {
@@ -30,5 +31,4 @@ android {
             dimension "api"
         }
     }
-
 }
