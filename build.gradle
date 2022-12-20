@@ -48,7 +48,6 @@ dependencies {
 
     api "io.freefair.gradle:lombok-plugin:$freefairGradleVersion"
     api "io.freefair.gradle:aspectj-plugin:$freefairGradleVersion"
-    implementation "io.freefair.gradle:plugin-utils:$freefairGradleVersion"
 
     testImplementation platform("org.junit:junit-bom:5.9.1")
 
