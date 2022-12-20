@@ -43,11 +43,13 @@ public class AndroidLombokPlugin implements Plugin<Project> {
         CommonExtension<?, ?, ?, ?> android = AndroidProjectUtil.getAndroidExtension(project);
         AndroidComponentsExtension<?, ?, ?> androidComponents = AndroidProjectUtil.getAndroidComponentsExtension(project);
 
-        android.getSourceSets().all(androidSourceSet -> {
-            project.getConfigurations().getByName(androidSourceSet.getCompileOnlyConfigurationName())
-                    .extendsFrom(lombokBasePlugin.getLombokConfiguration());
-            project.getConfigurations().getByName(androidSourceSet.getAnnotationProcessorConfigurationName())
-                    .extendsFrom(lombokBasePlugin.getLombokConfiguration());
+        project.afterEvaluate(p -> {
+            android.getSourceSets().all(androidSourceSet -> {
+                project.getConfigurations().getByName(androidSourceSet.getCompileOnlyConfigurationName())
+                        .extendsFrom(lombokBasePlugin.getLombokConfiguration());
+                project.getConfigurations().getByName(androidSourceSet.getAnnotationProcessorConfigurationName())
+                        .extendsFrom(lombokBasePlugin.getLombokConfiguration());
+            });
         });
 
         androidComponents.onVariants(androidComponents.selector().all(), variant -> {
@@ -81,12 +83,12 @@ public class AndroidLombokPlugin implements Plugin<Project> {
         });
     }
 
-    private void handleLombokConfig(Variant sourceSet, TaskProvider<JavaCompile> compileTaskProvider, TaskProvider<Delombok> delombokTaskProvider) {
+    private void handleLombokConfig(Variant variant, TaskProvider<JavaCompile> compileTaskProvider, TaskProvider<Delombok> delombokTaskProvider) {
         if (lombokBasePlugin.getLombokExtension().getDisableConfig().get()) {
             return;
         }
 
-        TaskProvider<LombokConfig> lombokConfigTask = AndroidConfigUtil.getLombokConfigTask(project, sourceSet);
+        TaskProvider<AndroidLombokConfig> lombokConfigTask = AndroidConfigUtil.getLombokConfigTask(project, variant);
 
         compileTaskProvider.configure(javaCompile -> {
             javaCompile.getInputs().file(lombokConfigTask.get().getOutputFile())

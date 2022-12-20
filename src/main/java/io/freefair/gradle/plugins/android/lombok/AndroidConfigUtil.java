@@ -14,13 +14,14 @@ import org.gradle.api.tasks.TaskProvider;
 @UtilityClass
 public class AndroidConfigUtil {
 
-    public TaskProvider<LombokConfig> getLombokConfigTask(Project project, Variant variant) {
+    public TaskProvider<AndroidLombokConfig> getLombokConfigTask(Project project, Variant variant) {
 
         String taskName = "generate" + StringGroovyMethods.capitalize(variant.getName()) + "EffectiveLombokConfig";
 
-        return project.getTasks().register(taskName, LombokConfig.class, lombokConfigTask -> {
+        return project.getTasks().register(taskName, AndroidLombokConfig.class, lombokConfigTask -> {
+            lombokConfigTask.dependsOn(project.getTasks().named("generate" + StringGroovyMethods.capitalize(variant.getName()) + "BuildConfig"));
             lombokConfigTask.setGroup("lombok");
-            lombokConfigTask.setDescription("Generate effective Lombok configuration for source-set '" + variant.getName() + "'.");
+            lombokConfigTask.setDescription("Generate effective Lombok configuration for variant '" + variant.getName() + "'.");
             lombokConfigTask.getPaths().from(variant.getSources().getJava().getAll());
             lombokConfigTask.getOutputFile().set(project.getLayout().getBuildDirectory().file("lombok/effective-config/lombok-" + variant.getName() + ".config"));
             lombokConfigTask.doLast("cleanLombokConfig", new CleanLombokConfig());

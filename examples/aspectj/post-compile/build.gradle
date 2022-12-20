@@ -10,6 +10,26 @@ android {
         targetSdkVersion 33
         versionCode 19
     }
+
+    flavorDimensions = ["api", "mode"]
+    productFlavors {
+        demo {
+            dimension "mode"
+        }
+        full {
+            dimension "mode"
+        }
+
+        minApi24 {
+            dimension "api"
+        }
+        minApi23 {
+            dimension "api"
+        }
+        minApi21 {
+            dimension "api"
+        }
+    }
 }
 
 dependencies {

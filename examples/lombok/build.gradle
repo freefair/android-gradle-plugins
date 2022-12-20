@@ -2,14 +2,33 @@ apply plugin: "com.android.application"
 apply plugin: "io.freefair.android-lombok"
 
 android {
-    compileSdkVersion 29
+    compileSdk 33
 
     defaultConfig {
         applicationId "foo.bar"
         minSdkVersion 14
-        targetSdkVersion 29
+        targetSdkVersion 33
         versionCode 19
     }
 
+    flavorDimensions = ["api", "mode"]
+    productFlavors {
+        demo {
+            dimension "mode"
+        }
+        full {
+            dimension "mode"
+        }
+
+        minApi24 {
+            dimension "api"
+        }
+        minApi23 {
+            dimension "api"
+        }
+        minApi21 {
+            dimension "api"
+        }
+    }
 
 }
