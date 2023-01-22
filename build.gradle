@@ -49,7 +49,7 @@ dependencies {
     api "io.freefair.gradle:lombok-plugin:$freefairGradleVersion"
     api "io.freefair.gradle:aspectj-plugin:$freefairGradleVersion"
 
-    testImplementation platform("org.junit:junit-bom:5.9.1")
+    testImplementation platform("org.junit:junit-bom:5.9.2")
 
     testImplementation 'org.assertj:assertj-core:3.24.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
