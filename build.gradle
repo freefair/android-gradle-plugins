@@ -2,9 +2,9 @@ import io.freefair.gradle.plugins.okhttp.tasks.UploadFile
 
 plugins {
     id "com.gradle.plugin-publish" version "1.1.0"
-    id "io.freefair.git-version" version "6.6.3"
-    id "io.freefair.lombok" version "6.6.3"
-    id "io.freefair.javadoc-links" version "6.6.3"
+    id "io.freefair.git-version"
+    id "io.freefair.lombok"
+    id "io.freefair.javadoc-links"
 }
 
 repositories {
@@ -13,7 +13,7 @@ repositories {
     mavenCentral()
 }
 
-def freefairGradleVersion = "6.6.3"
+def freefairGradleVersion = "8.0.1"
 def agpVersion = "7.4.2"
 
 group = 'io.freefair.gradle'
