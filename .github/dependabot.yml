@@ -1,9 +1,16 @@
 version: 2
 updates:
-- package-ecosystem: gradle
-  directory: "/"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-  assignees:
-  - larsgrefer
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "gradle"
+    target-branch: "8.0.x"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "gradle"
+    directory: "/"
+    target-branch: "7.4.x"
+    schedule:
+      interval: "daily"
