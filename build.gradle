@@ -59,25 +59,29 @@ dependencies {
 }
 
 gradlePlugin {
-    //noinspection GroovyAssignabilityCheck
+    website = "https://docs.freefair.io/android-gradle-plugins/$version/"
+    vcsUrl = 'https://github.com/freefair/android-gradle-plugins'
     plugins {
         androidJavadoc {
             id = "io.freefair.android-javadoc"
             implementationClass = "io.freefair.gradle.plugins.android.AndroidJavadocPlugin"
             displayName = "Android Javadoc Plugin"
             description = "Generate javadocs for all variants of your android project"
+            tags.set(['android'])
         }
         androidLombok {
             id = "io.freefair.android-lombok"
             implementationClass = "io.freefair.gradle.plugins.android.lombok.AndroidLombokPlugin"
             displayName = "Android Lombok Plugin"
             description = "Automatic Lombok and Delombok configuration for your android project"
+            tags.set(['android'])
         }
         androidCi {
             id = "io.freefair.android-ci"
             implementationClass = "io.freefair.gradle.plugins.android.ci.CiPlugin"
             displayName = "Android CI Plugin"
             description = "Properly configure your android project on CI servers (like travis)"
+            tags.set(['android'])
 
         }
         androidCiLint {
@@ -85,20 +89,16 @@ gradlePlugin {
             implementationClass = "io.freefair.gradle.plugins.android.ci.CiLintPlugin"
             displayName = "Android CI Plugin"
             description = "Properly configure your android project on CI servers (like travis)"
+            tags.set(['android'])
         }
         androidAspectjPostCompileWeaving {
             id = "io.freefair.android.aspectj.post-compile-weaving"
             implementationClass = "io.freefair.gradle.plugins.android.aspectj.AndroidAspectJPostCompileWeavingPlugin"
             displayName = "Android AspectJ Post-Compile Weaving Plugin"
             description = "Android AspectJ Post-Compile Weaving Plugin"
+            tags.set(['android'])
         }
     }
-}
-
-pluginBundle {
-    website = "https://docs.freefair.io/android-gradle-plugins/$version/"
-    vcsUrl = 'https://github.com/freefair/android-gradle-plugins'
-    tags = ['android']
 }
 
 plugins.withId("maven-publish") {
