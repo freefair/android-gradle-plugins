@@ -10,7 +10,7 @@ public class CiLintPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         if (CiUtil.isCi()) {
-            CommonExtension<?, ?, ?, ?> extension = AndroidProjectUtil.getAndroidExtension(project);
+            CommonExtension<?, ?, ?, ?, ?> extension = AndroidProjectUtil.getAndroidExtension(project);
 
             extension.getLint().setHtmlReport(false);
             extension.getLint().setXmlReport(false);

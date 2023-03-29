@@ -34,7 +34,7 @@ public class AndroidLombokPlugin implements Plugin<Project> {
         LombokPlugin lombokPlugin = project.getPlugins().apply(LombokPlugin.class);
         lombokBasePlugin = lombokPlugin.getLombokBasePlugin();
 
-        CommonExtension<?, ?, ?, ?> android = AndroidProjectUtil.getAndroidExtension(project);
+        CommonExtension<?, ?, ?, ?, ?> android = AndroidProjectUtil.getAndroidExtension(project);
         AndroidComponentsExtension<?, ?, ?> androidComponents = AndroidProjectUtil.getAndroidComponentsExtension(project);
 
         project.afterEvaluate(p -> {
