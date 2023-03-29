@@ -19,7 +19,7 @@ public class AndroidConfigUtil {
         String taskName = "generate" + StringGroovyMethods.capitalize(variant.getName()) + "EffectiveLombokConfig";
 
         return project.getTasks().register(taskName, AndroidLombokConfig.class, lombokConfigTask -> {
-            lombokConfigTask.dependsOn(project.getTasks().named("generate" + StringGroovyMethods.capitalize(variant.getName()) + "BuildConfig"));
+            //lombokConfigTask.dependsOn(project.getTasks().named("generate" + StringGroovyMethods.capitalize(variant.getName()) + "BuildConfig"));
             lombokConfigTask.setGroup("lombok");
             lombokConfigTask.setDescription("Generate effective Lombok configuration for variant '" + variant.getName() + "'.");
             lombokConfigTask.getPaths().from(variant.getSources().getJava().getAll());
