@@ -4,7 +4,7 @@ plugins {
     id "com.gradle.plugin-publish" version "1.2.0"
     id "io.freefair.git-version" version "6.6.3"
     id "io.freefair.lombok" version "6.6.3"
-    id "io.freefair.javadoc-links" version "6.6.3"
+    id "io.freefair.javadoc-links" version "8.2.1"
 }
 
 repositories {
