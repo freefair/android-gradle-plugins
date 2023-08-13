@@ -10,6 +10,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ORG_GRADLE_PROJECT_freefairBuildCachePassword: ${{ secrets.BUILD_CACHE_PASSWORD }}
     strategy:
       fail-fast: false
     steps:
@@ -30,6 +32,8 @@ jobs:
   build-examples:
     name: Build example projects
     runs-on: ubuntu-latest
+    env:
+      ORG_GRADLE_PROJECT_freefairBuildCachePassword: ${{ secrets.BUILD_CACHE_PASSWORD }}
     strategy:
       fail-fast: false
     defaults:
