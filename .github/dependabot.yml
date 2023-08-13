@@ -5,6 +5,11 @@ updates:
     schedule:
       interval: "weekly"
   - package-ecosystem: "gradle"
+    target-branch: "8.1.x"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "gradle"
     target-branch: "8.0.x"
     directory: "/"
     schedule:
