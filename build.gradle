@@ -154,3 +154,7 @@ tasks.register('uploadDocumentation', UploadFile) {
     file = javadocJar.archiveFile
     url = "https://docs.freefair.io/api/$project.version?path=android-gradle-plugins"
 }
+
+tasks.named('wrapper') {
+    distributionType = Wrapper.DistributionType.ALL
+}
