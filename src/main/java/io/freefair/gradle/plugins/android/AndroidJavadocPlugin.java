@@ -61,7 +61,7 @@ public class AndroidJavadocPlugin implements Plugin<Project> {
 
                 javadoc.setClasspath(variant.getCompileClasspath());
 
-                CommonExtension<?, ?, ?, ?, ?> android = AndroidProjectUtil.getAndroidExtension(project);
+                CommonExtension<?, ?, ?, ?, ?, ?> android = AndroidProjectUtil.getAndroidExtension(project);
 
                 javadoc.getOptions().setSource(android.getCompileOptions().getSourceCompatibility().getMajorVersion());
 

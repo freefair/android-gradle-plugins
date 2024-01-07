@@ -39,7 +39,7 @@ public class AndroidAspectJPostCompileWeavingPlugin implements Plugin<Project> {
         inpath = project.getConfigurations().create("inpath");
         aspectpath = project.getConfigurations().create("aspect");
 
-        CommonExtension<?, ?, ?, ?, ?> android = project.getExtensions().getByType(CommonExtension.class);
+        CommonExtension<?, ?, ?, ?, ?, ?> android = project.getExtensions().getByType(CommonExtension.class);
         AndroidComponentsExtension<?, ?, ?> androidComponents = project.getExtensions().getByType(AndroidComponentsExtension.class);
 
         android.getBuildTypes().configureEach(buildType -> {

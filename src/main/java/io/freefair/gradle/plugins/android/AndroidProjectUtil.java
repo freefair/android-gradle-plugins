@@ -16,7 +16,7 @@ import org.gradle.api.tasks.compile.JavaCompile;
 @UtilityClass
 public class AndroidProjectUtil {
 
-    public static CommonExtension<?, ?, ?, ?, ?> getAndroidExtension(Project project) {
+    public static CommonExtension<?, ?, ?, ?, ?, ?> getAndroidExtension(Project project) {
         try {
             return project.getExtensions().getByType(CommonExtension.class);
         } catch (UnknownDomainObjectException e) {
