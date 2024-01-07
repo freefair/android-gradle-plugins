@@ -1,7 +1,7 @@
 import io.freefair.gradle.plugins.okhttp.tasks.UploadFile
 
 plugins {
-    id "com.gradle.plugin-publish" version "1.2.0"
+    id "com.gradle.plugin-publish" version "1.2.1"
     id "io.freefair.git-version"
     id "io.freefair.lombok"
     id "io.freefair.javadoc-links"
@@ -49,9 +49,9 @@ dependencies {
     api "io.freefair.gradle:lombok-plugin:$freefairGradleVersion"
     api "io.freefair.gradle:aspectj-plugin:$freefairGradleVersion"
 
-    testImplementation platform("org.junit:junit-bom:5.10.0")
+    testImplementation platform("org.junit:junit-bom:5.10.1")
 
-    testImplementation 'org.assertj:assertj-core:3.24.2'
+    testImplementation 'org.assertj:assertj-core:3.25.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.junit.jupiter:junit-jupiter-params'
 
