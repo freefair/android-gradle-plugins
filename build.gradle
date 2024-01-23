@@ -14,7 +14,7 @@ repositories {
 }
 
 def freefairGradleVersion = "8.4"
-def agpVersion = "8.4.0-alpha04"
+def agpVersion = "8.4.0-alpha05"
 
 group = 'io.freefair.gradle'
 description = "FreeFair Android Gradle Plugins"
