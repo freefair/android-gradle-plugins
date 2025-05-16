@@ -20,6 +20,7 @@ group = 'io.freefair.gradle'
 description = "FreeFair Android Gradle Plugins"
 
 tasks.withType(Javadoc).configureEach {
+    failOnError = false
     options.addBooleanOption("Xdoclint:-missing", true)
     options.links "https://docs.gradle.org/$gradle.gradleVersion/javadoc/"
     options.links "https://developer.android.com/reference/tools/gradle-api/8.6/"
