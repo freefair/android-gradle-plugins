@@ -1,14 +1,19 @@
 version: 2
 updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "gradle"
+    target-branch: "8.12.x"
+    directory: "/"
+    schedule:
+      interval: "daily"
   - package-ecosystem: "gradle"
     target-branch: "8.11.x"
     directory: "/"
     schedule:
       interval: "daily"
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
   - package-ecosystem: "gradle"
     target-branch: "8.10.x"
     directory: "/"
@@ -21,11 +26,6 @@ updates:
       interval: "daily"
   - package-ecosystem: "gradle"
     target-branch: "8.8.x"
-    directory: "/"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "gradle"
-    target-branch: "8.7.x"
     directory: "/"
     schedule:
       interval: "daily"
