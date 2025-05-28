@@ -1,6 +1,6 @@
 plugins {
     id "io.freefair.settings.plugin-versions" version "8.13.1"
-    id "com.gradle.develocity" version "4.0.1"
+    id "com.gradle.develocity" version "4.0.2"
 }
 
 boolean isCiServer = System.getenv().containsKey("CI")
