@@ -13,7 +13,7 @@ repositories {
     mavenCentral()
 }
 
-def freefairGradleVersion = "8.13.1"
+def freefairGradleVersion = "8.14.2"
 def agpVersion = "8.13.0"
 
 group = 'io.freefair.gradle'
@@ -49,7 +49,7 @@ dependencies {
     api "io.freefair.gradle:lombok-plugin:$freefairGradleVersion"
     api "io.freefair.gradle:aspectj-plugin:$freefairGradleVersion"
 
-    testImplementation platform("org.junit:junit-bom:5.12.2")
+    testImplementation platform("org.junit:junit-bom:5.13.4")
 
     testImplementation 'org.assertj:assertj-core:3.27.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
