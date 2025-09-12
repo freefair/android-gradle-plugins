@@ -14,7 +14,7 @@ repositories {
 }
 
 def freefairGradleVersion = "8.13.1"
-def agpVersion = "8.12.0-alpha02"
+def agpVersion = "8.12.3"
 
 group = 'io.freefair.gradle'
 description = "FreeFair Android Gradle Plugins"
@@ -22,7 +22,7 @@ description = "FreeFair Android Gradle Plugins"
 tasks.withType(Javadoc).configureEach {
     options.addBooleanOption("Xdoclint:-missing", true)
     options.links "https://docs.gradle.org/$gradle.gradleVersion/javadoc/"
-    options.links "https://developer.android.com/reference/tools/gradle-api/8.7/"
+    options.links "https://developer.android.com/reference/tools/gradle-api/8.12/"
     options.links "https://docs.freefair.io/gradle-plugins/$freefairGradleVersion/api"
 }
 
